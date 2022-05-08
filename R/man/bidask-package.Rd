@@ -8,6 +8,14 @@
 \description{
 Implements an efficient estimation procedure of bid-ask spreads from open, high, low, and close prices as described in Ardia-Guidotti-Kroencke <https://www.ssrn.com/abstract=3892335>. Moreover, it provides an implementation of the estimators proposed in Roll (1984) <doi:10.1111/j.1540-6261.1984.tb03897.x>, Corwin-Schultz (2012) <doi:10.1111/j.1540-6261.2012.01729.x>, and Abdi-Ranaldo (2017) <doi:10.1093/rfs/hhx084>.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/eguidotti/bidask}
+  \item Report bugs at \url{https://github.com/eguidotti/bidask/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Emanuele Guidotti \email{emanuele.guidotti@unine.ch} (\href{https://orcid.org/0000-0002-8961-6623}{ORCID})
 
