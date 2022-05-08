@@ -1,0 +1,9 @@
+bibentry(
+	bibtype     = "Unpublished",
+	title       = "Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices", 
+	year        = 2021,
+	author      = as.person("David Ardia [aut], Emanuele Guidotti [aut], Tim A. Kroencke [aut]"),
+    note        = "Available at SSRN",
+    url         = "https://www.ssrn.com/abstract=3892335",
+	textVersion = 'Ardia, David and Guidotti, Emanuele and Kroencke, Tim Alexander, "Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices". Available at SSRN: https://www.ssrn.com/abstract=3892335'
+)
