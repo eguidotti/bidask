@@ -27,7 +27,7 @@ Numeric spread estimate.
     3. the previous close equals the previous high `n3 = mean(c1==h1)`
     4. the previous close equals the previous low `n4 = mean(c1==l1)`
     5. the high price equals the low price and the previous close: `n5 = mean(h==l & l==c1)`
-11. Compute the squared spread `s2 = -4(w1*e1+w2*e2)/((1-k*(n1+n2)/2)+(1-n5)*(1-k*(n3+n4)/2))`
+11. Compute the squared spread `s2 = -4*(w1*e1+w2*e2)/((1-k*(n1+n2)/2)+(1-n5)*(1-k*(n3+n4)/2))`
 12. Return the spread `s = sqrt(max(0, s2))`
 
 ### Testing
@@ -36,7 +36,7 @@ To check the implementation is correct, import the data available at:
 
 - https://raw.githubusercontent.com/eguidotti/bidask/main/data/ohlc.csv
 
-Then, run the estimation. You should obtain a spread estimate of **0.010050405054398756**. If you obtain a different results, you may use the following table to check and debug the intermediate steps.
+Then, run the estimation. You should obtain a spread estimate of **0.0100504050543988**. If you obtain a different results, you may use the following table to check and debug the intermediate steps.
 
 | variable | value                  |
 | -------- | ---------------------- |

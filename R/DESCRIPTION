@@ -1,7 +1,7 @@
 Package: bidask
 Type: Package
 Title: Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
-Version: 0.1.1
+Version: 1.0.0
 Authors@R: c(
     person(given = "Emanuele", family = "Guidotti", email = "emanuele.guidotti@unine.ch", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8961-6623")),
     person(given = "David", family = "Ardia", role = c("ctb"), comment = c(ORCID = "0000-0003-2823-782X")),
@@ -15,6 +15,5 @@ Description: Implements an efficient estimation procedure of bid-ask spreads fro
   and Abdi-Ranaldo (2017) <doi:10.1093/rfs/hhx084>.
 License: GPL-3
 Encoding: UTF-8
-Depends: xts
-Imports: zoo
+Imports: xts, zoo
 RoxygenNote: 7.1.2

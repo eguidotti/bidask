@@ -2,7 +2,7 @@
 "_PACKAGE"
 
 #' @import xts
-#' @importFrom stats lag qt rbinom rnorm
+#' @importFrom stats lag var qt rbinom rnorm
 NULL
 
 #' Rolling sum

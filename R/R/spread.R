@@ -1,4 +1,4 @@
-#' Estimate Bid-Ask Spreads from OHLC Prices
+#' Estimation of Bid-Ask Spreads from OHLC Prices
 #'
 #' This function estimates bid-ask spreads from open, high, low, and close prices with several methods.
 #'
@@ -41,14 +41,17 @@
 #' # simulate a price process with spread 1%
 #' x <- sim(spread = 0.01)
 #'
-#' # estimate the spread
+#' # estimate the spread with EDGE
+#' edge(x$Open, x$High, x$Low, x$Close)
+#' 
+#' # by default this is equivalent to
 #' spread(x)
 #'
 #' # use a rolling window of 21 periods
 #' spread(x, width = 21)
 #'
 #' # compute the spread for each month
-#' ep <- endpoints(x, on = "months")
+#' ep <- xts::endpoints(x, on = "months")
 #' spread(x, width = ep)
 #'
 #' # compute the critical values at 5% and 95%

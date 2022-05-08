@@ -1,4 +1,4 @@
-#' Simulate a OHLC Price Process
+#' Simulation of OHLC Prices
 #'
 #' This function performs simulations consisting of \code{n} periods (e.g., days) and where each period consists of a given number of \code{trades} (e.g., each minute).
 #' For each trade, the true value of the stock price, \eqn{P_m}, is simulated as \eqn{P_m = P_{m-1}e^{\sigma x}}, where \eqn{\sigma} is the standard deviation per trade and \eqn{x} is a random draw from a unit normal distribution.

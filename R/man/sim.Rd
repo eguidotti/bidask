@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim.R
 \name{sim}
 \alias{sim}
-\title{Simulate a OHLC Price Process}
+\title{Simulation of OHLC Prices}
 \usage{
 sim(
   n = 10000,
