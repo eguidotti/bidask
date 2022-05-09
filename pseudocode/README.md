@@ -4,7 +4,7 @@ This file provides the pseudocode to simplify implementations of EDGE in any pro
 
 ### Input
 
-`O`, `H`, `L`, `C` vectors of Open, High, Low, and Close prices. The vectors must be ordered in ascending order of the timestamp.
+`O`, `H`, `L`, `C` vectors of Open, High, Low, and Close prices. The vectors must be sorted in ascending order of the timestamp.
 
 ### Output
 
