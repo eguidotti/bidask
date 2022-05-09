@@ -86,6 +86,8 @@ EDGE <- function(x, width = nrow(x), probs = c(0.025, 0.975), na.rm = FALSE, tri
 #' @param close numeric vector of Close prices.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
 #'
+#' @details Prices must be sorted in ascending order of the timestamp.
+#'
 #' @return The spread estimate.
 #'
 #' @references 

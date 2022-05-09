@@ -24,6 +24,9 @@ The spread estimate.
 Implements an efficient estimation procedure of the bid-ask spread from Open, High, Low, and Close
 prices as proposed in \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)}.
 }
+\details{
+Prices must be sorted in ascending order of the timestamp.
+}
 \references{
 Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
 Available at SSRN: \url{https://www.ssrn.com/abstract=3892335}
