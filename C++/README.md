@@ -10,7 +10,7 @@ This folder contains the C++ source file [`edge.cpp`](https://github.com/eguidot
 
 Estimate the spread
 
-```python
+```c++
 edge(open, high, low, close)
 ```
 
