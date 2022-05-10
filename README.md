@@ -6,6 +6,7 @@ Available in:
 
 - [R](https://github.com/eguidotti/bidask/tree/main/R)
 - [Python](https://github.com/eguidotti/bidask/tree/main/python)
+- [MATLAB](https://github.com/eguidotti/bidask/tree/main/matlab)
 - [C++](https://github.com/eguidotti/bidask/tree/main/C++)
 
 You can also check the [pseudocode](https://github.com/eguidotti/bidask/tree/main/pseudocode) to implement the estimator in any programming language.
