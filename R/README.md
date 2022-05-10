@@ -61,7 +61,7 @@ Use multiple estimators
 spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL", "GMM"))
 ```
 
-Full documentation available on [CRAN](https://cran.r-project.org/web/packages/bidask/bidask.pdf)
+Full documentation available on [CRAN](https://cran.r-project.org/package=bidask/bidask.pdf)
 
 ## Cite as
 
