@@ -1,6 +1,6 @@
 # Pseudocode
 
-This file provides the pseudocode to simplify implementations of EDGE in any programming language. 
+This file provides the pseudocode to simplify implementations of [EDGE](https://www.ssrn.com/abstract=3892335) in any programming language. 
 
 ### Input
 
