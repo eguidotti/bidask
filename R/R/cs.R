@@ -45,10 +45,6 @@ CS <- function(x, width = nrow(x), method = "CS", na.rm = FALSE, trim = 0){
   # compute gamma
   G <- log(pmax(AH2, H1)/pmin(AL2, L1))^2
 
-  # constants
-  k1 <- 4*log(2)
-  k2 <- sqrt(8/pi)
-
   # compute spread
   A <- (sqrt(2*B)-sqrt(B))/(3-2*sqrt(2)) - sqrt(G/(3-2*sqrt(2)))
   S <- 2*(exp(A)-1)/(1+exp(A))
