@@ -65,11 +65,7 @@ proc sql;
         x2 IS NOT NULL
     
     GROUP BY
-        &by_csv
-
-    HAVING 
-        COUNT(DISTINCT x1) > 1 and 
-        COUNT(DISTINCT x2) > 1;   
+        &by_csv;   
 
 quit;
 
@@ -80,6 +76,7 @@ data edge;
 
     v1 = e11 - e1*e1;
     v2 = e22 - e2*e2;
+    if v1 and v2;
     
     w1 = v2 / (v1 + v2);
     w2 = v1 / (v1 + v2);
