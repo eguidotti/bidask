@@ -9,8 +9,7 @@ spread(
   width = nrow(x),
   method = "EDGE",
   probs = c(0.025, 0.975),
-  na.rm = FALSE,
-  trim = 0
+  na.rm = FALSE
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ spread(
 \item{probs}{vector of probabilities to compute the critical values when the method \code{EDGE} is selected. By default, the critical values at 2.5\% and 97.5\% are computed.}
 
 \item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.}
-
-\item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end before the spread is computed. Values of trim outside that range are taken as the nearest endpoint.}
 }
 \value{
 Time series of spread estimates.

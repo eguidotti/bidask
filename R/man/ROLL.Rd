@@ -4,7 +4,7 @@
 \alias{ROLL}
 \title{Roll Estimator}
 \usage{
-ROLL(x, width = nrow(x), na.rm = FALSE, trim = 0)
+ROLL(x, width = nrow(x), na.rm = FALSE)
 }
 \arguments{
 \item{x}{\code{xts} object with a column named \code{Close}, representing closing prices.}
@@ -12,8 +12,6 @@ ROLL(x, width = nrow(x), na.rm = FALSE, trim = 0)
 \item{width}{integer width of the rolling window to use, or vector of endpoints defining the intervals to use.}
 
 \item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.}
-
-\item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end before the spread is computed. Values of trim outside that range are taken as the nearest endpoint.}
 }
 \value{
 Time series of spread estimates.

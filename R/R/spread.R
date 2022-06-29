@@ -20,7 +20,6 @@
 #' @param method the estimator(s) to use. Choose one or more of: \code{EDGE}, \code{AR}, \code{AR2}, \code{CS}, \code{CS2}, \code{ROLL}, \code{O}, \code{OC}, \code{OHL}, \code{OHLC}, \code{C}, \code{CO}, \code{CHL}, \code{CHLO}, or \code{GMM}. See details.
 #' @param probs vector of probabilities to compute the critical values when the method \code{EDGE} is selected. By default, the critical values at 2.5\% and 97.5\% are computed.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
-#' @param trim the fraction (0 to 0.5) of observations to be trimmed from each end before the spread is computed. Values of trim outside that range are taken as the nearest endpoint.
 #'
 #' @return Time series of spread estimates.
 #'
@@ -62,7 +61,7 @@
 #'
 #' @export
 #'
-spread <- function(x, width = nrow(x), method = "EDGE", probs = c(0.025, 0.975), na.rm = FALSE, trim = 0){
+spread <- function(x, width = nrow(x), method = "EDGE", probs = c(0.025, 0.975), na.rm = FALSE){
 
   if(!is.xts(x))
     stop("x must be a xts object")
@@ -75,7 +74,7 @@ spread <- function(x, width = nrow(x), method = "EDGE", probs = c(0.025, 0.975),
 
   m <- "EDGE"
   if(m %in% method){
-    S <- cbind(S, EDGE(x, width = width, probs = probs, na.rm = na.rm, trim = trim))
+    S <- cbind(S, EDGE(x, width = width, probs = probs, na.rm = na.rm))
     method <- setdiff(method, m)
   }
   
@@ -88,25 +87,25 @@ spread <- function(x, width = nrow(x), method = "EDGE", probs = c(0.025, 0.975),
   m <- c("AR","AR2")
   if(any(m %in% method)){
     m <- intersect(method, m)
-    S <- cbind(S, AR(x, width = width, method = m, na.rm = na.rm, trim = trim))
+    S <- cbind(S, AR(x, width = width, method = m, na.rm = na.rm))
     method <- setdiff(method, m)
   }
 
   m <- c("CS","CS2")
   if(any(m %in% method)){
     m <- intersect(method, m)
-    S <- cbind(S, CS(x, width = width, method = m, na.rm = na.rm, trim = trim))
+    S <- cbind(S, CS(x, width = width, method = m, na.rm = na.rm))
     method <- setdiff(method, m)
   }
 
   m <- "ROLL"
   if(m %in% method){
-    S <- cbind(S, ROLL(x, width = width, na.rm = na.rm, trim = trim))
+    S <- cbind(S, ROLL(x, width = width, na.rm = na.rm))
     method <- setdiff(method, m)
   }
   
   if(length(method)){
-    S <- cbind(S, OHLC(x, width = width, method = method, na.rm = na.rm, trim = trim))
+    S <- cbind(S, OHLC(x, width = width, method = method, na.rm = na.rm))
   }
 
   return(S)

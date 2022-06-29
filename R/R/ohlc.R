@@ -4,13 +4,12 @@
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
 #' @param method one of \code{"O"}, \code{"OC"}, \code{"OHL"}, \code{"OHLC"}, \code{"C"}, \code{"CO"}, \code{"CHL"}, \code{"CHLO"}, or any combination of them, e.g. \code{"OHLC.CHLO"}.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
-#' @param trim the fraction (0 to 0.5) of observations to be trimmed from each end before the spread is computed. Values of trim outside that range are taken as the nearest endpoint.
 #'
 #' @return Time series of spread estimates.
 #'
 #' @keywords internal
 #'
-OHLC <- function(x, width = nrow(x), method = "OHLC.CHLO", na.rm = FALSE, trim = 0){
+OHLC <- function(x, width = nrow(x), method = "OHLC.CHLO", na.rm = FALSE){
 
   # methods
   methods <- strsplit(method, split = ".", fixed = TRUE)
@@ -66,23 +65,23 @@ OHLC <- function(x, width = nrow(x), method = "OHLC.CHLO", na.rm = FALSE, trim =
 
   # open estimators
   if("O" %in% m)
-    S2.O <- -4*rmean((O-O1)*(O1-O2), width = width-2, na.rm = na.rm, trim = trim)/(1-v.oo)^2
+    S2.O <- -4*rmean((O-O1)*(O1-O2), width = width-2, na.rm = na.rm)/(1-v.oo)^2
   if("OC" %in% m)
-    S2.OC <- -4*rmean((C-O)*(O-C1), width = width-1, na.rm = na.rm, trim = trim)/(1-v.oc)
+    S2.OC <- -4*rmean((C-O)*(O-C1), width = width-1, na.rm = na.rm)/(1-v.oc)
   if("OHL" %in% m)
-    S2.OHL <- -4*rmean((M-O)*(O-M1), width = width-1, na.rm = na.rm, trim = trim)/(1-v.ohl)
+    S2.OHL <- -4*rmean((M-O)*(O-M1), width = width-1, na.rm = na.rm)/(1-v.ohl)
   if("OHLC" %in% m)
-    S2.OHLC <- -4*rmean((M-O)*(O-C1), width = width-1, na.rm = na.rm, trim = trim)/(1-v.ohl)
+    S2.OHLC <- -4*rmean((M-O)*(O-C1), width = width-1, na.rm = na.rm)/(1-v.ohl)
 
   # close estimators
   if("C" %in% m)
-    S2.C <- -4*rmean((C-C1)*(C1-C2), width = width-2, na.rm = na.rm, trim = trim)/(1-v.cc)^2
+    S2.C <- -4*rmean((C-C1)*(C1-C2), width = width-2, na.rm = na.rm)/(1-v.cc)^2
   if("CO" %in% m)
-    S2.CO <- -4*rmean((O-C1)*(C1-O1), width = width-1, na.rm = na.rm, trim = trim)/(1-v.occ)/(1-v.oc)
+    S2.CO <- -4*rmean((O-C1)*(C1-O1), width = width-1, na.rm = na.rm)/(1-v.occ)/(1-v.oc)
   if("CHL" %in% m)
-    S2.CHL <- -4*rmean((M-C1)*(C1-M1), width = width-1, na.rm = na.rm, trim = trim)/(1-v.hlc)/(1-v.chl)
+    S2.CHL <- -4*rmean((M-C1)*(C1-M1), width = width-1, na.rm = na.rm)/(1-v.hlc)/(1-v.chl)
   if("CHLO" %in% m)
-    S2.CHLO <- -4*rmean((O-C1)*(C1-M1), width = width-1, na.rm = na.rm, trim = trim)/(1-v.hlc)/(1-v.chl)
+    S2.CHLO <- -4*rmean((O-C1)*(C1-M1), width = width-1, na.rm = na.rm)/(1-v.hlc)/(1-v.chl)
 
   # all estimators
   S2 <- NULL

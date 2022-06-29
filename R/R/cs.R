@@ -4,7 +4,6 @@
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
 #' @param method one of \code{"CS"}, \code{"CS2"}.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
-#' @param trim the fraction (0 to 0.5) of observations to be trimmed from each end before the spread is computed. Values of trim outside that range are taken as the nearest endpoint.
 #'
 #' @return Time series of spread and volatility estimates.
 #'
@@ -14,7 +13,7 @@
 #'
 #' @keywords internal
 #'
-CS <- function(x, width = nrow(x), method = "CS", na.rm = FALSE, trim = 0){
+CS <- function(x, width = nrow(x), method = "CS", na.rm = FALSE){
 
   # check
   ok <- c("CS","CS2")
@@ -56,7 +55,7 @@ CS <- function(x, width = nrow(x), method = "CS", na.rm = FALSE, trim = 0){
   if("CS" %in% method) {
 
     # compute spread
-    cs <- rmean(S, width = width-1, na.rm = na.rm, trim = trim)
+    cs <- rmean(S, width = width-1, na.rm = na.rm)
 
     # set negative spreads to zero
     cs[cs<0] <- 0
@@ -73,7 +72,7 @@ CS <- function(x, width = nrow(x), method = "CS", na.rm = FALSE, trim = 0){
     S[S<0] <- 0
 
     # compute spread
-    cs2 <- rmean(S, width = width-1, na.rm = na.rm, trim = trim)
+    cs2 <- rmean(S, width = width-1, na.rm = na.rm)
 
     # set name
     colnames(cs2) <- "CS2"

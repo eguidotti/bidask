@@ -4,7 +4,7 @@
 \alias{CS}
 \title{Corwin-Schultz Estimator}
 \usage{
-CS(x, width = nrow(x), method = "CS", na.rm = FALSE, trim = 0)
+CS(x, width = nrow(x), method = "CS", na.rm = FALSE)
 }
 \arguments{
 \item{x}{\code{xts} object with columns named \code{High}, \code{Low}, \code{Close}, representing HLC prices.}
@@ -14,8 +14,6 @@ CS(x, width = nrow(x), method = "CS", na.rm = FALSE, trim = 0)
 \item{method}{one of \code{"CS"}, \code{"CS2"}.}
 
 \item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.}
-
-\item{trim}{the fraction (0 to 0.5) of observations to be trimmed from each end before the spread is computed. Values of trim outside that range are taken as the nearest endpoint.}
 }
 \value{
 Time series of spread and volatility estimates.

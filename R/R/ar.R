@@ -4,7 +4,6 @@
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
 #' @param method one of \code{"AR"}, \code{"AR2"}.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
-#' @param trim the fraction (0 to 0.5) of observations to be trimmed from each end before the spread is computed. Values of trim outside that range are taken as the nearest endpoint.
 #'
 #' @return Time series of spread estimates.
 #'
@@ -14,7 +13,7 @@
 #'
 #' @keywords internal
 #'
-AR <- function(x, width = nrow(x), method = "AR", na.rm = FALSE, trim = 0){
+AR <- function(x, width = nrow(x), method = "AR", na.rm = FALSE){
 
   # check
   ok <- c("AR","AR2")
@@ -40,7 +39,7 @@ AR <- function(x, width = nrow(x), method = "AR", na.rm = FALSE, trim = 0){
   if("AR" %in% method) {
 
     # compute average squared spread
-    ar <- rmean(S2, width = width-1, na.rm = na.rm, trim = trim)
+    ar <- rmean(S2, width = width-1, na.rm = na.rm)
 
     # set negative estimates to zero
     ar[ar<0] <- 0
@@ -63,7 +62,7 @@ AR <- function(x, width = nrow(x), method = "AR", na.rm = FALSE, trim = 0){
     S <- sqrt(S2)
 
     # compute average spread
-    ar2 <- rmean(S, width = width-1, na.rm = na.rm, trim = trim)
+    ar2 <- rmean(S, width = width-1, na.rm = na.rm)
 
     # set names
     colnames(ar2) <- "AR2"

@@ -4,13 +4,12 @@
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
 #' @param probs vector of probabilities to compute the critical values.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
-#' @param trim the fraction (0 to 0.5) of observations to be trimmed from each end before the spread is computed. Values of trim outside that range are taken as the nearest endpoint.
 #'
 #' @return Time series of spread estimates.
 #'
 #' @keywords internal
 #'
-EDGE <- function(x, width = nrow(x), probs = c(0.025, 0.975), na.rm = FALSE, trim = 0){
+EDGE <- function(x, width = nrow(x), probs = c(0.025, 0.975), na.rm = FALSE){
 
   # to log
   x <- log(x)
@@ -35,11 +34,10 @@ EDGE <- function(x, width = nrow(x), probs = c(0.025, 0.975), na.rm = FALSE, tri
   # means
   X <- cbind(X1, X2, X1^2, X2^2, X1*X2)
   V <- cbind(((O==H)+(O==L))/2, ((C1==H1)+(C1==L1))/2, H==L & L==C1)
-  E <- rmean(cbind(X, V[-1]), width = width-1, na.rm = na.rm, trim = trim)
+  E <- rmean(cbind(X, V[-1]), width = width-1, na.rm = na.rm)
   
   # number of observations
   N <- rsum(!is.na(X[,1]), width = width-1)
-  N <- N - 2 * as.integer(N*trim)
   J <- N/(N-1)
 
   # variance

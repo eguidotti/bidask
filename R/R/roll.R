@@ -3,7 +3,6 @@
 #' @param x \code{xts} object with a column named \code{Close}, representing closing prices.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
-#' @param trim the fraction (0 to 0.5) of observations to be trimmed from each end before the spread is computed. Values of trim outside that range are taken as the nearest endpoint.
 #'
 #' @return Time series of spread estimates.
 #'
@@ -13,7 +12,7 @@
 #'
 #' @keywords internal
 #'
-ROLL <- function(x, width = nrow(x), na.rm = FALSE, trim = 0){
+ROLL <- function(x, width = nrow(x), na.rm = FALSE){
 
   # compute returns
   R1 <- x$CLOSE/lag(x$CLOSE, 1) - 1
@@ -24,9 +23,9 @@ ROLL <- function(x, width = nrow(x), na.rm = FALSE, trim = 0){
   R2 <- R2[-c(1:2)]
 
   # expectations
-  E1 <- rmean(R1, width = width-1, na.rm = na.rm, trim = trim)
-  E2 <- rmean(R2, width = width-2, na.rm = na.rm, trim = trim)
-  E12 <- rmean(R1*R2, width = width-2, na.rm = na.rm, trim = trim)
+  E1 <- rmean(R1, width = width-1, na.rm = na.rm)
+  E2 <- rmean(R2, width = width-2, na.rm = na.rm)
+  E12 <- rmean(R1*R2, width = width-2, na.rm = na.rm)
 
   # spread
   s <- E1*E2-E12

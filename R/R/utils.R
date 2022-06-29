@@ -18,13 +18,10 @@ rsum <- function(x, width, na.rm = FALSE){
 
 #' Rolling mean
 #' @keywords internal
-rmean <- function(x, width, na.rm = FALSE, trim = 0){
+rmean <- function(x, width, na.rm = FALSE){
 
   if(length(width) > 1)
-    return(xts::period.apply(x, INDEX = width[width>=0], FUN = mean, na.rm = na.rm, trim = trim))
-
-  if(trim > 0)
-    return(zoo::rollapplyr(x, width = width, FUN = mean, na.rm = na.rm, trim = trim)[-(1:(width-1)),])
+    return(xts::period.apply(x, INDEX = width[width>=0], FUN = mean, na.rm = na.rm))
 
   return(zoo::rollmeanr(x, k = width, na.rm = na.rm))
 
