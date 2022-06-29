@@ -9,7 +9,7 @@
 #'
 #' @keywords internal
 #'
-EDGE <- function(x, width = nrow(x), probs = c(0.025, 0.975), na.rm = FALSE){
+EDGE <- function(x, width = nrow(x), probs = NULL, na.rm = FALSE){
 
   # to log
   x <- log(x)
