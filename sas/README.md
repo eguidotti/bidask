@@ -23,7 +23,7 @@ sas edge.sas \
 
 - `<DATA>`: the path to the file containing Open, High, Low, Close prices (for multiple groups)
 - `<FILE>`: the path to store the spread estimates (for each group). See [here](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/acpcref/p1d0tocg3njhmfn1d4ld2covlwm0.htm) for supported file extensions
-- `<GROUP>`: comma separated list of column(s) to group by; e.g., `stock` or `stock,day`
+- `<GROUP>`: comma separated list of column(s) to group by; e.g., `symbol` or `date,symbol`
 - `<OPEN>`: the column containing Open prices
 - `<HIGH>`: the column containing High prices
 - `<LOW>`: the column containing Low prices
