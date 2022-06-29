@@ -4,7 +4,14 @@
 \alias{spread}
 \title{Estimation of Bid-Ask Spreads from OHLC Prices}
 \usage{
-spread(x, width = nrow(x), method = "EDGE", probs = NULL, na.rm = FALSE)
+spread(
+  x,
+  width = nrow(x),
+  method = "EDGE",
+  probs = NULL,
+  signed = FALSE,
+  na.rm = FALSE
+)
 }
 \arguments{
 \item{x}{\code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.}
@@ -13,15 +20,17 @@ spread(x, width = nrow(x), method = "EDGE", probs = NULL, na.rm = FALSE)
 
 \item{method}{the estimator(s) to use. Choose one or more of: \code{EDGE}, \code{AR}, \code{AR2}, \code{CS}, \code{CS2}, \code{ROLL}, \code{O}, \code{OC}, \code{OHL}, \code{OHLC}, \code{C}, \code{CO}, \code{CHL}, \code{CHLO}, or \code{GMM}. See details.}
 
-\item{probs}{vector of probabilities to compute the critical values when the method \code{EDGE} is selected. By default, the critical values at 2.5\% and 97.5\% are computed.}
+\item{probs}{vector of probabilities to compute the critical values when the method \code{EDGE} is selected.}
 
-\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.}
+\item{signed}{a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.}
+
+\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
 }
 \value{
-Time series of spread estimates.
+Time series of (percent) spread estimates.
 }
 \description{
-This function estimates bid-ask spreads from open, high, low, and close prices with several methods.
+This function estimates (percent) effective bid-ask spreads from open, high, low, and close prices with several methods.
 }
 \details{
 The method \code{EDGE} implements the Efficient Discrete Generalized Estimator proposed in Ardia-Guidotti-Kroencke (2021).
@@ -32,9 +41,17 @@ The method \code{GMM} combines the 8 OHLC estimators with the Generalized Method
 
 The method \code{AR} implements the estimator proposed in Abdi & Ranaldo (2017). \code{AR2} implements the 2-period adjusted version.
 
-The method \code{CS} implements the estimator proposed in Corwin & Schultz (2012). \code{CS2} implements the 2-period adjusted version. Both versions are adjusted for overnight returns as described in the paper.
+The method \code{CS} implements the estimator proposed in Corwin & Schultz (2012). \code{CS2} implements the 2-period adjusted version. Both versions are adjusted for overnight (close-to-open) returns as described in the paper.
 
 The method \code{ROLL} implements the estimator proposed in Roll (1984).
+}
+\note{
+\itemize{
+\item Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
+when using this package in publication. Hint: type \code{citation("bidask")}
+\item Place the URL \url{https://github.com/eguidotti/bidask} 
+in a footnote when using this package in other online material.
+}
 }
 \examples{
 # simulate a price process with spread 1\%
@@ -61,15 +78,15 @@ spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL", "GMM"))
 
 }
 \references{
-Roll, R. (1984). A simple implicit measure of the effective bid-ask spread in an efficient market. The Journal of Finance, 39 (4), 1127-1139.
-\doi{10.1111/j.1540-6261.1984.tb03897.x}
-
-Corwin, S. A., & Schultz, P. (2012). A simple way to estimate bid-ask spreads from daily high and low prices. The Journal of Finance, 67 (2), 719-760.
-\doi{10.1111/j.1540-6261.2012.01729.x}
+Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
+Available at SSRN: \url{https://www.ssrn.com/abstract=3892335}
 
 Abdi, F., & Ranaldo, A. (2017). A simple estimation of bid-ask spreads from daily close, high, and low prices. The Review of Financial Studies, 30 (12), 4437-4480.
 \doi{10.1093/rfs/hhx084}
 
-Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
-Available at SSRN: \url{https://www.ssrn.com/abstract=3892335}
+Corwin, S. A., & Schultz, P. (2012). A simple way to estimate bid-ask spreads from daily high and low prices. The Journal of Finance, 67 (2), 719-760.
+\doi{10.1111/j.1540-6261.2012.01729.x}
+
+Roll, R. (1984). A simple implicit measure of the effective bid-ask spread in an efficient market. The Journal of Finance, 39 (4), 1127-1139.
+\doi{10.1111/j.1540-6261.1984.tb03897.x}
 }

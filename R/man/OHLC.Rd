@@ -4,7 +4,7 @@
 \alias{OHLC}
 \title{OHLC Estimators}
 \usage{
-OHLC(x, width = nrow(x), method = "OHLC.CHLO", na.rm = FALSE)
+OHLC(x, width = nrow(x), method = "OHLC.CHLO", signed = FALSE, na.rm = FALSE)
 }
 \arguments{
 \item{x}{\code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.}
@@ -13,7 +13,9 @@ OHLC(x, width = nrow(x), method = "OHLC.CHLO", na.rm = FALSE)
 
 \item{method}{one of \code{"O"}, \code{"OC"}, \code{"OHL"}, \code{"OHLC"}, \code{"C"}, \code{"CO"}, \code{"CHL"}, \code{"CHLO"}, or any combination of them, e.g. \code{"OHLC.CHLO"}.}
 
-\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.}
+\item{signed}{a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.}
+
+\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
 }
 \value{
 Time series of spread estimates.

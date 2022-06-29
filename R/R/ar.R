@@ -3,7 +3,8 @@
 #' @param x \code{xts} object with columns named \code{High}, \code{Low}, \code{Close}, representing HLC prices.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
 #' @param method one of \code{"AR"}, \code{"AR2"}.
-#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @param signed a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.
+#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
 #'
 #' @return Time series of spread estimates.
 #'
@@ -13,7 +14,7 @@
 #'
 #' @keywords internal
 #'
-AR <- function(x, width = nrow(x), method = "AR", na.rm = FALSE){
+AR <- function(x, width = nrow(x), method = "AR", signed = FALSE, na.rm = FALSE){
 
   # check
   ok <- c("AR","AR2")
@@ -41,12 +42,12 @@ AR <- function(x, width = nrow(x), method = "AR", na.rm = FALSE){
     # compute average squared spread
     ar <- rmean(S2, width = width-1, na.rm = na.rm)
 
-    # set negative estimates to zero
-    ar[ar<0] <- 0
-
     # square root
-    ar <- sqrt(ar)
+    ar <- sign(ar) * sqrt(abs(ar))
 
+    # set negative estimates to zero
+    if(!signed) ar[ar<0] <- 0
+    
     # set names
     colnames(ar) <- "AR"
 

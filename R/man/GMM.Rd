@@ -4,14 +4,16 @@
 \alias{GMM}
 \title{GMM Estimator}
 \usage{
-GMM(x, width = nrow(x), na.rm = FALSE)
+GMM(x, width = nrow(x), signed = FALSE, na.rm = FALSE)
 }
 \arguments{
 \item{x}{\code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.}
 
 \item{width}{integer width of the rolling window to use, or vector of endpoints defining the intervals to use.}
 
-\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.}
+\item{signed}{a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.}
+
+\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
 }
 \value{
 Time series of spread estimates.

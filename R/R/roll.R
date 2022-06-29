@@ -2,7 +2,8 @@
 #'
 #' @param x \code{xts} object with a column named \code{Close}, representing closing prices.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
-#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @param signed a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.
+#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
 #'
 #' @return Time series of spread estimates.
 #'
@@ -12,7 +13,7 @@
 #'
 #' @keywords internal
 #'
-ROLL <- function(x, width = nrow(x), na.rm = FALSE){
+ROLL <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
 
   # compute returns
   R1 <- x$CLOSE/lag(x$CLOSE, 1) - 1
@@ -27,14 +28,19 @@ ROLL <- function(x, width = nrow(x), na.rm = FALSE){
   E2 <- rmean(R2, width = width-2, na.rm = na.rm)
   E12 <- rmean(R1*R2, width = width-2, na.rm = na.rm)
 
-  # spread
-  s <- E1*E2-E12
-  s[] <- 2*sqrt(pmax(0, s))
-
+  # squared spread
+  S2 <- 4 * (E1*E2-E12)
+  
+  # square root
+  S <- sign(S2) * sqrt(abs(S2))
+  
+  # negative estimates
+  if(!signed) S[S<0] <- 0
+  
   # set names
-  colnames(s) <- "ROLL"
+  colnames(S) <- "ROLL"
 
   # return
-  return(s)
+  return(S)
 
 }

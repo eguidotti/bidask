@@ -1,7 +1,8 @@
 # bidask 1.0.1
 
+- Added argument `signed`
 - Removed argument `trim`
-- Update argument default `probs = NULL`
+- Change argument default to `probs = NULL`
 
 # bidask 1.0.0
 

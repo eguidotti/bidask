@@ -4,7 +4,7 @@
 \alias{AR}
 \title{Abdi-Ranaldo Estimator}
 \usage{
-AR(x, width = nrow(x), method = "AR", na.rm = FALSE)
+AR(x, width = nrow(x), method = "AR", signed = FALSE, na.rm = FALSE)
 }
 \arguments{
 \item{x}{\code{xts} object with columns named \code{High}, \code{Low}, \code{Close}, representing HLC prices.}
@@ -13,7 +13,9 @@ AR(x, width = nrow(x), method = "AR", na.rm = FALSE)
 
 \item{method}{one of \code{"AR"}, \code{"AR2"}.}
 
-\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.}
+\item{signed}{a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.}
+
+\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
 }
 \value{
 Time series of spread estimates.

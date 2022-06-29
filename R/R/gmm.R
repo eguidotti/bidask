@@ -2,13 +2,14 @@
 #'
 #' @param x \code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
-#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @param signed a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.
+#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
 #'
 #' @return Time series of spread estimates.
 #'
 #' @keywords internal
 #'
-GMM <- function(x, width = nrow(x), na.rm = FALSE){
+GMM <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
 
   # to log
   x <- log(x)
@@ -72,15 +73,18 @@ GMM <- function(x, width = nrow(x), na.rm = FALSE){
   
   # squared spread
   S2 <- rapply(x, width = width, FUN = GMM, by.column = FALSE)
-  
-  # set to zero
-  S2[S2<0] <- 0
   S2[is.infinite(S2)] <- NA
+  
+  # square root
+  S <- sign(S2) * sqrt(abs(S2))
+  
+  # negative estimates
+  if(!signed) S[S<0] <- 0
 
   # set names
-  colnames(S2) <- "GMM"
+  colnames(S) <- "GMM"
 
   # return
-  return(sqrt(S2))
+  return(S)
 
 }

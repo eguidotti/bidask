@@ -4,7 +4,7 @@
 \alias{CS}
 \title{Corwin-Schultz Estimator}
 \usage{
-CS(x, width = nrow(x), method = "CS", na.rm = FALSE)
+CS(x, width = nrow(x), method = "CS", signed = FALSE, na.rm = FALSE)
 }
 \arguments{
 \item{x}{\code{xts} object with columns named \code{High}, \code{Low}, \code{Close}, representing HLC prices.}
@@ -13,10 +13,12 @@ CS(x, width = nrow(x), method = "CS", na.rm = FALSE)
 
 \item{method}{one of \code{"CS"}, \code{"CS2"}.}
 
-\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.}
+\item{signed}{a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.}
+
+\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
 }
 \value{
-Time series of spread and volatility estimates.
+Time series of spread estimates.
 }
 \description{
 Corwin-Schultz Estimator

@@ -3,9 +3,10 @@
 #' @param x \code{xts} object with columns named \code{High}, \code{Low}, \code{Close}, representing HLC prices.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
 #' @param method one of \code{"CS"}, \code{"CS2"}.
-#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @param signed a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.
+#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
 #'
-#' @return Time series of spread and volatility estimates.
+#' @return Time series of spread estimates.
 #'
 #' @references
 #' Corwin, S. A., & Schultz, P. (2012). A simple way to estimate bid-ask spreads from daily high and low prices. The Journal of Finance, 67 (2), 719-760.
@@ -13,7 +14,7 @@
 #'
 #' @keywords internal
 #'
-CS <- function(x, width = nrow(x), method = "CS", na.rm = FALSE){
+CS <- function(x, width = nrow(x), method = "CS", signed = FALSE, na.rm = FALSE){
 
   # check
   ok <- c("CS","CS2")
@@ -57,9 +58,9 @@ CS <- function(x, width = nrow(x), method = "CS", na.rm = FALSE){
     # compute spread
     cs <- rmean(S, width = width-1, na.rm = na.rm)
 
-    # set negative spreads to zero
-    cs[cs<0] <- 0
-
+    # set negative estimates to zero
+    if(!signed) cs[cs<0] <- 0
+    
     # set name
     colnames(cs) <- "CS"
 

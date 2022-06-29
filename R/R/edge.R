@@ -3,13 +3,14 @@
 #' @param x \code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
 #' @param probs vector of probabilities to compute the critical values.
-#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
-#'
+#' @param signed a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.
+#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
+#' 
 #' @return Time series of spread estimates.
 #'
 #' @keywords internal
 #'
-EDGE <- function(x, width = nrow(x), probs = NULL, na.rm = FALSE){
+EDGE <- function(x, width = nrow(x), probs = NULL, signed = FALSE, na.rm = FALSE){
 
   # to log
   x <- log(x)
@@ -65,32 +66,51 @@ EDGE <- function(x, width = nrow(x), probs = NULL, na.rm = FALSE){
     colnames(S2)[2:ncol(S2)] <- sprintf("EDGE_%s", probs*100)
   }
 
+  # square root
+  S <- sign(S2) * sqrt(abs(S2))
+  
   # set negative spreads to zero
-  S2[S2<0] <- 0
+  if(!signed) S[S<0] <- 0
   
   # return the spread
-  return(sqrt(S2))
+  return(S)
 
 }
 
 #' Efficient Estimation of Bid-Ask Spreads from OHLC Prices
 #' 
-#' Implements an efficient estimation procedure of the bid-ask spread from Open, High, Low, and Close
-#' prices as proposed in \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)}.
+#' This function implements an efficient estimator of the
+#' effective bid-ask spread from open, high, low, and close prices as proposed 
+#' in \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)}.
 #'
-#' @param open numeric vector of Open prices.
-#' @param high numeric vector of High prices.
-#' @param low numeric vector of Low prices.
-#' @param close numeric vector of Close prices.
-#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds.
+#' @param open numeric vector of open prices.
+#' @param high numeric vector of high prices.
+#' @param low numeric vector of low prices.
+#' @param close numeric vector of close prices.
+#' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
 #'
 #' @details Prices must be sorted in ascending order of the timestamp.
 #'
-#' @return The spread estimate.
+#' @return The (percent) spread estimate.
+#'
+#' @note 
+#' \itemize{
+#' \item Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
+#' when using this package in publication. Hint: type \code{citation("bidask")}
+#' \item Place the URL \url{https://github.com/eguidotti/bidask} 
+#' in a footnote when using this package in other online material.
+#' }
 #'
 #' @references 
 #' Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
 #' Available at SSRN: \url{https://www.ssrn.com/abstract=3892335}
+#'
+#' @examples
+#' # simulate a price process with spread 1%
+#' x <- sim(spread = 0.01)
+#'
+#' # estimate the spread
+#' edge(x$Open, x$High, x$Low, x$Close)
 #'
 #' @export
 #' 

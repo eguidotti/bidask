@@ -7,7 +7,7 @@ Authors@R: c(
     person(given = "David", family = "Ardia", role = c("ctb"), comment = c(ORCID = "0000-0003-2823-782X")),
     person(given = "Tim", family = "Kroencke", role = c("ctb"), comment = c(ORCID = "0000-0001-8700-356X"))
   )
-Description: Implements an efficient estimation procedure of bid-ask spreads from open, high, low, and close prices
+Description: Implements an efficient estimator of the effective bid-ask spread from open, high, low, and close prices
   as described in Ardia-Guidotti-Kroencke <https://www.ssrn.com/abstract=3892335>. 
   Moreover, it provides an implementation of the estimators proposed in 
   Roll (1984) <doi:10.1111/j.1540-6261.1984.tb03897.x>, 

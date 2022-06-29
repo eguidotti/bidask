@@ -24,14 +24,14 @@
 #' @return Simulated OHLC prices.
 #'
 #' @references
-#' Corwin, S. A., & Schultz, P. (2012). A simple way to estimate bid-ask spreads from daily high and low prices. The Journal of Finance, 67 (2), 719-760.
-#' \doi{10.1111/j.1540-6261.2012.01729.x}
+#' Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
+#' Available at SSRN: \url{https://www.ssrn.com/abstract=3892335}
 #'
 #' Abdi, F., & Ranaldo, A. (2017). A simple estimation of bid-ask spreads from daily close, high, and low prices. The Review of Financial Studies, 30 (12), 4437-4480.
 #' \doi{10.1093/rfs/hhx084}
 #'
-#' Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
-#' Available at SSRN: \url{https://www.ssrn.com/abstract=3892335}
+#' Corwin, S. A., & Schultz, P. (2012). A simple way to estimate bid-ask spreads from daily high and low prices. The Journal of Finance, 67 (2), 719-760.
+#' \doi{10.1111/j.1540-6261.2012.01729.x}
 #' 
 #' @export
 #'
