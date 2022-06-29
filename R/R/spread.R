@@ -61,7 +61,7 @@
 #'
 #' @export
 #'
-spread <- function(x, width = nrow(x), method = "EDGE", probs = c(0.025, 0.975), na.rm = FALSE){
+spread <- function(x, width = nrow(x), method = "EDGE", probs = NULL, na.rm = FALSE){
 
   if(!is.xts(x))
     stop("x must be a xts object")

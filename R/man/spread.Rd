@@ -4,13 +4,7 @@
 \alias{spread}
 \title{Estimation of Bid-Ask Spreads from OHLC Prices}
 \usage{
-spread(
-  x,
-  width = nrow(x),
-  method = "EDGE",
-  probs = c(0.025, 0.975),
-  na.rm = FALSE
-)
+spread(x, width = nrow(x), method = "EDGE", probs = NULL, na.rm = FALSE)
 }
 \arguments{
 \item{x}{\code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.}
