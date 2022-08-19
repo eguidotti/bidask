@@ -81,7 +81,7 @@ function edge(open::AbstractVector, high::AbstractVector, low::AbstractVector, c
 
     s2 = -4 * (w1 * e1 + w2 * e2) / ((1 - k * (n1 + n2) / 2) + (1 - n5) * (1 - k * (n3 + n4) / 2))
 
-    return s2
+    return sqrt(max(0.0, s2))
 end
 
 export 
