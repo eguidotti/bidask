@@ -4,13 +4,20 @@ Implements an efficient estimation procedure of the bid-ask spread from Open, Hi
 
 ## Installation
 
-```julia
-julia> using Pkg
-julia> Pkg.add(PackageSpec(url="https://github.com/eguidotti/bidask.git", subdir="julia/"))
+Install this package with:
 
+```julia
+using Pkg
+Pkg.add(PackageSpec(url="https://github.com/eguidotti/bidask.git", subdir="julia/"))
 ```
 
 ## Usage
+
+Import the package
+
+```julia
+using BidAsk
+```
 
 Estimate the spread
 

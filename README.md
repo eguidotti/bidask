@@ -8,6 +8,7 @@ Available in:
 - [Python](https://github.com/eguidotti/bidask/tree/main/python)
 - [MATLAB](https://github.com/eguidotti/bidask/tree/main/matlab)
 - [SAS](https://github.com/eguidotti/bidask/tree/main/sas)
+- [Julia](https://github.com/eguidotti/bidask/tree/main/julia)
 - [C++](https://github.com/eguidotti/bidask/tree/main/C++)
 
 You can also check the [pseudocode](https://github.com/eguidotti/bidask/tree/main/pseudocode) to implement the estimator in any programming language.
