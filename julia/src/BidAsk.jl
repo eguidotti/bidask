@@ -59,7 +59,7 @@ function edge(open::AbstractVector, high::AbstractVector, low::AbstractVector, c
     n2 = mean(skipmissing(o .== l))
     n3 = mean(skipmissing(c1 .== h1))
     n4 = mean(skipmissing(c1 .== l1))
-    n5 = mean(skipmissing(h .== l .&& l .== c1))
+    n5 = mean(skipmissing((h .== l) .& (l .== c1)))
 
     s2 = -4 * (w1 * e1 + w2 * e2) / ((1 - k * (n1 + n2) / 2) + (1 - n5) * (1 - k * (n3 + n4) / 2))
 
