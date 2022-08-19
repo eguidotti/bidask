@@ -25,10 +25,10 @@ Estimate the spread
 edge(open, high, low, close)
 ```
 
-- `open`::AbstractVector of open prices
-- `high`::AbstractVector of high prices
-- `low`::AbstractVector of low prices
-- `close`::AbstractVector of close prices
+- `open`: AbstractVector of open prices
+- `high`: AbstractVector of high prices
+- `low`: AbstractVector of low prices
+- `close`: AbstractVector of close prices
 
 Prices must be sorted in ascending order of the timestamp.
 
