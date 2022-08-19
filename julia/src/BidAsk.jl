@@ -2,24 +2,6 @@ module BidAsk
 
 using Statistics
 
-function is_nan_inf(x)
-    if isnan(x)
-        return true
-    elseif isinf(x)
-        return true
-    else
-        return false
-    end
-end
-
-function nanmean(x::AbstractVector)
-    return mean(filter(!is_nan_inf, x))
-end
-
-function nanvar(x::AbstractVector)
-    return var(filter(!is_nan_inf, x))
-end
-
 """
 Efficient Estimation of Bid-Ask Spreads from OHLC Prices
 
@@ -63,21 +45,21 @@ function edge(open::AbstractVector, high::AbstractVector, low::AbstractVector, c
     x1 = (m-o) .* (o-m1) + (m-c1) .* (c1-m1)
     x2 = (m-o) .* (o-c1) + (o-c1) .* (c1-m1)
 
-    e1 = nanmean(x1)
-    e2 = nanmean(x2)
+    e1 = mean(skipmissing(x1))
+    e2 = mean(skipmissing(x2))
 
-    v1 = nanvar(x1)
-    v2 = nanvar(x2)
+    v1 = var(skipmissing(x1))
+    v2 = var(skipmissing(x2))
 
     w1 = v2 ./ (v1 .+ v2)
     w2 = v1 ./ (v1 .+ v2)
     k = 4 .* w1 .* w2
 
-    n1 = nanmean(o .== h)
-    n2 = nanmean(o .== l)
-    n3 = nanmean(c1 .== h1)
-    n4 = nanmean(c1 .== l1)
-    n5 = nanmean(h .== l .&& l .== c1)
+    n1 = mean(skipmissing(o .== h))
+    n2 = mean(skipmissing(o .== l))
+    n3 = mean(skipmissing(c1 .== h1))
+    n4 = mean(skipmissing(c1 .== l1))
+    n5 = mean(skipmissing(h .== l .&& l .== c1))
 
     s2 = -4 * (w1 * e1 + w2 * e2) / ((1 - k * (n1 + n2) / 2) + (1 - n5) * (1 - k * (n3 + n4) / 2))
 
