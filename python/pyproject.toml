@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bidask"
-version = "0.1.0"
+version = "0.1.1"
 license = "GPL-3.0-or-later"
 description = "Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices"
 authors = ["Emanuele Guidotti <emanuele.guidotti@unine.ch>"]

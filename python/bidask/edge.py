@@ -39,6 +39,9 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array) -> floa
     v1 = np.nanvar(x1)
     v2 = np.nanvar(x2)
 
+    if not v1 or not v2:
+        return np.nan
+
     w1 = v2 / (v1 + v2)
     w2 = v1 / (v1 + v2)
     k = 4 * w1 * w2
