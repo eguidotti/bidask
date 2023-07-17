@@ -4,16 +4,22 @@
 \alias{OHLC}
 \title{OHLC Estimators}
 \usage{
-OHLC(x, width = nrow(x), method = "OHLC.CHLO", signed = FALSE, na.rm = FALSE)
+OHLC(
+  x,
+  width = nrow(x),
+  method = "OHL.OHLC.CHL.CHLO",
+  signed = FALSE,
+  na.rm = FALSE
+)
 }
 \arguments{
 \item{x}{\code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.}
 
 \item{width}{integer width of the rolling window to use, or vector of endpoints defining the intervals to use.}
 
-\item{method}{one of \code{"O"}, \code{"OC"}, \code{"OHL"}, \code{"OHLC"}, \code{"C"}, \code{"CO"}, \code{"CHL"}, \code{"CHLO"}, or any combination of them, e.g. \code{"OHLC.CHLO"}.}
+\item{method}{one of \code{"OHL"}, \code{"OHLC"}, \code{"CHL"}, \code{"CHLO"}, or any combination of them, e.g. \code{"OHLC.CHLO"}.}
 
-\item{signed}{a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.}
+\item{signed}{a \code{logical} value indicating whether signed estimates should be returned.}
 
 \item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
 }

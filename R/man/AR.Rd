@@ -13,7 +13,7 @@ AR(x, width = nrow(x), method = "AR", signed = FALSE, na.rm = FALSE)
 
 \item{method}{one of \code{"AR"}, \code{"AR2"}.}
 
-\item{signed}{a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.}
+\item{signed}{a \code{logical} value indicating whether signed estimates should be returned.}
 
 \item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
 }

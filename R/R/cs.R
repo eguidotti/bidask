@@ -3,7 +3,7 @@
 #' @param x \code{xts} object with columns named \code{High}, \code{Low}, \code{Close}, representing HLC prices.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
 #' @param method one of \code{"CS"}, \code{"CS2"}.
-#' @param signed a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.
+#' @param signed a \code{logical} value indicating whether signed estimates should be returned.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
 #'
 #' @return Time series of spread estimates.

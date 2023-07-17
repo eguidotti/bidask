@@ -5,9 +5,8 @@
 #' @details
 #' The method \code{EDGE} implements the Efficient Discrete Generalized Estimator proposed in Ardia-Guidotti-Kroencke (2021).
 #' 
-#' The methods \code{O}, \code{OC}, \code{OHL}, \code{OHLC}, \code{C}, \code{CO}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia-Guidotti-Kroencke (2021).
+#' The methods \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia-Guidotti-Kroencke (2021).
 #' They can be combined by concatenating their identifiers, e.g., \code{OHLC.CHLO} uses an average of the \code{OHLC} and \code{CHLO} estimators.
-#' The method \code{GMM} combines the 8 OHLC estimators with the Generalized Method of Moments.
 #'
 #' The method \code{AR} implements the estimator proposed in Abdi & Ranaldo (2017). \code{AR2} implements the 2-period adjusted version.
 #'
@@ -15,22 +14,24 @@
 #'
 #' The method \code{ROLL} implements the estimator proposed in Roll (1984).
 #'
+#' These estimators are formally estimators for the mean square spread. 
+#' In finite samples, the estimate of the square spread may become negative.
+#' If \code{signed=TRUE}, then the function returns the signed root of the square spread:
+#' \deqn{\hat{S} = sign(\hat{S^2})\times\sqrt{|\hat{S^2}|}}
+#' Otherwise, the methods \code{EDGE}, \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} ignore the sign, while the methods
+#' \code{AR}, \code{CS}, \code{ROLL} reset negative estimates to zero.
+#'
 #' @param x \code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use. By default, the whole time series is used to compute a single spread estimate.
-#' @param method the estimator(s) to use. Choose one or more of: \code{EDGE}, \code{AR}, \code{AR2}, \code{CS}, \code{CS2}, \code{ROLL}, \code{O}, \code{OC}, \code{OHL}, \code{OHLC}, \code{C}, \code{CO}, \code{CHL}, \code{CHLO}, or \code{GMM}. See details.
-#' @param probs vector of probabilities to compute the critical values when the method \code{EDGE} is selected.
-#' @param signed a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.
+#' @param method the estimator(s) to use. Choose one or more of: \code{EDGE}, \code{AR}, \code{AR2}, \code{CS}, \code{CS2}, \code{ROLL}, \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO}. See details.
+#' @param signed a \code{logical} value indicating whether signed estimates should be returned. See details.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
 #'
 #' @return Time series of (percent) spread estimates.
 #'
 #' @note 
-#' \itemize{
-#' \item Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
+#' Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
 #' when using this package in publication. Hint: type \code{citation("bidask")}
-#' \item Place the URL \url{https://github.com/eguidotti/bidask} 
-#' in a footnote when using this package in other online material.
-#' }
 #'
 #' @references
 #' Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
@@ -62,15 +63,12 @@
 #' ep <- xts::endpoints(x, on = "months")
 #' spread(x, width = ep)
 #'
-#' # compute the critical values at 5% and 95%
-#' spread(x, probs = c(0.05, 0.95))
-#'
 #' # use multiple estimators
-#' spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL", "GMM"))
+#' spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL"))
 #'
 #' @export
 #'
-spread <- function(x, width = nrow(x), method = "EDGE", probs = NULL, signed = FALSE, na.rm = FALSE){
+spread <- function(x, width = nrow(x), method = "EDGE", signed = FALSE, na.rm = FALSE){
 
   if(!is.xts(x))
     stop("x must be a xts object")
@@ -81,42 +79,38 @@ spread <- function(x, width = nrow(x), method = "EDGE", probs = NULL, signed = F
   S <- NULL
   x <- x[,intersect(colnames(x), c("OPEN", "HIGH", "LOW", "CLOSE"))]
 
+  todo <- method
+  
   m <- "EDGE"
-  if(m %in% method){
-    S <- cbind(S, EDGE(x, width = width, probs = probs, signed = signed, na.rm = na.rm))
-    method <- setdiff(method, m)
+  if(m %in% todo){
+    S <- cbind(S, EDGE(x, width = width, signed = signed, na.rm = na.rm))
+    todo <- setdiff(todo, m)
   }
   
-  m <- "GMM"
-  if(m %in% method){
-    S <- cbind(S, GMM(x, width = width, signed = signed, na.rm = na.rm))
-    method <- setdiff(method, m)
-  }
-
   m <- c("AR","AR2")
-  if(any(m %in% method)){
-    m <- intersect(method, m)
+  if(any(m %in% todo)){
+    m <- intersect(todo, m)
     S <- cbind(S, AR(x, width = width, method = m, signed = signed, na.rm = na.rm))
-    method <- setdiff(method, m)
+    todo <- setdiff(todo, m)
   }
 
   m <- c("CS","CS2")
-  if(any(m %in% method)){
-    m <- intersect(method, m)
+  if(any(m %in% todo)){
+    m <- intersect(todo, m)
     S <- cbind(S, CS(x, width = width, method = m, signed = signed, na.rm = na.rm))
-    method <- setdiff(method, m)
+    todo <- setdiff(todo, m)
   }
 
   m <- "ROLL"
-  if(m %in% method){
+  if(m %in% todo){
     S <- cbind(S, ROLL(x, width = width, signed = signed, na.rm = na.rm))
-    method <- setdiff(method, m)
+    todo <- setdiff(todo, m)
   }
   
-  if(length(method)){
-    S <- cbind(S, OHLC(x, width = width, method = method, signed = signed, na.rm = na.rm))
+  if(length(todo)){
+    S <- cbind(S, OHLC(x, width = width, method = todo, signed = signed, na.rm = na.rm))
   }
 
-  return(S)
+  return(S[,method])
 
 }

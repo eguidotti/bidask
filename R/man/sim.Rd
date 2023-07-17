@@ -12,9 +12,8 @@ sim(
   volatility = 0.03,
   jump = 0,
   drift = 0,
-  askhigh = FALSE,
-  bidlow = FALSE,
-  units = "day"
+  units = "day",
+  signed = FALSE
 )
 }
 \arguments{
@@ -32,11 +31,9 @@ sim(
 
 \item{drift}{the expected return per period.}
 
-\item{askhigh}{if \code{TRUE}, returns the column \code{AskHigh} containing 1 if the High price is buyer initiated and 0 otherwise.}
-
-\item{bidlow}{if \code{TRUE}, returns the column \code{BidLow} containing 1 if the Low price is seller initiated and 0 otherwise.}
-
 \item{units}{the units of the time period. One of: \code{sec}, \code{min}, \code{hour}, \code{day}, \code{week}, \code{month}, \code{year}.}
+
+\item{signed}{if \code{TRUE}, returns signed prices indicating whether they are buys (positive prices) or sells (negative prices).}
 }
 \value{
 Simulated OHLC prices.

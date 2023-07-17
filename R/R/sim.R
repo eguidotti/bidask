@@ -17,9 +17,8 @@
 #' @param volatility the close-to-close volatility.
 #' @param jump the close-to-open volatility.
 #' @param drift the expected return per period.
-#' @param askhigh if \code{TRUE}, returns the column \code{AskHigh} containing 1 if the High price is buyer initiated and 0 otherwise. 
-#' @param bidlow if \code{TRUE}, returns the column \code{BidLow} containing 1 if the Low price is seller initiated and 0 otherwise.
 #' @param units the units of the time period. One of: \code{sec}, \code{min}, \code{hour}, \code{day}, \code{week}, \code{month}, \code{year}.
+#' @param signed if \code{TRUE}, returns signed prices indicating whether they are buys (positive prices) or sells (negative prices).
 #'
 #' @return Simulated OHLC prices.
 #'
@@ -35,7 +34,16 @@
 #' 
 #' @export
 #'
-sim <- function(n = 10000, trades = 390, prob = 1, spread = 0.01, volatility = 0.03, jump = 0, drift = 0, askhigh = FALSE, bidlow = FALSE, units = "day"){
+sim <- function(
+    n = 10000, 
+    trades = 390, 
+    prob = 1, 
+    spread = 0.01, 
+    volatility = 0.03, 
+    jump = 0, 
+    drift = 0, 
+    units = "day",
+    signed = FALSE){
 
   # sanitize units
   if(units == "minute") units <- "min"
@@ -56,40 +64,35 @@ sim <- function(n = 10000, trades = 390, prob = 1, spread = 0.01, volatility = 0
   r[idx] <-  r[idx] + rnorm(n, sd = jump)
 
   # compute prices
-  isbuy <- rbinom(m, size = 1, prob = 0.5)
-  p <- exp(cumsum(r)) * (1 + spread*(-0.5 + isbuy))
+  z <- spread * (rbinom(m, size = 1, prob = 0.5) - 0.5)
+  p <- exp(cumsum(r)) * (1 + z)
+  
+  # signed prices
+  if(signed){
+    p <- p * sign(z)
+  }
 
   # subset observations
   keep <- as.logical(rbinom(m, size = 1, prob = prob))
 
   # convert to OHLC
-  prev <- c(p[1], isbuy[1])
-  ohlc <- matrix(nrow = n, ncol = 4+askhigh+bidlow)
+  ohlc <- matrix(nrow = n, ncol = 4)
+  prev <- p[1]
   for(i in 1:n){
     # indices of the i-th period
     idx <- (i-1)*trades + 1:trades
-    # extract observed prices
+    # observed prices
     obs <- p[idx][keep[idx]]
-    # extract buy/sell bounce
-    if(askhigh | bidlow) 
-      buy <- isbuy[idx][keep[idx]]
     # if empty keep previous close
-    if(!length(obs)){
-      obs <- prev[1]
-      if(askhigh | bidlow)
-        buy <- prev[2]
-    }
-    # OHLC
+    if(!length(obs)) obs <- prev
+    # index of last observation
     last <- length(obs)
-    irow <- c(obs[1], max(obs), min(obs), obs[last])
-    # Ask-High and Bid-Low
-    if(askhigh) irow <- c(irow, buy[which.max(obs)])
-    if(bidlow) irow <- c(irow, !buy[which.min(obs)])
-    # Fill matrix
-    ohlc[i,] <- irow
-    # Store previous close
-    if(askhigh | bidlow) prev <- c(obs[last], buy[last])
-    else prev <- obs[last]
+    # unsigned prices
+    uobs <- abs(obs)
+    # fill matrix
+    ohlc[i,] <- obs[c(1, which.max(uobs), which.min(uobs), last)]
+    # store previous close
+    prev <- obs[last]
   }
 
   # get time
@@ -101,8 +104,6 @@ sim <- function(n = 10000, trades = 390, prob = 1, spread = 0.01, volatility = 0
   time <- seq(now, length = n, by = units)
   p <- xts::xts(ohlc, order.by = time)
   cn <- c("Open", "High", "Low", "Close")
-  if(askhigh) cn <- c(cn, "AskHigh")
-  if(bidlow) cn <- c(cn, "BidLow")
   colnames(p) <- cn
 
   # return

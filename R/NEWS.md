@@ -1,8 +1,14 @@
+# bidask 1.1.0
+
+- Updated OHLC estimators and EDGE 
+- Removed argument `probs`
+- Improved documentation
+
 # bidask 1.0.1
 
 - Added argument `signed`
 - Removed argument `trim`
-- Change argument default to `probs = NULL`
+- Changed argument default to `probs = NULL`
 
 # bidask 1.0.0
 

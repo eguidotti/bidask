@@ -2,15 +2,14 @@
 #'
 #' @param x \code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use.
-#' @param probs vector of probabilities to compute the critical values.
-#' @param signed a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.
+#' @param signed a \code{logical} value indicating whether signed estimates should be returned.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
 #' 
 #' @return Time series of spread estimates.
 #'
 #' @keywords internal
 #'
-EDGE <- function(x, width = nrow(x), probs = NULL, signed = FALSE, na.rm = FALSE){
+EDGE <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
 
   # to log
   x <- log(x)
@@ -23,54 +22,69 @@ EDGE <- function(x, width = nrow(x), probs = NULL, signed = FALSE, na.rm = FALSE
   M <- (H+L)/2
 
   # lag
-  H1 <- lag(H, 1)[-1]
-  L1 <- lag(L, 1)[-1]
-  C1 <- lag(C, 1)[-1]
-  M1 <- lag(M, 1)[-1]
+  H1 <- lag(H, 1)
+  L1 <- lag(L, 1)
+  C1 <- lag(C, 1)
+  M1 <- lag(M, 1)
 
-  # vectors derived from log-returns
-  X1 <- (M-O)*(O-M1)+(M-C1)*(C1-M1)
-  X2 <- (M-O)*(O-C1)+(O-C1)*(C1-M1)
+  # returns
+  r1 <- M-O
+  r2 <- O-M1
+  r3 <- M-C1
+  r4 <- C1-M1
+  r5 <- O-C1
+  
+  # define z
+  z1 <- r1*r2 + r3*r4
+  z2 <- r1*r5 + r5*r4
+  
+  # define tau
+  tau <- H!=L | L!=C1 
+  
+  # define phi
+  phi1 <- O!=H & tau 
+  phi2 <- O!=L & tau 
+  phi3 <- C1!=H1 & tau 
+  phi4 <- C1!=L1 & tau 
 
-  # means
-  X <- cbind(X1, X2, X1^2, X2^2, X1*X2)
-  V <- cbind(((O==H)+(O==L))/2, ((C1==H1)+(C1==L1))/2, H==L & L==C1)
-  E <- rmean(cbind(X, V[-1]), width = width-1, na.rm = na.rm)
+  # compute means
+  x <- cbind(
+    z1, z2, z1^2, z2^2,
+    r1, tau*r2, r3, tau*r4, r5,
+    tau, phi1, phi2, phi3, phi4
+  )
+  m <- rmean(x[-1], width = width-1, na.rm = na.rm)
   
   # number of observations
-  N <- rsum(!is.na(X[,1]), width = width-1)
-  J <- N/(N-1)
+  n <- rsum(!is.na(z1[-1]), width = width-1)
 
-  # variance
-  V11 <- J*(E[,3]-E[,1]^2)
-  V22 <- J*(E[,4]-E[,2]^2)
-  V12 <- J*(E[,5]-E[,1]*E[,2])
-
+  # variances
+  v1 <- m[,3] - m[,1]^2
+  v2 <- m[,4] - m[,2]^2
+  
   # weights
-  W1 <- V22/(V11+V22)
-  W2 <- 1-W1
+  w1 <- v2 / (v1 + v2)
+  w2 <- 1 - w1
   
-  # adjustment for infrequent trading
-  K <- 4*W1*W2
-  D <- (1-K*E[,6])+(1-E[,8])*(1-K*E[,7])
+  # compute pi
+  pi1 <- -1/8 * (m[,11] + m[,12])
+  pi2 <- -1/8 * (m[,13] + m[,14]) 
   
-  # compute the square spread
-  S2 <- -4*(W1*E[,1]+W2*E[,2])/D
+  # compute square spread
+  S2 <- n/(n-1) * (
+      w1 * (m[,1] - (m[,5]*m[,6] + m[,7]*m[,8]) / m[,10]) + 
+      w2 * (m[,2] - (m[,9]*m[,5] + m[,8]*m[,9]) / m[,10])
+    ) / (pi1 + pi2)
+    
+  # formatting
   S2[is.infinite(S2)] <- NA
   colnames(S2) <- "EDGE"
 
-  # confidence intervals
-  if(!is.null(probs)){
-    stdev <- 4*sqrt(W1^2*V11+W2^2*V22+2*W1*W2*V12)/D
-    for(p in probs) S2 <- cbind(S2, S2[,1]+stdev/sqrt(N)*qt(p = p, df = N-1))
-    colnames(S2)[2:ncol(S2)] <- sprintf("EDGE_%s", probs*100)
-  }
-
-  # square root
+  # signed square root
   S <- sign(S2) * sqrt(abs(S2))
   
-  # set negative spreads to zero
-  if(!signed) S[S<0] <- 0
+  # unsigned spreads
+  if(!signed) S <- abs(S)
   
   # return the spread
   return(S)
@@ -79,27 +93,30 @@ EDGE <- function(x, width = nrow(x), probs = NULL, signed = FALSE, na.rm = FALSE
 
 #' Efficient Estimation of Bid-Ask Spreads from OHLC Prices
 #' 
-#' This function implements an efficient estimator of the
-#' effective bid-ask spread from open, high, low, and close prices as proposed 
+#' This function implements the efficient estimator of the
+#' bid-ask spread from open, high, low, and close prices as proposed 
 #' in \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)}.
+#' Prices must be sorted in ascending order of the timestamp.
 #'
 #' @param open numeric vector of open prices.
 #' @param high numeric vector of high prices.
 #' @param low numeric vector of low prices.
 #' @param close numeric vector of close prices.
+#' @param signed a \code{logical} value indicating whether signed estimates should be returned. See details.
 #' @param na.rm a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.
 #'
-#' @details Prices must be sorted in ascending order of the timestamp.
-#'
+#' @details 
+#' This estimators is formally an estimator for the mean square spread. 
+#' In finite samples, the estimate of the square spread may become negative.
+#' If \code{signed=TRUE}, then the function returns the signed root of the square spread:
+#' \deqn{\hat{S} = sign(\hat{S^2})\times\sqrt{|\hat{S^2}|}}
+#' Otherwise, the sign is ignored.
+#' 
 #' @return The (percent) spread estimate.
 #'
 #' @note 
-#' \itemize{
-#' \item Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
+#' Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
 #' when using this package in publication. Hint: type \code{citation("bidask")}
-#' \item Place the URL \url{https://github.com/eguidotti/bidask} 
-#' in a footnote when using this package in other online material.
-#' }
 #'
 #' @references 
 #' Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
@@ -114,7 +131,7 @@ EDGE <- function(x, width = nrow(x), probs = NULL, signed = FALSE, na.rm = FALSE
 #'
 #' @export
 #' 
-edge <- function(open, high, low, close, na.rm = FALSE){
+edge <- function(open, high, low, close, signed = FALSE, na.rm = FALSE){
   
   n <- length(open)
   if(length(high) != n | length(low) != n | length(close) != n)
@@ -137,27 +154,59 @@ edge <- function(open, high, low, close, na.rm = FALSE){
   c <- c[-1]
   m <- m[-1]
   
-  x1 <- (m-o)*(o-m1) + (m-c1)*(c1-m1)
-  x2 <- (m-o)*(o-c1) + (o-c1)*(c1-m1)
+  r1 <- m-o
+  r2 <- o-m1
+  r3 <- m-c1
+  r4 <- c1-m1
+  r5 <- o-c1
   
-  e1 <- mean(x1, na.rm = na.rm)
-  e2 <- mean(x2, na.rm = na.rm)
+  z1 <- r1*r2 + r3*r4
+  z2 <- r1*r5 + r5*r4
   
-  v1 <- var(x1, na.rm = na.rm)
-  v2 <- var(x2, na.rm = na.rm)
+  tau <- h!=l | l!=c1 
   
-  w1 <- v2/(v1+v2)
-  w2 <- v1/(v1+v2)
-  k <- 4 * w1 * w2
+  phi1 <- o!=h & tau
+  phi2 <- o!=l & tau
+  phi3 <- c1!=h1 & tau
+  phi4 <- c1!=l1 & tau
   
-  n1 <- mean(o==h, na.rm = na.rm)
-  n2 <- mean(o==l, na.rm = na.rm)
-  n3 <- mean(c1==h1, na.rm = na.rm)
-  n4 <- mean(c1==l1, na.rm = na.rm)
-  n5 <- mean(h==l & l==c1, na.rm = na.rm)
+  m1 <- mean(z1, na.rm = na.rm)
+  m2 <- mean(z2, na.rm = na.rm)
+  m3 <- mean(z1^2, na.rm = na.rm)
+  m4 <- mean(z2^2, na.rm = na.rm)
+  m5 <- mean(r1, na.rm = na.rm)
+  m6 <- mean(r2*tau, na.rm = na.rm)
+  m7 <- mean(r3, na.rm = na.rm)
+  m8 <- mean(r4*tau, na.rm = na.rm)
+  m9 <- mean(r5, na.rm = na.rm)
+  m10 <- mean(tau, na.rm = na.rm)
+  m11 <- mean(phi1, na.rm = na.rm)
+  m12 <- mean(phi2, na.rm = na.rm)
+  m13 <- mean(phi3, na.rm = na.rm)
+  m14 <- mean(phi4, na.rm = na.rm)
   
-  s2 <- -4*(w1*e1+w2*e2)/((1-k*(n1+n2)/2)+(1-n5)*(1-k*(n3+n4)/2))
+  n <- sum(!is.na(z1))
   
-  return(sqrt(max(0, s2)))
+  v1 <- m3 - m1^2
+  v2 <- m4 - m2^2
+  
+  w1 <- v2 / (v1 + v2)
+  w2 <- 1 - w1
+
+  p1 <- -1/8 * (m11 + m12)
+  p2 <- -1/8 * (m13 + m14)
+  
+  s2 <- n/(n-1) * (
+    w1 * (m1 - (m5*m6 + m7*m8) / m10) +
+    w2 * (m2 - (m9*m5 + m8*m9) / m10)
+  ) / (p1 + p2)
+    
+  if(is.infinite(s2))
+    return(NA)
+  
+  if(!signed)
+    return(sqrt(abs(s2)))
+  
+  return(sign(s2) * sqrt(abs(s2)))
   
 }

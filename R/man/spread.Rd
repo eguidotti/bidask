@@ -4,25 +4,16 @@
 \alias{spread}
 \title{Estimation of Bid-Ask Spreads from OHLC Prices}
 \usage{
-spread(
-  x,
-  width = nrow(x),
-  method = "EDGE",
-  probs = NULL,
-  signed = FALSE,
-  na.rm = FALSE
-)
+spread(x, width = nrow(x), method = "EDGE", signed = FALSE, na.rm = FALSE)
 }
 \arguments{
 \item{x}{\code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.}
 
 \item{width}{integer width of the rolling window to use, or vector of endpoints defining the intervals to use. By default, the whole time series is used to compute a single spread estimate.}
 
-\item{method}{the estimator(s) to use. Choose one or more of: \code{EDGE}, \code{AR}, \code{AR2}, \code{CS}, \code{CS2}, \code{ROLL}, \code{O}, \code{OC}, \code{OHL}, \code{OHLC}, \code{C}, \code{CO}, \code{CHL}, \code{CHLO}, or \code{GMM}. See details.}
+\item{method}{the estimator(s) to use. Choose one or more of: \code{EDGE}, \code{AR}, \code{AR2}, \code{CS}, \code{CS2}, \code{ROLL}, \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO}. See details.}
 
-\item{probs}{vector of probabilities to compute the critical values when the method \code{EDGE} is selected.}
-
-\item{signed}{a \code{logical} value indicating whether non-positive estimates should be preceded by the negative sign instead of being imputed. Default \code{FALSE}.}
+\item{signed}{a \code{logical} value indicating whether signed estimates should be returned. See details.}
 
 \item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
 }
@@ -35,23 +26,25 @@ This function estimates (percent) effective bid-ask spreads from open, high, low
 \details{
 The method \code{EDGE} implements the Efficient Discrete Generalized Estimator proposed in Ardia-Guidotti-Kroencke (2021).
 
-The methods \code{O}, \code{OC}, \code{OHL}, \code{OHLC}, \code{C}, \code{CO}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia-Guidotti-Kroencke (2021).
+The methods \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia-Guidotti-Kroencke (2021).
 They can be combined by concatenating their identifiers, e.g., \code{OHLC.CHLO} uses an average of the \code{OHLC} and \code{CHLO} estimators.
-The method \code{GMM} combines the 8 OHLC estimators with the Generalized Method of Moments.
 
 The method \code{AR} implements the estimator proposed in Abdi & Ranaldo (2017). \code{AR2} implements the 2-period adjusted version.
 
 The method \code{CS} implements the estimator proposed in Corwin & Schultz (2012). \code{CS2} implements the 2-period adjusted version. Both versions are adjusted for overnight (close-to-open) returns as described in the paper.
 
 The method \code{ROLL} implements the estimator proposed in Roll (1984).
+
+These estimators are formally estimators for the mean square spread. 
+In finite samples, the estimate of the square spread may become negative.
+If \code{signed=TRUE}, then the function returns the signed root of the square spread:
+\deqn{\hat{S} = sign(\hat{S^2})\times\sqrt{|\hat{S^2}|}}
+Otherwise, the methods \code{EDGE}, \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} ignore the sign, while the methods
+\code{AR}, \code{CS}, \code{ROLL} reset negative estimates to zero.
 }
 \note{
-\itemize{
-\item Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
+Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
 when using this package in publication. Hint: type \code{citation("bidask")}
-\item Place the URL \url{https://github.com/eguidotti/bidask} 
-in a footnote when using this package in other online material.
-}
 }
 \examples{
 # simulate a price process with spread 1\%
@@ -70,11 +63,8 @@ spread(x, width = 21)
 ep <- xts::endpoints(x, on = "months")
 spread(x, width = ep)
 
-# compute the critical values at 5\% and 95\%
-spread(x, probs = c(0.05, 0.95))
-
 # use multiple estimators
-spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL", "GMM"))
+spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL"))
 
 }
 \references{
