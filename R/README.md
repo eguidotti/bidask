@@ -49,16 +49,10 @@ ep <- xts::endpoints(x, on = "months")
 spread(x, width = ep)
 ```
 
-Compute the critical values at 5% and 95%
-
-```r
-spread(x, probs = c(0.05, 0.95))
-```
-
 Use multiple estimators
 
 ```r
-spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL", "GMM"))
+spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL"))
 ```
 
 Full documentation available on [CRAN](https://cran.r-project.org/package=bidask/bidask.pdf)
