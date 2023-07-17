@@ -12,40 +12,40 @@ Numeric spread estimate.
 
 ### Algorithm
 
-2. Convert the `O`, `H`, `L`, `C` vectors to logs 
+1. Convert the `O`, `H`, `L`, `C` vectors to logs 
    1. `o = log(O)`
    2. `h = log(H)`
    3. `l = log(L)`
    4. `c = log(C)`
 
-3. Compute the mid prices 
+2. Compute the mid prices 
    1. `m = (h+l)/2`
 
-4. Lag the vectors of one period 
+3. Lag the vectors of one period 
    1. `c1 = lag(c)`
    2. `m1 = lag(m)` 
    3. `h1 = lag(h)` 
    4. `l1 = lag(l)`
 
-5. Compute the  vectors:
+4. Compute the  vectors:
    1. `r1 = m-o`
    2. `r2 = o-m1`
    3. `r3 = m-c1`
    4. `r4 = c1-m1`
    5. `r5 = o-c1`
 
-6. Compute the vectors:
+5. Compute the vectors:
    1. `z1 = r1*r2 + r3*r4`  
    2. `z2 = r1*r5 + r5*r4`
 
-7. Compute the following indicator variables that equal 1 if:
+6. Compute the following indicator variables that equal 1 if:
    1. The high differs from the low, or the low differs from the previous close:  `tau = h!=l | l!=c1 ` 
    2. Same as 1. and the open differs from the high: `phi1 = o!=h & tau`
    3. Same as 1. and the open differs from the low: `phi2 = o!=l & tau`
    4. Same as 1. and the previous close differs from the previous high: `phi3 = c1!=h1 & tau`
    5. Same as 1. and the previous close differs from the previous low: `phi4 = c1!=l1 & tau`
 
-8. Compute the means:
+7. Compute the means:
    1. `m1 = mean(z1)`
    2. `m2 = mean(z2)`
    3. `m3 = mean(z1^2)`
@@ -61,25 +61,25 @@ Numeric spread estimate.
    13. `m13 = mean(phi3)`
    14. `m14 = mean(phi4)`
 
-9. Compute the total number of non-missing observations 
+8. Compute the total number of non-missing observations 
    1. `n = sum(!is.na(z1))`
 
-10. Compute the variances 
+9. Compute the variances 
     1. `v1 = m3 - m1^2`  
     2. `v2 = m4 - m2^2`
 
-11. Compute the weights 
+10. Compute the weights 
     1. `w1 = v2/(v1+v2)`  
     2. `w2 = v1/(v1+v2)`
 
-12. Compute the coefficients 
+11. Compute the coefficients 
     1. `p1 = -1/8 * (m11+m12)`  
     2. `p2 = -1/8 * (m13+m14)`
 
-13. Compute the square spread 
+12. Compute the square spread 
     1. `s2 = n/(n-1) * (w1 * (m1 - (m5*m6 + m7*m8) / m10) + w2 * (m2 - (m9*m5 + m8*m9) / m10)) / (p1 + p2))`
 
-14. Return the square root of the absolute value of the square spread 
+13. Return the square root of the absolute value of the square spread 
     1. `s = sqrt(abs(s2))`
 
 
