@@ -9,19 +9,19 @@ CS <- function(x, width = nrow(x), method = "CS", signed = FALSE, na.rm = FALSE)
     stop(sprintf("Method(s) '%s' not available. The available methods are '%s'.",
                  paste(ko, collapse = "', '"), paste(ok, collapse = "', '")))
   
-  C1 <- lag(x$CLOSE, 1)
-  H1 <- lag(x$HIGH, 1)
-  L1 <- lag(x$LOW, 1)
+  H <- x$HIGH[-1]
+  L <- x$LOW[-1]
   
-  H2 <- x$HIGH
-  L2 <- x$LOW
+  C1 <- lag(x$CLOSE, 1)[-1]
+  H1 <- lag(x$HIGH, 1)[-1]
+  L1 <- lag(x$LOW, 1)[-1]
+  
+  GAP <- pmax(0, C1-H) + pmin(0, C1-L)
+  AH <- H + GAP
+  AL <- L + GAP
 
-  x$GAP <- pmax(0, C1-H2) + pmin(0, C1-L2)
-  AH2 <- H2 + x$GAP
-  AL2 <- L2 + x$GAP
-
-  B <- rsum(log(H2/L2)^2, width = 2, na.rm = na.rm)
-  G <- log(pmax(AH2, H1)/pmin(AL2, L1))^2
+  B <- log(H/L)^2 + log(H1/L1)^2
+  G <- log(pmax(AH, H1)/pmin(AL, L1))^2
 
   A <- (sqrt(2*B)-sqrt(B))/(3-2*sqrt(2)) - sqrt(G/(3-2*sqrt(2)))
   S <- 2*(exp(A)-1)/(1+exp(A))
