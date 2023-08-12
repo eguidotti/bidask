@@ -2,7 +2,7 @@
 % Please edit documentation in R/edge.R
 \name{edge}
 \alias{edge}
-\title{Efficient Estimation of Bid-Ask Spreads from OHLC Prices}
+\title{Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices}
 \usage{
 edge(open, high, low, close, signed = FALSE, na.rm = FALSE)
 }
@@ -15,32 +15,27 @@ edge(open, high, low, close, signed = FALSE, na.rm = FALSE)
 
 \item{close}{numeric vector of close prices.}
 
-\item{signed}{a \code{logical} value indicating whether signed estimates should be returned. See details.}
+\item{signed}{whether signed estimates should be returned.}
 
-\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
+\item{na.rm}{whether missing values should be ignored.}
 }
 \value{
-The (percent) spread estimate.
+The spread estimate. A value of 0.01 corresponds to a spread of 1\%.
 }
 \description{
-This function implements the efficient estimator of the
-bid-ask spread from open, high, low, and close prices as proposed 
-in \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)}.
-Prices must be sorted in ascending order of the timestamp.
+This function implements an efficient estimator of
+bid-ask spreads from open, high, low, and close prices as described 
+in \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, & Kroencke (2021)}.
 }
 \details{
-This estimators is formally an estimator for the mean square spread. 
-In finite samples, the estimate of the square spread may become negative.
-If \code{signed=TRUE}, then the function returns the signed root of the square spread:
-\deqn{\hat{S} = sign(\hat{S^2})\times\sqrt{|\hat{S^2}|}}
-Otherwise, the sign is ignored.
+Prices must be sorted in ascending order of the timestamp.
 }
 \note{
-Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
-when using this package in publication. Hint: type \code{citation("bidask")}
+Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, & Kroencke (2021)} 
+when using this package in publication.
 }
 \examples{
-# simulate a price process with spread 1\%
+# simulate open, high, low, and close prices with spread 1\%
 x <- sim(spread = 0.01)
 
 # estimate the spread

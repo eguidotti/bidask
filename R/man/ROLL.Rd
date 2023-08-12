@@ -6,23 +6,7 @@
 \usage{
 ROLL(x, width = nrow(x), signed = FALSE, na.rm = FALSE)
 }
-\arguments{
-\item{x}{\code{xts} object with a column named \code{Close}, representing closing prices.}
-
-\item{width}{integer width of the rolling window to use, or vector of endpoints defining the intervals to use.}
-
-\item{signed}{a \code{logical} value indicating whether signed estimates should be returned.}
-
-\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
-}
-\value{
-Time series of spread estimates.
-}
 \description{
 Roll Estimator
-}
-\references{
-Roll, R. (1984). A simple implicit measure of the effective bid-ask spread in an efficient market. The Journal of Finance, 39 (4), 1127-1139.
-\doi{10.1111/j.1540-6261.1984.tb03897.x}
 }
 \keyword{internal}

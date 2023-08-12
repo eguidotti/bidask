@@ -6,25 +6,7 @@
 \usage{
 AR(x, width = nrow(x), method = "AR", signed = FALSE, na.rm = FALSE)
 }
-\arguments{
-\item{x}{\code{xts} object with columns named \code{High}, \code{Low}, \code{Close}, representing HLC prices.}
-
-\item{width}{integer width of the rolling window to use, or vector of endpoints defining the intervals to use.}
-
-\item{method}{one of \code{"AR"}, \code{"AR2"}.}
-
-\item{signed}{a \code{logical} value indicating whether signed estimates should be returned.}
-
-\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
-}
-\value{
-Time series of spread estimates.
-}
 \description{
 Abdi-Ranaldo Estimator
-}
-\references{
-Abdi, F., & Ranaldo, A. (2017). A simple estimation of bid-ask spreads from daily close, high, and low prices. The Review of Financial Studies, 30 (12), 4437-4480.
-\doi{10.1093/rfs/hhx084}
 }
 \keyword{internal}

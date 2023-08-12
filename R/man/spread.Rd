@@ -2,59 +2,53 @@
 % Please edit documentation in R/spread.R
 \name{spread}
 \alias{spread}
-\title{Estimation of Bid-Ask Spreads from OHLC Prices}
+\title{Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices}
 \usage{
 spread(x, width = nrow(x), method = "EDGE", signed = FALSE, na.rm = FALSE)
 }
 \arguments{
-\item{x}{\code{xts} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}, representing OHLC prices.}
+\item{x}{\code{\link[xts]{xts}} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}.}
 
 \item{width}{integer width of the rolling window to use, or vector of endpoints defining the intervals to use. By default, the whole time series is used to compute a single spread estimate.}
 
-\item{method}{the estimator(s) to use. Choose one or more of: \code{EDGE}, \code{AR}, \code{AR2}, \code{CS}, \code{CS2}, \code{ROLL}, \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO}. See details.}
+\item{method}{the estimator(s) to use. See details.}
 
-\item{signed}{a \code{logical} value indicating whether signed estimates should be returned. See details.}
+\item{signed}{whether signed estimates should be returned.}
 
-\item{na.rm}{a \code{logical} value indicating whether \code{NA} values should be stripped before the computation proceeds. Default \code{FALSE}.}
+\item{na.rm}{whether missing values should be ignored.}
 }
 \value{
-Time series of (percent) spread estimates.
+Time series of spread estimates. A value of 0.01 corresponds to a spread of 1\%.
 }
 \description{
-This function estimates (percent) effective bid-ask spreads from open, high, low, and close prices with several methods.
+This function implements several methods to estimate bid-ask spreads
+from open, high, low, and close prices.
 }
 \details{
-The method \code{EDGE} implements the Efficient Discrete Generalized Estimator proposed in Ardia-Guidotti-Kroencke (2021).
+The method \code{EDGE} implements the Efficient Discrete Generalized Estimator described in Ardia, Guidotti, & Kroencke (2021).
 
-The methods \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia-Guidotti-Kroencke (2021).
+The methods \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia, Guidotti, & Kroencke (2021).
 They can be combined by concatenating their identifiers, e.g., \code{OHLC.CHLO} uses an average of the \code{OHLC} and \code{CHLO} estimators.
 
-The method \code{AR} implements the estimator proposed in Abdi & Ranaldo (2017). \code{AR2} implements the 2-period adjusted version.
+The method \code{AR} implements the estimator described in Abdi & Ranaldo (2017). \code{AR2} implements the 2-period adjusted version.
 
-The method \code{CS} implements the estimator proposed in Corwin & Schultz (2012). \code{CS2} implements the 2-period adjusted version. Both versions are adjusted for overnight (close-to-open) returns as described in the paper.
+The method \code{CS} implements the estimator described in Corwin & Schultz (2012). \code{CS2} implements the 2-period adjusted version. Both versions are adjusted for overnight (close-to-open) returns as described in the paper.
 
-The method \code{ROLL} implements the estimator proposed in Roll (1984).
-
-These estimators are formally estimators for the mean square spread. 
-In finite samples, the estimate of the square spread may become negative.
-If \code{signed=TRUE}, then the function returns the signed root of the square spread:
-\deqn{\hat{S} = sign(\hat{S^2})\times\sqrt{|\hat{S^2}|}}
-Otherwise, the methods \code{EDGE}, \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} ignore the sign, while the methods
-\code{AR}, \code{CS}, \code{ROLL} reset negative estimates to zero.
+The method \code{ROLL} implements the estimator described in Roll (1984).
 }
 \note{
-Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, Kroencke (2021)} 
-when using this package in publication. Hint: type \code{citation("bidask")}
+Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, & Kroencke (2021)} 
+when using this package in publication.
 }
 \examples{
-# simulate a price process with spread 1\%
+# simulate open, high, low, and close prices with spread 1\%
 x <- sim(spread = 0.01)
 
-# estimate the spread with EDGE
-edge(x$Open, x$High, x$Low, x$Close)
+# estimate the spread
+spread(x)
 
 # by default this is equivalent to
-spread(x)
+edge(x$Open, x$High, x$Low, x$Close)
 
 # use a rolling window of 21 periods
 spread(x, width = 21)
