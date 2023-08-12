@@ -67,6 +67,9 @@ spread <- function(x, width = nrow(x), method = "EDGE", signed = FALSE, na.rm = 
   if(!is.xts(x))
     stop("x must be a xts object")
 
+  if(nrow(x) < 3)
+    stop("x contains less than 3 observations")
+  
   method <- toupper(method)
   colnames(x) <- toupper(gsub("^(.*\\b)(Open|High|Low|Close)$", "\\2", colnames(x)))
 
