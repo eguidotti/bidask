@@ -9,6 +9,8 @@ CS <- function(x, width = nrow(x), method = "CS", signed = FALSE, na.rm = FALSE)
     stop(sprintf("Method(s) '%s' not available. The available methods are '%s'.",
                  paste(ko, collapse = "', '"), paste(ok, collapse = "', '")))
   
+  x <- log(x)
+  
   H <- x$HIGH[-1]
   L <- x$LOW[-1]
   
@@ -20,8 +22,8 @@ CS <- function(x, width = nrow(x), method = "CS", signed = FALSE, na.rm = FALSE)
   AH <- H + GAP
   AL <- L + GAP
 
-  B <- log(H/L)^2 + log(H1/L1)^2
-  G <- log(pmax(AH, H1)/pmin(AL, L1))^2
+  B <- (H-L)^2 + (H1-L1)^2
+  G <- (pmax(AH, H1) - pmin(AL, L1))^2
 
   A <- (sqrt(2*B)-sqrt(B))/(3-2*sqrt(2)) - sqrt(G/(3-2*sqrt(2)))
   S <- 2*(exp(A)-1)/(1+exp(A))
