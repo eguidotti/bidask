@@ -15,7 +15,7 @@ rsum <- function(x, width, na.rm = FALSE){
     width <- c(0, width)
   
   if(length(width) > 1)
-    return(xts::period.apply(x, INDEX = width[width>=0], FUN = sum, na.rm = na.rm))
+    return(xts::period.apply(x, INDEX = width[width>=0], FUN = colSums, na.rm = na.rm))
 
   return(zoo::rollsumr(x, k = width, na.rm = na.rm))
 
@@ -31,7 +31,7 @@ rmean <- function(x, width, na.rm = FALSE){
     width <- c(0, width)
   
   if(length(width) > 1)
-    return(xts::period.apply(x, INDEX = width[width>=0], FUN = mean, na.rm = na.rm))
+    return(xts::period.apply(x, INDEX = width[width>=0], FUN = colMeans, na.rm = na.rm))
 
   return(zoo::rollmeanr(x, k = width, na.rm = na.rm))
 

@@ -13,8 +13,10 @@ ROLL <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
   R1 <- C - C1
   R2 <- C1 - C2
   
+  N <- xts::xts(!is.na(R2), order.by = zoo::index(R2))[-(1:2)]
+  
   m <- rmean(cbind(R1, R2, R1*R2)[-(1:2),], width = width-2, na.rm = na.rm)
-  n <- rsum(!is.na(R2)[-(1:2),,drop=FALSE], width = width-2)
+  n <- rsum(N, width = width-2)
   
   S2 <- -4 * n/(n-1) * (m[,3] - m[,1]*m[,2])
   colnames(S2) <- "ROLL"
