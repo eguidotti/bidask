@@ -43,10 +43,6 @@ pt = mean(tau)
 po = mean(phi1) + mean(phi2)
 pc = mean(phi3) + mean(phi4)
 
-# return missing value if any of these is zero
-if pt == 0 OR po == 0 OR pc == 0:
-    return missing
-
 # compute returns
 r1 = m-o
 r2 = o-m1
@@ -70,10 +66,6 @@ e2 = mean(x2)
 # compute variances
 v1 = mean(x1*x1) - e1*e1
 v2 = mean(x2*x2) - e2*e2
-
-# use same variance if both are zero by chance
-if v1 == 0 AND v2 == 0:
-    v1 = v2 = 1.
 
 # compute square spread
 s2 = (v2*e1 + v1*e2) / (v1 + v2)
