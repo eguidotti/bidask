@@ -23,14 +23,16 @@ from bidask import edge
 Arguments:
 
 ```python
-edge(open, high, low, close, signed=False)
+edge(open, high, low, close, sign=False)
 ```
 
-- `open`: array-like vector of Open prices.
-- `high`: array-like vector of High prices.
-- `low`: array-like vector of Low prices.
-- `close`: array-like vector of Close prices.
-- `signed`: whether signed estimates should be returned.
+| field   | description                                 |
+| ------- | ------------------------------------------- |
+| `open`  | Array-like vector of open prices            |
+| `high`  | Array-like vector of high prices            |
+| `low`   | Array-like vector of low prices             |
+| `close` | Array-like vector of close prices           |
+| `sign`  | Whether signed estimates should be returned |
 
 The input prices must be sorted in ascending order of the timestamp. 
 

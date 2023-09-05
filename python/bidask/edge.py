@@ -1,26 +1,28 @@
 import numpy as np
 
 
-def edge(open: np.array, high: np.array, low: np.array, close: np.array, signed: bool = False) -> float:
+def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: bool = False) -> float:
     """
     Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-    Implements an efficient estimator of bid-ask spreads from open, high, low, and close 
-    prices as described in Ardia, Guidotti, & Kroencke (2021): https://www.ssrn.com/abstract=3892335
+    Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices 
+    as described in Ardia, Guidotti, & Kroencke (2021) -> https://www.ssrn.com/abstract=3892335
 
     Prices must be sorted in ascending order of the timestamp.
-    :param open: array-like vector of Open prices.
-    :param high: array-like vector of High prices.
-    :param low: array-like vector of Low prices.
-    :param close: array-like vector of Close prices.
-    :param signed: whether signed estimates should be returned.
 
-    :return: The spread estimate. A value of 0.01 corresponds to a spread of 1%.
+    Parameters
+    ----------
+    - `open`: array-like vector of open prices
+    - `high`: array-like vector of high prices
+    - `low`: array-like vector of low prices
+    - `close`: array-like vector of close prices
+    - `sign`: whether signed estimates should be returned
+
+    Returns
+    -------
+    The spread estimate. A value of 0.01 corresponds to a spread of 1%.
+    
     """
-
-    n = len(open)
-    if len(high) != n or len(low) != n or len(close) != n:
-        raise Exception("open, high, low, close must have the same length")
 
     o = np.log(np.asarray(open))
     h = np.log(np.asarray(high))
@@ -40,10 +42,10 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, signed:
     pt = np.nanmean(tau)
     po = np.nanmean(phi1) + np.nanmean(phi2)
     pc = np.nanmean(phi3) + np.nanmean(phi4)
-  
+    
     if pt == 0 or po == 0 or pc == 0:
         return np.nan
-  
+
     r1 = m-o
     r2 = o-m1
     r3 = m-c1
@@ -66,7 +68,7 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, signed:
     s2 = (v2*e1 + v1*e2) / (v1 + v2)
   
     s = np.sqrt(np.abs(s2))
-    if signed: 
-        s = s * np.sign(s2)
+    if sign and s2 < 0: 
+        s = -s
   
     return float(s)
