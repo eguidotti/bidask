@@ -1,6 +1,8 @@
 # Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-Implements an efficient estimation procedure of the bid-ask spread from Open, High, Low, and Close prices as proposed in [Ardia, Guidotti, Kroencke (2021)](https://www.ssrn.com/abstract=3892335)
+Implements an efficient estimator of bid-ask spreads from open, high, low, and close 
+prices as described in Ardia, Guidotti, & Kroencke (2021): https://www.ssrn.com/abstract=3892335
+
 
 ## Installation
 
@@ -12,13 +14,13 @@ pip install bidask
 
 ## Usage
 
-Import the estimator
+Import the estimator:
 
 ```python
 from bidask import edge
 ```
 
-Estimate the spread
+Estimate the spread. A value of 0.01 corresponds to a spread of 1%:
 
 ```python
 edge(open, high, low, close)
@@ -28,6 +30,7 @@ edge(open, high, low, close)
 - `high`: array-like vector of High prices.
 - `low`: array-like vector of Low prices.
 - `close`: array-like vector of Close prices.
+- `signed`: whether signed estimates should be returned.
 
 Prices must be sorted in ascending order of the timestamp.
 
