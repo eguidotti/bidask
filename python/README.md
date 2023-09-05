@@ -23,7 +23,7 @@ from bidask import edge
 Estimate the spread. A value of 0.01 corresponds to a spread of 1%:
 
 ```python
-edge(open, high, low, close)
+edge(open, high, low, close, signed=False)
 ```
 
 - `open`: array-like vector of Open prices.
