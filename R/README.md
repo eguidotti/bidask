@@ -1,6 +1,7 @@
 # Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-Implements an efficient estimation procedure of the bid-ask spread from Open, High, Low, and Close prices as proposed in [Ardia, Guidotti, Kroencke (2021)](https://www.ssrn.com/abstract=3892335)
+Implements an efficient estimator of bid-ask spreads from open, high, low, and close 
+prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com/abstract=3892335).
 
 ## Installation
 
@@ -18,38 +19,38 @@ Load the library:
 library("bidask")
 ```
 
-Simulate a price process with spread 1%
+Simulate a price process with spread 1%:
 
 ```R
 x <- sim(spread = 0.01)
 ```
 
-Estimate the spread
+Estimate the spread. A value of 0.01 corresponds to a spread of 1%:
 
 ```r
 edge(x$Open, x$High, x$Low, x$Close)
 ```
 
-By default this is equivalent to
+By default this is equivalent to:
 
 ```r
 spread(x)
 ```
 
-Use a rolling window of 21 periods
+Use a rolling window of 21 periods:
 
 ```r
 spread(x, width = 21)
 ```
 
-Compute the spread for each month
+Compute the spread for each month:
 
 ```r
 ep <- xts::endpoints(x, on = "months")
 spread(x, width = ep)
 ```
 
-Use multiple estimators
+Use multiple estimators:
 
 ```r
 spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL"))
