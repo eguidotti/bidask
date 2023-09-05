@@ -100,9 +100,9 @@ EDGE <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
 
 #' Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 #' 
-#' This function implements an efficient estimator of
-#' bid-ask spreads from open, high, low, and close prices as described 
-#' in \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, & Kroencke (2021)}.
+#' Implements an efficient estimator of bid-ask spreads 
+#' from open, high, low, and close prices as described in 
+#' \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, & Kroencke (2021)}.
 #' 
 #' @details
 #' Prices must be sorted in ascending order of the timestamp.
@@ -193,8 +193,9 @@ edge <- function(open, high, low, close, signed = FALSE, na.rm = FALSE){
   
   s2 <- (v2*e1 + v1*e2) / (v1 + v2)
   
-  s <- sign(s2) * sqrt(abs(s2))
-  if(!signed) s <- abs(s)
+  s <- sqrt(abs(s2))
+  if(signed)
+    s <- s * sign(s2)
   
   return(s)
   
