@@ -58,7 +58,7 @@ OHLC <- function(x, width = nrow(x), method = "OHL.CHL.OHLC.CHLO", signed = FALS
     S2 <- cbind(S2, eval(parse(text = expr)))
   }
   
-  S2[is.infinite(S2)] <- NA
+  S2[is.infinite(S2)] <- NaN
   colnames(S2) <- method
   
   S <- sign(S2) * sqrt(abs(S2))

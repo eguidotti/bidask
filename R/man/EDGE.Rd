@@ -23,9 +23,9 @@ edge(open, high, low, close, signed = FALSE, na.rm = FALSE)
 The spread estimate. A value of 0.01 corresponds to a spread of 1\%.
 }
 \description{
-This function implements an efficient estimator of
-bid-ask spreads from open, high, low, and close prices as described 
-in \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, & Kroencke (2021)}.
+Implements an efficient estimator of bid-ask spreads 
+from open, high, low, and close prices as described in 
+\href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, & Kroencke (2021)}.
 }
 \details{
 Prices must be sorted in ascending order of the timestamp.

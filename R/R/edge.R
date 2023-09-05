@@ -88,7 +88,7 @@ EDGE <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
     e2^2
   
   S2 <- (v2*e1 + v1*e2) / (v1 + v2)
-  S2[is.infinite(S2)] <- NA
+  S2[is.infinite(S2)] <- NaN
   colnames(S2) <- "EDGE"
 
   S <- sign(S2) * sqrt(abs(S2))
@@ -167,7 +167,7 @@ edge <- function(open, high, low, close, signed = FALSE, na.rm = FALSE){
   pc <- mean(phi3, na.rm = na.rm) + mean(phi4, na.rm = na.rm)
   
   if(is.na(pt) | is.na(po) | is.na(pc) | pt == 0 | po == 0 | pc == 0)
-    return(NA)
+    return(NaN)
   
   r1 <- m-o
   r2 <- o-m1
@@ -188,9 +188,6 @@ edge <- function(open, high, low, close, signed = FALSE, na.rm = FALSE){
   v1 <- mean(x1^2, na.rm = na.rm) - e1^2
   v2 <- mean(x2^2, na.rm = na.rm) - e2^2
 
-  if(v1 == 0 & v2 == 0)
-    v1 <- v2 <- 1
-  
   s2 <- (v2*e1 + v1*e2) / (v1 + v2)
   
   s <- sqrt(abs(s2))
