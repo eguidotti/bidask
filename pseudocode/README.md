@@ -13,11 +13,6 @@ Numeric spread estimate. A value of 0.01 corresponds to a spread of 1%.
 ### Algorithm
 
 ```python
-# check input data
-n = len(open)
-if len(high) != n OR len(low) != n OR len(close) != n:
-    raise Exception("open, high, low, close must have the same length")
-
 # convert prices to logs
 o = log(open)
 h = log(high)
