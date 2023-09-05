@@ -5,7 +5,11 @@ prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com
 
 ## Installation
 
-Download the SAS file [`edge.sas`](https://github.com/eguidotti/bidask/tree/main/sas/edge.sas) into your working directory.
+Download the SAS file [`edge.sas`](https://github.com/eguidotti/bidask/tree/main/sas/edge.sas) into your working directory. For instance:
+
+```shell
+wget https://github.com/eguidotti/bidask/raw/main/sas/edge.sas
+```
 
 ## Usage
 
@@ -25,8 +29,8 @@ sas edge.sas \
 
 | field   | description                                                  |
 | ------- | ------------------------------------------------------------ |
-| `in`    | The path to a file containing open, high, low, and close prices for multiple groups |
-| `out`   | The path to output spread estimates. See [here](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/acpcref/p1d0tocg3njhmfn1d4ld2covlwm0.htm) for supported file extensions |
+| `in`    | The path to a SAS dataset containing open, high, low, and close prices for multiple groups |
+| `out`   | The name of the file to output spread estimates. See [here](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/acpcref/p1d0tocg3njhmfn1d4ld2covlwm0.htm) for supported file extensions |
 | `group` | Comma separated list of column(s) to group by; e.g., `symbol` or `date,symbol` |
 | `open`  | The name of the column containing open prices                |
 | `high`  | The name of the column containing high prices                |
@@ -40,15 +44,17 @@ The output value is the spread estimate. A value of 0.01 corresponds to a spread
 
 ## Example
 
+The file [`ohlc.sas7bdat`](ohlc.sas7bdat) contains simulated open, high, low, and close prices as described [here](https://github.com/eguidotti/bidask/tree/main/pseudocode) for two symbols. Download the file into your working directory. For instance:
+
 ```bash
-wget https://github.com/eguidotti/bidask/tree/main/sas/ohlc.csv.gz
+wget https://github.com/eguidotti/bidask/raw/main/sas/ohlc.sas7bdat
 ```
 
-
+Then, estimate the spread for each symbol:
 
 ```SAS
 sas edge.sas \
-  -set in ohlc.csv.gz \
+  -set in ohlc.sas7bdat \
   -set out edge.csv \
   -set by Symbol \
   -set open Open \
@@ -57,6 +63,13 @@ sas edge.sas \
   -set close Close \
   -set sign 0
 ```
+
+The output file `edge.csv` contains the following estimates:
+
+| Symbol | EDGE         |
+| ------ | ------------ |
+| A      | 0.0101849035 |
+| B      | 0.0101849035 |
 
 ## Cite as
 
