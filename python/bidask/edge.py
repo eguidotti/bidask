@@ -62,9 +62,6 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, signed:
   
     v1 = np.nanmean(x1**2) - e1**2
     v2 = np.nanmean(x2**2) - e2**2
-
-    if v1 == 0 and v2 == 0:
-        v1 = v2 = 1.
   
     s2 = (v2*e1 + v1*e2) / (v1 + v2)
   
