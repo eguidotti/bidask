@@ -1,6 +1,7 @@
 # Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-Implements an efficient estimation procedure of the bid-ask spread from Open, High, Low, and Close prices as proposed in [Ardia, Guidotti, Kroencke (2021)](https://www.ssrn.com/abstract=3892335)
+Implements an efficient estimator of bid-ask spreads from open, high, low, and close 
+prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com/abstract=3892335).
 
 ## Installation
 
@@ -8,18 +9,21 @@ This folder contains the C++ source file [`edge.cpp`](https://github.com/eguidot
 
 ## Usage
 
-Estimate the spread
+Arguments:
 
 ```c++
-edge(open, high, low, close)
+edge(open, high, low, close, sign=false)
 ```
 
-- `open`: standard `vector<double>` of Open prices.
-- `high`: standard `vector<double>` of High prices.
-- `low`: standard`vector<double>` of Low prices.
-- `close`: standard `vector<double>` of Close prices.
+- `open`: std::vector<double> of Open prices.
+- `high`: std::vector<double> of High prices.
+- `low`: std::vector<double> of Low prices.
+- `close`: std::vector<double> of Close prices.
+- `sign`: whether signed estimates should be returned.
 
-Prices must be sorted in ascending order of the timestamp.
+The input prices must be sorted in ascending order of the timestamp. 
+
+The output value is the spread estimate. A value of 0.01 corresponds to a spread of 1%.
 
 ## Cite as
 
