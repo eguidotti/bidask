@@ -4,7 +4,7 @@ This file provides the pseudocode to simplify implementations of [EDGE](https://
 
 ### Input
 
-Vectors of `open`, `high`, `low`, and `close` prices. The vectors must be sorted in ascending order of the timestamp. The function should also accept the argument `signed` specifying whether signed estimates should be returned.
+Vectors of `open`, `high`, `low`, and `close` prices. The vectors must be sorted in ascending order of the timestamp. The function should also accept the argument `sign` specifying whether signed estimates should be returned.
 
 ### Output
 
@@ -70,10 +70,10 @@ v2 = mean(x2*x2) - e2*e2
 # compute square spread
 s2 = (v2*e1 + v1*e2) / (v1 + v2)
 
-# compute signed square root
+# compute square root
 s = sqrt(abs(s2))
-if signed: 
-    s = s * sign(s2)
+if sign AND s2 < 0: 
+    s = -s
 
 # return the spread
 return s
