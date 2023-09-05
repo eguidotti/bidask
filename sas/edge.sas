@@ -1,3 +1,28 @@
+/*
+Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
+
+Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices 
+as described in Ardia, Guidotti, & Kroencke (2021) -> https://www.ssrn.com/abstract=3892335
+
+Prices must be sorted in ascending order of the timestamp within each group.
+
+Parameters
+----------
+- `in`: the path to a SAS dataset containing open, high, low, and close prices for multiple groups
+- `out`: the name of the file to output spread estimates
+- `group`: comma separated list of column(s) to group by; e.g., `symbol` or `date,symbol`
+- `open`: the name of the column containing open prices
+- `high`: the name of the column containing high prices
+- `low`: the name of the column containing low prices
+- `close`: the name of the column containing close prices
+- `sign`: boolean value (0/1) indicating whether signed estimates should be returned
+
+Returns
+-------
+The spread estimate. A value of 0.01 corresponds to a spread of 1%.
+
+*/
+
 %let in = %sysget(in);
 %let out = %sysget(out);
 
