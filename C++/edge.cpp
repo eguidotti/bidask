@@ -3,7 +3,6 @@
 #include <vector>
 #include <stdexcept>
 
-
 template <typename T>
 double mean(const std::vector<T> &x){
   unsigned int n = x.size(); double sum = 0.0;
@@ -11,7 +10,27 @@ double mean(const std::vector<T> &x){
   return sum / n;
 }
 
+/*
+Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
+Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices 
+as described in Ardia, Guidotti, & Kroencke (2021) -> https://www.ssrn.com/abstract=3892335
+
+Prices must be sorted in ascending order of the timestamp.
+
+Parameters
+----------
+- `open`: std::vector of open prices
+- `high`: std::vector of high prices
+- `low`: std::vector of low prices
+- `close`: std::vector of close prices
+- `sign`: whether signed estimates should be returned
+
+Returns
+-------
+The spread estimate. A value of 0.01 corresponds to a spread of 1%.
+
+*/
 double edge(
     const std::vector<double> &open,
     const std::vector<double> &high,

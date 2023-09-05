@@ -5,7 +5,7 @@ prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com
 
 ## Installation
 
-This folder contains the C++ source file [`edge.cpp`](https://github.com/eguidotti/bidask/tree/main/C++/edge.cpp) and the corresponding header [`edge.h`](https://github.com/eguidotti/bidask/tree/main/C++/edge.h)
+Download the C++ source file [`edge.cpp`](https://github.com/eguidotti/bidask/tree/main/C++/edge.cpp) and the corresponding header [`edge.h`](https://github.com/eguidotti/bidask/tree/main/C++/edge.h)
 
 ## Usage
 
@@ -15,11 +15,13 @@ Arguments:
 edge(open, high, low, close, sign=false)
 ```
 
-- `open`: std::vector<double> of Open prices.
-- `high`: std::vector<double> of High prices.
-- `low`: std::vector<double> of Low prices.
-- `close`: std::vector<double> of Close prices.
-- `sign`: whether signed estimates should be returned.
+| field   | description                                 |
+| ------- | ------------------------------------------- |
+| `open`  | std::vector\<double\> of open prices        |
+| `high`  | std::vector\<double\> of high prices        |
+| `low`   | std::vector\<double\> of low prices         |
+| `close` | std::vector\<double\> of close prices       |
+| `sign`  | Whether signed estimates should be returned |
 
 The input prices must be sorted in ascending order of the timestamp. 
 
