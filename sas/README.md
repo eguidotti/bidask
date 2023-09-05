@@ -13,7 +13,7 @@ wget https://github.com/eguidotti/bidask/raw/main/sas/edge.sas
 
 ## Usage
 
-The file reads a SAS dataset containing open, high, low, close prices for multiple groups, and saves the spread estimates to an output file. Run the file [`edge.sas`](https://github.com/eguidotti/bidask/tree/main/sas/edge.sas) from the command line as follows:
+The code reads a SAS dataset containing open, high, low, close prices for multiple groups, and saves the spread estimates to an output file. Run the file [`edge.sas`](https://github.com/eguidotti/bidask/tree/main/sas/edge.sas) from the command line as follows:
 
 ```SAS
 sas edge.sas \
@@ -50,7 +50,7 @@ The file [`ohlc.sas7bdat`](ohlc.sas7bdat) contains simulated open, high, low, an
 wget https://github.com/eguidotti/bidask/raw/main/sas/ohlc.sas7bdat
 ```
 
-Then, estimate the spread for each symbol:
+Estimate the spread for each symbol:
 
 ```SAS
 sas edge.sas \
