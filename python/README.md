@@ -20,7 +20,7 @@ Import the estimator:
 from bidask import edge
 ```
 
-Estimate the spread. A value of 0.01 corresponds to a spread of 1%:
+Arguments:
 
 ```python
 edge(open, high, low, close, signed=False)
@@ -32,7 +32,19 @@ edge(open, high, low, close, signed=False)
 - `close`: array-like vector of Close prices.
 - `signed`: whether signed estimates should be returned.
 
-Prices must be sorted in ascending order of the timestamp.
+The input prices must be sorted in ascending order of the timestamp. 
+
+The output value is the spread estimate. A value of 0.01 corresponds to a spread of 1%.
+
+## Example
+
+```python
+import pandas as pd
+from bidask import edge
+
+x = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
+edge(x.Open, x.High, x.Low, x.Close)
+```
 
 ## Cite as
 
