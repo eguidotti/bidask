@@ -17,17 +17,16 @@ data prices;
     set "&in";
     by &by_lst;
 
-    o = log(OPEN);
-    h = log(HIGH);
-    l = log(LOW);
-    c = log(CLOSE);
+    o = log(&open);
+    h = log(&high);
+    l = log(&low);
+    c = log(&close);
     m = (h + l) / 2;
 
     h1 = lag1(h);
     l1 = lag1(l);    
     m1 = lag1(m);
     c1 = lag1(c);
-    c2 = lag2(c);
 
     r1 = m-o;
     r2 = o-m1;
