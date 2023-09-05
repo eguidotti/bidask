@@ -44,8 +44,8 @@ The output value is the spread estimate. A value of 0.01 corresponds to a spread
 import pandas as pd
 from bidask import edge
 
-x = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
-edge(x.Open, x.High, x.Low, x.Close)
+df = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
+edge(df.Open, df.High, df.Low, df.Close)
 ```
 
 ## Cite as
