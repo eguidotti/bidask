@@ -1,6 +1,7 @@
 # Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-Implements an efficient estimation procedure of the bid-ask spread from Open, High, Low, and Close prices as proposed in [Ardia, Guidotti, Kroencke (2021)](https://www.ssrn.com/abstract=3892335)
+Implements an efficient estimator of bid-ask spreads from open, high, low, and close 
+prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com/abstract=3892335).
 
 ## Installation
 
@@ -8,28 +9,54 @@ Download the SAS file [`edge.sas`](https://github.com/eguidotti/bidask/tree/main
 
 ## Usage
 
-The file reads a SAS dataset containing open, high, low, close prices (for multiple groups) and saves the spread estimates into a (e.g., csv) file. Run the file [`edge.sas`](https://github.com/eguidotti/bidask/tree/main/sas/edge.sas) from the command line:
+The file reads a SAS dataset containing open, high, low, close prices for multiple groups, and saves the spread estimates to an output file. Run the file [`edge.sas`](https://github.com/eguidotti/bidask/tree/main/sas/edge.sas) from the command line as follows:
 
 ```SAS
 sas edge.sas \
-  -set in <DATA> \
-  -set out <FILE> \
-  -set by <GROUP> \
-  -set open <OPEN> \
-  -set high <HIGH> \
-  -set low <LOW> \
-  -set close <CLOSE> 
+  -set in <...> \
+  -set out <...> \
+  -set by <...> \
+  -set open <...> \
+  -set high <...> \
+  -set low <...> \
+  -set close <...> \
+  -set sign <...>
 ```
 
-- `<DATA>`: the path to the file containing Open, High, Low, Close prices (for multiple groups)
-- `<FILE>`: the path to store the spread estimates (for each group). See [here](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/acpcref/p1d0tocg3njhmfn1d4ld2covlwm0.htm) for supported file extensions
-- `<GROUP>`: comma separated list of column(s) to group by; e.g., `symbol` or `date,symbol`
-- `<OPEN>`: the column containing Open prices
-- `<HIGH>`: the column containing High prices
-- `<LOW>`: the column containing Low prices
-- `<CLOSE>`: the column containing Close prices
+| field   | description                                                  |
+| ------- | ------------------------------------------------------------ |
+| `in`    | The path to a file containing open, high, low, and close prices for multiple groups |
+| `out`   | The path to output spread estimates. See [here](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/acpcref/p1d0tocg3njhmfn1d4ld2covlwm0.htm) for supported file extensions |
+| `group` | Comma separated list of column(s) to group by; e.g., `symbol` or `date,symbol` |
+| `open`  | The name of the column containing open prices                |
+| `high`  | The name of the column containing high prices                |
+| `low`   | The name of the column containing low prices                 |
+| `close` | The name of the column containing close prices               |
+| `sign`  | Boolean value (0/1) indicating whether signed estimates should be returned |
 
-Prices must be sorted in ascending order of the timestamp within each group. 
+The input prices must be sorted in ascending order of the timestamp within each group. 
+
+The output value is the spread estimate. A value of 0.01 corresponds to a spread of 1%.
+
+## Example
+
+```bash
+wget https://github.com/eguidotti/bidask/tree/main/sas/ohlc.csv.gz
+```
+
+
+
+```SAS
+sas edge.sas \
+  -set in ohlc.csv.gz \
+  -set out edge.csv \
+  -set by Symbol \
+  -set open Open \
+  -set high High \
+  -set low Low \
+  -set close Close \
+  -set sign 0
+```
 
 ## Cite as
 
