@@ -41,6 +41,21 @@ test_that("edge-rolling", {
   
 })
 
+test_that("edge-sign", {
+  
+  set.seed(123)
+  x <- sim(prob = 0.01)
+  
+  width <- 21
+  s1 <- spread(x, width = width, method = "EDGE", sign = TRUE)
+  s2 <- zoo::rollapplyr(x, width = width, by.column = FALSE, FUN = function(x){
+    edge(x$Open, x$High, x$Low, x$Close, sign = TRUE)
+  })[-(1:width-1)]
+  
+  expect_equal(as.numeric(s1), as.numeric(s2))
+  
+})
+
 test_that("edge-nan", {
   
   expect_true(is.nan(edge(
