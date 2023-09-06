@@ -5,12 +5,12 @@ prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com
 
 Available in:
 
-- [R](https://github.com/eguidotti/bidask/tree/main/r)
-- [Python](https://github.com/eguidotti/bidask/tree/main/python)
-- [MATLAB](https://github.com/eguidotti/bidask/tree/main/matlab)
-- [SAS](https://github.com/eguidotti/bidask/tree/main/sas)
-- [Julia](https://github.com/eguidotti/bidask/tree/main/julia)
 - [C++](https://github.com/eguidotti/bidask/tree/main/c++)
+- [Julia](https://github.com/eguidotti/bidask/tree/main/julia)
+- [MATLAB](https://github.com/eguidotti/bidask/tree/main/matlab)
+- [Python](https://github.com/eguidotti/bidask/tree/main/python)
+- [R](https://github.com/eguidotti/bidask/tree/main/r)
+- [SAS](https://github.com/eguidotti/bidask/tree/main/sas)
 
 You can also check the [pseudocode](https://github.com/eguidotti/bidask/tree/main/pseudocode) to implement the estimator in any programming language.
 
