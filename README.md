@@ -5,7 +5,7 @@ prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com
 
 Available in:
 
-- [R](https://github.com/eguidotti/bidask/tree/main/R)
+- [R](https://github.com/eguidotti/bidask/tree/main/r)
 - [Python](https://github.com/eguidotti/bidask/tree/main/python)
 - [MATLAB](https://github.com/eguidotti/bidask/tree/main/matlab)
 - [SAS](https://github.com/eguidotti/bidask/tree/main/sas)
