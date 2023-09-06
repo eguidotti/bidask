@@ -9,7 +9,7 @@ NULL
 #' 
 #' @keywords internal
 #' 
-rsum <- function(x, width, na.rm = FALSE){
+rsum <- function(x, width, na.rm){
   
   if(length(width) == 1 && width == nrow(x))
     width <- c(0, width)
@@ -25,7 +25,7 @@ rsum <- function(x, width, na.rm = FALSE){
 #' 
 #' @keywords internal
 #' 
-rmean <- function(x, width, na.rm = FALSE){
+rmean <- function(x, width, na.rm){
 
   if(length(width) == 1 && width == nrow(x))
     width <- c(0, width)

@@ -1,0 +1,159 @@
+---
+title: "Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bidask}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+This vignette illustrates how to estimate bid-ask spreads from open, high, low, and close prices. Let's start by loading the package:
+
+```{r setup}
+library(bidask)
+```
+
+The package offers two ways to estimate bid-ask spreads:
+
+1. `edge()`: designed for tidy data.
+2. `spread()`: designed for `xts` objects.
+
+The function `edge()` implements the efficient estimator described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com/abstract=3892335). Open, high, low, and close prices are to be passed as separate vectors. 
+
+The function `spread()` requires an `xts` object containing columns named `Open`, `High`, `Low`, `Close` and it provides additional functionalities, such as additional estimators and rolling estimates.
+
+An output value of 0.01 corresponds to a spread estimate of 1%.
+
+Examples are provided below.
+
+## Tidy data
+
+The function `edge()` can be easily used with tidy data and the `dplyr` grammar. In the following example, we estimate bid-ask spreads for cryptocurrencies.
+
+Download daily prices for Bitcoin and Ethereum using the [crypto2](https://cran.r-project.org/package=crypto2) package:
+
+```{r}
+library(dplyr)
+library(crypto2)
+df <- crypto_list(only_active=TRUE) %>%
+  filter(symbol %in% c("BTC", "ETH")) %>%
+  crypto_history(start_date = "20200101", end_date = "20221231")
+```
+
+```{r}
+head(df)
+```
+
+Estimate the spread for each coin in each year:
+
+```{r}
+df %>%
+  mutate(yyyy = format(timestamp, "%Y")) %>%
+  group_by(symbol, yyyy) %>%
+  arrange(timestamp) %>%
+  summarise(EDGE = edge(open, high, low, close))
+```
+
+## `xts` objects
+
+The function `spread()` provides additional functionalities for [xts](https://cran.r-project.org/package=xts) objects. In the following example, we estimate bid-ask spreads for equities.
+
+Download daily data for Microsoft (MSFT) using the [quantmod](https://cran.r-project.org/package=quantmod) package:
+
+```{r}
+library(quantmod)
+x <- getSymbols("MSFT", auto.assign = FALSE, start = "2019-01-01", end = "2022-12-31")
+head(x)
+```
+
+This is an `xts` object:
+
+```{r}
+class(x)
+```
+So we can estimate the spread with:
+
+```{r}
+spread(x)
+```
+
+By default, the call above is equivalent to:
+
+```{r}
+edge(open = x[,1], high = x[,2], low = x[,3], close = x[,4])
+```
+
+But `spread()` also provides additional functionalities. For instance, estimate the spread for each month and plot the estimates:
+
+```{r}
+sp <- spread(x, width = endpoints(x, on = "months"))
+plot(sp)
+```
+
+Or estimate the spread using a rolling window of 21 obervations:
+
+```{r}
+sp <- spread(x, width = 21)
+plot(sp)
+```
+
+To illustrate higher-frequency estimates, we are going to download intraday data from Alpha Vantage. You must register with Alpha Vantage in order to download their data, but the one-time registration is fast and free. Register at https://www.alphavantage.co/ to receive your key. A sample key is provided below. You can set the API key globally as follows:
+
+```{r}
+setDefaults(getSymbols.av, api.key = "4FC5HHAXTSE5SUTL")
+```
+
+Download minute data for Microsoft in the last 15 days:
+
+```{r}
+x <- getSymbols(
+  Symbols = "MSFT", 
+  auto.assign = FALSE, 
+  src = "av", 
+  periodicity = "intraday", 
+  interval = "1min", 
+  output.size = "full")
+```
+
+```{r}
+head(x)
+```
+
+Estimate the spread for each day and plot the estimates:
+
+```{r}
+sp <- spread(x, width = endpoints(x, on = "day"))
+plot(sp)
+```
+
+## GitHub 
+
+If you find this package useful, please [star the repo](https://github.com/eguidotti/bidask)!
+
+The repository also contains implementations for Python, C++, MATLAB, and more.
+
+## Cite as
+
+*Ardia, David and Guidotti, Emanuele and Kroencke, Tim Alexander, "Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices". Available at SSRN: https://ssrn.com/abstract=3892335*
+
+A BibTex  entry for LaTeX users is:
+
+```bibtex
+@unpublished{edge2021,
+    author = {Ardia, David and Guidotti, Emanuele and Kroencke, Tim},
+    title  = {Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices},
+    year   = {2021},
+    note   = {Available at SSRN}
+    url    = {https://ssrn.com/abstract=3892335}
+}
+```

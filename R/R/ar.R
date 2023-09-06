@@ -2,7 +2,7 @@
 #'
 #' @keywords internal
 #'
-AR <- function(x, width = nrow(x), method = "AR", signed = FALSE, na.rm = FALSE){
+AR <- function(x, width = nrow(x), method, sign, na.rm){
 
   ok <- c("AR","AR2")
   if(length(ko <- setdiff(method, ok)))
@@ -22,7 +22,7 @@ AR <- function(x, width = nrow(x), method = "AR", signed = FALSE, na.rm = FALSE)
   if("AR" %in% method) {
     ar <- rmean(S2, width = width-1, na.rm = na.rm)
     ar <- sign(ar) * sqrt(abs(ar))
-    if(!signed) ar <- abs(ar)
+    if(!sign) ar <- abs(ar)
     colnames(ar) <- "AR"
   }
 

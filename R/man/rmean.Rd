@@ -4,7 +4,7 @@
 \alias{rmean}
 \title{Rolling mean}
 \usage{
-rmean(x, width, na.rm = FALSE)
+rmean(x, width, na.rm)
 }
 \description{
 Rolling mean

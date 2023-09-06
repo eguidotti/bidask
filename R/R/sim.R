@@ -12,12 +12,12 @@
 #' @param n the number of periods to simulate.
 #' @param trades the number of trades per period.
 #' @param prob the probability to observe a trade.
-#' @param spread the percentage spread.
+#' @param spread the bid-ask spread.
 #' @param volatility the open-to-close volatility.
 #' @param overnight the close-to-open volatility.
 #' @param drift the expected return per period.
 #' @param units the units of the time period. One of: \code{sec}, \code{min}, \code{hour}, \code{day}, \code{week}, \code{month}, \code{year}.
-#' @param signed whether to return positive prices for buys and negative prices for sells.
+#' @param sign whether to return positive prices for buys and negative prices for sells.
 #'
 #' @return Simulated open, high, low, and close prices.
 #'
@@ -40,7 +40,7 @@ sim <- function(
     overnight = 0, 
     drift = 0, 
     units = "day",
-    signed = FALSE){
+    sign = FALSE){
 
   # sanitize units
   if(units == "minute") units <- "min"
@@ -65,7 +65,7 @@ sim <- function(
   p <- exp(cumsum(r)) * (1 + z)
   
   # signed prices
-  if(signed){
+  if(sign){
     p <- p * sign(z)
   }
 

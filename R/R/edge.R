@@ -2,7 +2,7 @@
 #'
 #' @keywords internal
 #'
-EDGE <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
+EDGE <- function(x, width = nrow(x), sign, na.rm){
   
   x <- log(x)
 
@@ -92,7 +92,7 @@ EDGE <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
   colnames(S2) <- "EDGE"
 
   S <- sign(S2) * sqrt(abs(S2))
-  if(!signed) S <- abs(S)
+  if(!sign) S <- abs(S)
   
   return(S)
   
@@ -111,8 +111,7 @@ EDGE <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
 #' @param high numeric vector of high prices.
 #' @param low numeric vector of low prices.
 #' @param close numeric vector of close prices.
-#' @param signed whether signed estimates should be returned.
-#' @param na.rm whether missing values should be ignored.
+#' @param sign whether signed estimates should be returned.
 #'
 #' @return The spread estimate. A value of 0.01 corresponds to a spread of 1\%.
 #'
@@ -133,12 +132,12 @@ EDGE <- function(x, width = nrow(x), signed = FALSE, na.rm = FALSE){
 #'
 #' @export
 #' 
-edge <- function(open, high, low, close, signed = FALSE, na.rm = FALSE){
+edge <- function(open, high, low, close, sign = FALSE){
   
   n <- length(open)
   if(length(high) != n | length(low) != n | length(close) != n)
     stop("open, high, low, close must have the same length")
-    
+  
   o <- log(as.numeric(open))
   h <- log(as.numeric(high))
   l <- log(as.numeric(low))
@@ -162,12 +161,9 @@ edge <- function(open, high, low, close, signed = FALSE, na.rm = FALSE){
   phi3 <- c1!=h1 & tau
   phi4 <- c1!=l1 & tau
   
-  pt <- mean(tau, na.rm = na.rm)
-  po <- mean(phi1, na.rm = na.rm) + mean(phi2, na.rm = na.rm)
-  pc <- mean(phi3, na.rm = na.rm) + mean(phi4, na.rm = na.rm)
-  
-  if(is.na(pt) | is.na(po) | is.na(pc) | pt == 0 | po == 0 | pc == 0)
-    return(NaN)
+  pt <- mean(tau, na.rm = TRUE)
+  po <- mean(phi1, na.rm = TRUE) + mean(phi2, na.rm = TRUE)
+  pc <- mean(phi3, na.rm = TRUE) + mean(phi4, na.rm = TRUE)
   
   r1 <- m-o
   r2 <- o-m1
@@ -175,24 +171,24 @@ edge <- function(open, high, low, close, signed = FALSE, na.rm = FALSE){
   r4 <- c1-m1
   r5 <- o-c1
   
-  d1 <- r1 - tau * mean(r1, na.rm = na.rm) / pt
-  d3 <- r3 - tau * mean(r3, na.rm = na.rm) / pt
-  d5 <- r5 - tau * mean(r5, na.rm = na.rm) / pt
+  d1 <- r1 - tau * mean(r1, na.rm = TRUE) / pt
+  d3 <- r3 - tau * mean(r3, na.rm = TRUE) / pt
+  d5 <- r5 - tau * mean(r5, na.rm = TRUE) / pt
   
   x1 <- -4/po*d1*r2 -4/pc*d3*r4 
   x2 <- -4/po*d1*r5 -4/pc*d5*r4 
   
-  e1  <- mean(x1, na.rm = na.rm)
-  e2  <- mean(x2, na.rm = na.rm)
+  e1  <- mean(x1, na.rm = TRUE)
+  e2  <- mean(x2, na.rm = TRUE)
   
-  v1 <- mean(x1^2, na.rm = na.rm) - e1^2
-  v2 <- mean(x2^2, na.rm = na.rm) - e2^2
+  v1 <- mean(x1^2, na.rm = TRUE) - e1^2
+  v2 <- mean(x2^2, na.rm = TRUE) - e2^2
 
   s2 <- (v2*e1 + v1*e2) / (v1 + v2)
   
   s <- sqrt(abs(s2))
-  if(signed)
-    s <- s * sign(s2)
+  if(sign & s2 < 0)
+    s <- -s
   
   return(s)
   

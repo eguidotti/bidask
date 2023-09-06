@@ -2,3 +2,5 @@
 ^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^doc$
+^Meta$

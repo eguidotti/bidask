@@ -4,7 +4,7 @@
 \alias{ROLL}
 \title{Roll Estimator}
 \usage{
-ROLL(x, width = nrow(x), signed = FALSE, na.rm = FALSE)
+ROLL(x, width = nrow(x), sign, na.rm)
 }
 \description{
 Roll Estimator

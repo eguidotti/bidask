@@ -4,7 +4,7 @@
 \alias{rsum}
 \title{Rolling sum}
 \usage{
-rsum(x, width, na.rm = FALSE)
+rsum(x, width, na.rm)
 }
 \description{
 Rolling sum

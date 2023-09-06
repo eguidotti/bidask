@@ -2,7 +2,7 @@
 #'
 #' @keywords internal
 #'
-CS <- function(x, width = nrow(x), method = "CS", signed = FALSE, na.rm = FALSE){
+CS <- function(x, width = nrow(x), method, sign, na.rm){
 
   ok <- c("CS","CS2")
   if(length(ko <- setdiff(method, ok)))
@@ -32,7 +32,7 @@ CS <- function(x, width = nrow(x), method = "CS", signed = FALSE, na.rm = FALSE)
 
   if("CS" %in% method) {
     cs <- rmean(S, width = width-1, na.rm = na.rm)
-    if(!signed) cs <- abs(cs)
+    if(!sign) cs <- abs(cs)
     colnames(cs) <- "CS"
   }
 

@@ -2,7 +2,7 @@
 #'
 #' @keywords internal
 #'
-OHLC <- function(x, width = nrow(x), method = "OHL.CHL.OHLC.CHLO", signed = FALSE, na.rm = FALSE){
+OHLC <- function(x, width = nrow(x), method, sign, na.rm){
 
   methods <- strsplit(method, split = ".", fixed = TRUE)
 
@@ -62,7 +62,7 @@ OHLC <- function(x, width = nrow(x), method = "OHL.CHL.OHLC.CHLO", signed = FALS
   colnames(S2) <- method
   
   S <- sign(S2) * sqrt(abs(S2))
-  if(!signed) S <- abs(S)
+  if(!sign) S <- abs(S)
   
   return(S)
   

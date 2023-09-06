@@ -10,7 +10,7 @@ test_that("edge", {
   
 })
 
-test_that("width-ep", {
+test_that("edge-monthly", {
   
   set.seed(123)
   x <- sim(prob = 0.01)
@@ -26,7 +26,7 @@ test_that("width-ep", {
   
 })
 
-test_that("width-int", {
+test_that("edge-rolling", {
   
   set.seed(123)
   x <- sim(prob = 0.01)
@@ -41,24 +41,13 @@ test_that("width-int", {
   
 })
 
-test_that("na.rm-FALSE", {
+test_that("edge-nan", {
   
-  set.seed(123)
-  x <- sim(); x[10, 4] <- NA
-  
-  s <- edge(x$Open, x$High, x$Low, x$Close, na.rm = FALSE)
-  
-  expect_true(is.na(s))
-  
-})
-
-test_that("na.rm-TRUE", {
-  
-  set.seed(123)
-  x <- sim(); x[10, 4] <- NA
-  
-  s <- edge(x$Open, x$High, x$Low, x$Close, na.rm = TRUE)
-  
-  expect_true(!is.na(s))
+  expect_true(is.nan(edge(
+    c(18.21, 17.61, 17.61),
+    c(18.21, 17.61, 17.61),
+    c(17.61, 17.61, 17.61),
+    c(17.61, 17.61, 17.61)
+  )))
   
 })

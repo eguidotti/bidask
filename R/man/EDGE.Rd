@@ -4,7 +4,7 @@
 \alias{edge}
 \title{Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices}
 \usage{
-edge(open, high, low, close, signed = FALSE, na.rm = FALSE)
+edge(open, high, low, close, sign = FALSE)
 }
 \arguments{
 \item{open}{numeric vector of open prices.}
@@ -15,9 +15,7 @@ edge(open, high, low, close, signed = FALSE, na.rm = FALSE)
 
 \item{close}{numeric vector of close prices.}
 
-\item{signed}{whether signed estimates should be returned.}
-
-\item{na.rm}{whether missing values should be ignored.}
+\item{sign}{whether signed estimates should be returned.}
 }
 \value{
 The spread estimate. A value of 0.01 corresponds to a spread of 1\%.

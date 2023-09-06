@@ -13,7 +13,7 @@ sim(
   overnight = 0,
   drift = 0,
   units = "day",
-  signed = FALSE
+  sign = FALSE
 )
 }
 \arguments{
@@ -23,7 +23,7 @@ sim(
 
 \item{prob}{the probability to observe a trade.}
 
-\item{spread}{the percentage spread.}
+\item{spread}{the bid-ask spread.}
 
 \item{volatility}{the open-to-close volatility.}
 
@@ -33,7 +33,7 @@ sim(
 
 \item{units}{the units of the time period. One of: \code{sec}, \code{min}, \code{hour}, \code{day}, \code{week}, \code{month}, \code{year}.}
 
-\item{signed}{whether to return positive prices for buys and negative prices for sells.}
+\item{sign}{whether to return positive prices for buys and negative prices for sells.}
 }
 \value{
 Simulated open, high, low, and close prices.
