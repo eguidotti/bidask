@@ -50,10 +50,10 @@ spread(x)
 # by default this is equivalent to
 edge(x$Open, x$High, x$Low, x$Close)
 
-# use a rolling window of 21 periods
+# estimate the spread using a rolling window of 21 periods
 spread(x, width = 21)
 
-# compute the spread for each month
+# estimate the spread for each month
 ep <- xts::endpoints(x, on = "months")
 spread(x, width = ep)
 
