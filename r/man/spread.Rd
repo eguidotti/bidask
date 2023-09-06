@@ -4,7 +4,7 @@
 \alias{spread}
 \title{Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices}
 \usage{
-spread(x, width = nrow(x), method = "EDGE", sign = FALSE, na.rm = TRUE)
+spread(x, width = nrow(x), method = "EDGE", sign = FALSE, na.rm = FALSE)
 }
 \arguments{
 \item{x}{\code{\link[xts]{xts}} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}.}
