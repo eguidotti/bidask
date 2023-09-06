@@ -19,44 +19,32 @@ Load the library:
 library("bidask")
 ```
 
-Simulate a price process with spread 1%:
+Arguments:
 
 ```R
-x <- sim(spread = 0.01)
+edge(open, high, low, close, sign=FALSE)
 ```
 
-Estimate the spread. A value of 0.01 corresponds to a spread of 1%:
+| field   | description                                 |
+| ------- | ------------------------------------------- |
+| `open`  | Numeric vector of open prices               |
+| `high`  | Numeric vector of high prices               |
+| `low`   | Numeric vector of low prices                |
+| `close` | Numeric vector of close prices              |
+| `sign`  | Whether signed estimates should be returned |
 
-```r
-edge(x$Open, x$High, x$Low, x$Close)
+The input prices must be sorted in ascending order of the timestamp. 
+
+The output value is the spread estimate. A value of 0.01 corresponds to a spread of 1%.
+
+## Example
+
+```R
+library("bidask")
+
+df = read.csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
+edge(df$Open, df$High, df$Low, df$Close)
 ```
-
-By default this is equivalent to:
-
-```r
-spread(x)
-```
-
-Use a rolling window of 21 periods:
-
-```r
-spread(x, width = 21)
-```
-
-Compute the spread for each month:
-
-```r
-ep <- xts::endpoints(x, on = "months")
-spread(x, width = ep)
-```
-
-Use multiple estimators:
-
-```r
-spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL"))
-```
-
-Full documentation available on [CRAN](https://cran.r-project.org/package=bidask/bidask.pdf)
 
 ## Cite as
 
