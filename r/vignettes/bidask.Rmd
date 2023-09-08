@@ -107,15 +107,15 @@ sp <- spread(x, width = 21)
 plot(sp)
 ```
 
-To illustrate higher-frequency estimates, we are going to download intraday data from Alpha Vantage. You must register with Alpha Vantage in order to download their data, but the one-time registration is fast and free. Register at https://www.alphavantage.co/ to receive your key. A sample key is provided below. You can set the API key globally as follows:
+To illustrate higher-frequency estimates, we are going to download intraday data from Alpha Vantage. You must register with Alpha Vantage in order to download their data, but the one-time registration is fast and free. Register at https://www.alphavantage.co/ to receive your key. You can set the API key globally as follows:
 
 ```{r}
-setDefaults(getSymbols.av, api.key = "4FC5HHAXTSE5SUTL")
+setDefaults(getSymbols.av, api.key = "<API-KEY>")
 ```
 
-Download minute data for Microsoft in the last 15 days:
+Download minute data for Microsoft:
 
-```{r}
+```r
 x <- getSymbols(
   Symbols = "MSFT", 
   auto.assign = FALSE, 
@@ -123,6 +123,11 @@ x <- getSymbols(
   periodicity = "intraday", 
   interval = "1min", 
   output.size = "full")
+```
+
+```{r, include=FALSE}
+x <- read.csv(system.file("extdata", "msft.csv", package = "bidask"))
+x <- xts(x[,-1], order.by = as.POSIXct(x[,1]))
 ```
 
 ```{r}
