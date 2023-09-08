@@ -33,7 +33,7 @@ edge(open, high, low, close, sign=FALSE)
 | `close` | Numeric vector of close prices              |
 | `sign`  | Whether signed estimates should be returned |
 
-The input prices must be sorted in ascending order of the timestamp. 
+The input prices must be sorted in ascending order of the timestamp.
 
 The output value is the spread estimate. A value of 0.01 corresponds to a spread of 1%.
 
