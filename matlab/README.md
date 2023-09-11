@@ -1,25 +1,46 @@
 # Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-Implements an efficient estimation procedure of the bid-ask spread from Open, High, Low, and Close prices as proposed in [Ardia, Guidotti, Kroencke (2021)](https://www.ssrn.com/abstract=3892335)
+Implements an efficient estimator of bid-ask spreads from open, high, low, and close 
+prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com/abstract=3892335).
 
 ## Installation
 
-This folder contains the MATLAB implementation in the file [`edge.m`](https://github.com/eguidotti/bidask/tree/main/matlab/edge.m)
+Download the file [`edge.m`](https://github.com/eguidotti/bidask/tree/main/matlab/edge.m) into your working directory.
 
 ## Usage
 
-Estimate the spread
+Import the estimator:
 
-```c++
-edge(open, high, low, close)
+```matlab
+import edge.*
 ```
 
-- `open`: vector of Open prices with size `T` x `1`
-- `high`: vector of High prices with size `T` x `1`
-- `low`: vector of Low prices with size `T` x `1`
-- `close`: vector of Close prices with size `T` x `1`
+Arguments:
 
-Prices must be sorted in ascending order of the timestamp.
+```matlab
+edge(open, high, low, close, sign=false)
+```
+
+| field   | description                                 |
+| ------- | ------------------------------------------- |
+| `open`  | Vector of open prices with size `T` x `1`   |
+| `high`  | Vector of high prices with size `T` x `1`   |
+| `low`   | Vector of low prices with size `T` x `1`    |
+| `close` | Vector of close prices with size `T` x `1`  |
+| `sign`  | Whether signed estimates should be returned |
+
+The input prices must be sorted in ascending order of the timestamp. 
+
+The output value is the spread estimate. A value of 0.01 corresponds to a spread of 1%.
+
+## Example
+
+```matlab
+import edge.*
+
+df = csvread(websave(tempname, 'https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv'), 1, 0);
+edge(df(:,1), df(:,2), df(:,3), df(:,4))
+```
 
 ## Cite as
 
