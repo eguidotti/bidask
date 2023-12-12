@@ -32,7 +32,7 @@ edge(open, high, low, close, sign=False)
 | `high`  | Array-like vector of high prices            |
 | `low`   | Array-like vector of low prices             |
 | `close` | Array-like vector of close prices           |
-| `sign`  | Whether signed estimates should be returned. If `False`, negative estimates are set to zero |
+| `sign`  | Whether signed estimates should be returned |
 
 The input prices must be sorted in ascending order of the timestamp. 
 
