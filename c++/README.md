@@ -5,7 +5,7 @@ prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com
 
 ## Installation
 
-Download the C++ source file [`edge.cpp`](https://github.com/eguidotti/bidask/tree/main/C++/edge.cpp) and the corresponding header [`edge.h`](https://github.com/eguidotti/bidask/tree/main/C++/edge.h)
+Download the C++ source file [`edge.cpp`](https://github.com/eguidotti/bidask/tree/main/cpp/edge.cpp) and the corresponding header [`edge.h`](https://github.com/eguidotti/bidask/tree/main/cpp/edge.h)
 
 ## Usage
 
