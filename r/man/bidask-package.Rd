@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Emanuele Guidotti \email{emanuele.guidotti@unine.ch} (\href{https://orcid.org/0000-0002-8961-6623}{ORCID})
+\strong{Maintainer}: Emanuele Guidotti \email{emanuele.guidotti@usi.ch} (\href{https://orcid.org/0000-0002-8961-6623}{ORCID})
 
 Other contributors:
 \itemize{
