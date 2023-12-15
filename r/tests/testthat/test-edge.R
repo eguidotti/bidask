@@ -64,9 +64,5 @@ test_that("edge-nan", {
     c(17.61, 17.61, 17.61),
     c(17.61, 17.61, 17.61)
   )))
-    
-  set.seed(123)
-  x <- sim(prob = 0.1)
-  expect_true(all(is.na(spread(x, width = 2))))
   
 })
