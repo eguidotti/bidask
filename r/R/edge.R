@@ -87,6 +87,9 @@ EDGE <- function(x, width = nrow(x), sign, na.rm){
     po*pc/2 * (m[,16] - m[,27]*m[,10]/m[,5] - m[,6]*m[,28]/m[,5] + m[,6]*m[,10]*m[,29]/m[,5]^2) -
     e2^2
   
+  v1[v1 < .Machine$double.eps] <- 0
+  v2[v2 < .Machine$double.eps] <- 0
+  
   S2 <- (v2*e1 + v1*e2) / (v1 + v2)
   S2[is.infinite(S2)] <- NaN
   colnames(S2) <- "EDGE"
