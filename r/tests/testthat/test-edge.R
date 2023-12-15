@@ -14,8 +14,10 @@ test_that("edge-monthly", {
   
   set.seed(123)
   x <- sim(prob = 0.01)
-
+  
+  zoo::index(x) <- zoo::index(x) - as.integer(start(x))
   width <- xts::endpoints(x, on = "months")
+  
   s1 <- as.numeric(spread(x, width = width, method = "EDGE"))
   s2 <- sapply(2:length(width), function(i){
     m <- x[width[i-1]:width[i]]
