@@ -68,7 +68,8 @@ def edge(
             raise ValueError("Invalid mid_price string. Must be 'hl', 'oc', 'hlc', 'ohl', or 'ohlc'")
 
     # get mid_price before taking log to avoid bias   
-    mid_price = _get_mid_price(open, high, low, close, mid_price)
+    if isinstance(mid_price, str):
+        mid_price = _get_mid_price(open, high, low, close, mid_price)
 
     open = pd.Series(np.log(open))
     high = pd.Series(np.log(high))
