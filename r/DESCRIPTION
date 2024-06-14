@@ -23,8 +23,5 @@ Suggests:
     dplyr,
     crypto2,
     quantmod,
-    knitr,
-    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-VignetteBuilder: knitr
