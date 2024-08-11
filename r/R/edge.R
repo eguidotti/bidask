@@ -187,7 +187,7 @@ edge <- function(open, high, low, close, sign = FALSE){
   s2 <- (v2*e1 + v1*e2) / (v1 + v2)
   
   s <- sqrt(abs(s2))
-  if(sign & s2 < 0)
+  if(sign & !is.na(s2) & s2 < 0)
     s <- -s
   
   return(s)
