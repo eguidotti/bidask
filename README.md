@@ -33,10 +33,10 @@ You can browse publications related to the paper [here](https://scholar.google.c
 
 ## Terms of use
 
-All code is released under the [GPL-3.0](https://github.com/eguidotti/bidask/?tab=GPL-3.0-1-ov-file#GPL-3.0-1-ov-file) license. All data are released under the [CC BY 4.0](http://creativecommons.org/licenses/by/4.0) license. Please:
+All code is released under the [GPL-3.0](https://github.com/eguidotti/bidask/?tab=GPL-3.0-1-ov-file#GPL-3.0-1-ov-file) license. All data are released under the [CC BY 4.0](http://creativecommons.org/licenses/by/4.0) license. When using any data or code from this repository, you agree to:
 
-- cite the [paper](https://doi.org/10.1016/j.jfineco.2024.103916) when using any data or code from this repository
-- place the URL https://github.com/eguidotti/bidask in a footnote to help others find this repository
+- cite [Ardia, Guidotti, & Kroencke (2024)](https://doi.org/10.1016/j.jfineco.2024.103916) as indicated below
+- place the link [https://github.com/eguidotti/bidask](https://github.com/eguidotti/bidask) in a footnote to help others find this repository
 
 ## Cite as
 
