@@ -2,7 +2,7 @@ function s = edge(open, high, low, close, sign)
     % Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
     %
     % Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices 
-    % as described in Ardia, Guidotti, & Kroencke (2021) -> https://www.ssrn.com/abstract=3892335
+    % as described in Ardia, Guidotti, & Kroencke (2024) -> https://doi.org/10.1016/j.jfineco.2024.103916
     %
     % Prices must be sorted in ascending order of the timestamp.
     %

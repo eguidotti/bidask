@@ -1,7 +1,6 @@
 # Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-Implements an efficient estimator of bid-ask spreads from open, high, low, and close 
-prices as described in [Ardia, Guidotti, & Kroencke (2021)](https://www.ssrn.com/abstract=3892335).
+Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices.
 
 
 ## Installation
@@ -50,16 +49,19 @@ edge(df.Open, df.High, df.Low, df.Close)
 
 ## Cite as
 
-*Ardia, David and Guidotti, Emanuele and Kroencke, Tim Alexander, "Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices". Available at SSRN: https://ssrn.com/abstract=3892335* 
+> Ardia, D., Guidotti, E., Kroencke, T.A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. *Journal of Financial Economics*, 161, 103916. [doi: 10.1016/j.jfineco.2024.103916](https://doi.org/10.1016/j.jfineco.2024.103916)
 
 A BibTex  entry for LaTeX users is:
 
 ```bibtex
-@unpublished{edge2021,
-    author = {Ardia, David and Guidotti, Emanuele and Kroencke, Tim},
-    title  = {Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices},
-    year   = {2021},
-    note   = {Available at SSRN}
-    url    = {https://ssrn.com/abstract=3892335}
+@article{edge,
+  title = {Efficient estimation of bid–ask spreads from open, high, low, and close prices},
+  journal = {Journal of Financial Economics},
+  volume = {161},
+  pages = {103916},
+  year = {2024},
+  doi = {https://doi.org/10.1016/j.jfineco.2024.103916},
+  author = {David Ardia and Emanuele Guidotti and Tim A. Kroencke},
 }
 ```
+

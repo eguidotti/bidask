@@ -4,9 +4,9 @@
 #' from open, high, low, and close prices.
 #'
 #' @details
-#' The method \code{EDGE} implements the Efficient Discrete Generalized Estimator described in Ardia, Guidotti, & Kroencke (2021).
+#' The method \code{EDGE} implements the Efficient Discrete Generalized Estimator described in Ardia, Guidotti, & Kroencke (2024).
 #' 
-#' The methods \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia, Guidotti, & Kroencke (2021).
+#' The methods \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia, Guidotti, & Kroencke (2024).
 #' They can be combined by concatenating their identifiers, e.g., \code{OHLC.CHLO} uses an average of the \code{OHLC} and \code{CHLO} estimators.
 #'
 #' The method \code{AR} implements the estimator described in Abdi & Ranaldo (2017). \code{AR2} implements their 2-period version.
@@ -24,12 +24,12 @@
 #' @return Time series of spread estimates. A value of 0.01 corresponds to a spread of 1\%.
 #'
 #' @note 
-#' Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, & Kroencke (2021)} 
+#' Please cite \href{https://doi.org/10.1016/j.jfineco.2024.103916}{Ardia, Guidotti, & Kroencke (2024)} 
 #' when using this package in publication.
 #'
 #' @references
-#' Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
-#' Available at SSRN: \url{https://www.ssrn.com/abstract=3892335}
+#' Ardia, D., Guidotti E., & Kroencke T. A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
+#' \doi{10.1016/j.jfineco.2024.103916}
 #'
 #' Abdi, F., & Ranaldo, A. (2017). A simple estimation of bid-ask spreads from daily close, high, and low prices. Review of Financial Studies, 30 (12), 4437-4480.
 #' \doi{10.1093/rfs/hhx084}

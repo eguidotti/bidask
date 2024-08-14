@@ -22,12 +22,12 @@
 #' @return Simulated open, high, low, and close prices.
 #'
 #' @note 
-#' Please cite \href{https://www.ssrn.com/abstract=3892335}{Ardia, Guidotti, & Kroencke (2021)} 
+#' Please cite \href{https://doi.org/10.1016/j.jfineco.2024.103916}{Ardia, Guidotti, & Kroencke (2024)} 
 #' when using this package in publication.
 #'
 #' @references
-#' Ardia, D., Guidotti E., & Kroencke T. A. (2021). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
-#' Available at SSRN: \url{https://www.ssrn.com/abstract=3892335}
+#' Ardia, D., Guidotti E., & Kroencke T. A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
+#' \doi{10.1016/j.jfineco.2024.103916}
 #'
 #' @export
 #'
