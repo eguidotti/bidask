@@ -6,6 +6,6 @@ bibentry(
 	author      = as.person("David Ardia [aut], Emanuele Guidotti [aut], Tim A. Kroencke [aut]"),
 	volume      = "161",
 	pages       = "103916",
-    doi         = "https://doi.org/10.1016/j.jfineco.2024.103916",
+    doi         = "10.1016/j.jfineco.2024.103916",
 	textVersion = 'Ardia, D., Guidotti, E., Kroencke, T.A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. Journal of Financial Economics, 161, 103916. doi: 10.1016/j.jfineco.2024.103916'
 )

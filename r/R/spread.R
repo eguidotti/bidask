@@ -24,11 +24,11 @@
 #' @return Time series of spread estimates. A value of 0.01 corresponds to a spread of 1\%.
 #'
 #' @note 
-#' Please cite \href{https://doi.org/10.1016/j.jfineco.2024.103916}{Ardia, Guidotti, & Kroencke (2024)} 
+#' Please cite Ardia, Guidotti, & Kroencke (2024)
 #' when using this package in publication.
 #'
 #' @references
-#' Ardia, D., Guidotti E., & Kroencke T. A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
+#' Ardia, D., Guidotti, E., Kroencke, T.A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. Journal of Financial Economics, 161, 103916. 
 #' \doi{10.1016/j.jfineco.2024.103916}
 #'
 #' Abdi, F., & Ranaldo, A. (2017). A simple estimation of bid-ask spreads from daily close, high, and low prices. Review of Financial Studies, 30 (12), 4437-4480.

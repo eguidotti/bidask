@@ -23,13 +23,13 @@ The spread estimate. A value of 0.01 corresponds to a spread of 1\%.
 \description{
 Implements an efficient estimator of bid-ask spreads 
 from open, high, low, and close prices as described in 
-\href{https://doi.org/10.1016/j.jfineco.2024.103916}{Ardia, Guidotti, & Kroencke (2024)}.
+Ardia, Guidotti, & Kroencke (2024).
 }
 \details{
 Prices must be sorted in ascending order of the timestamp.
 }
 \note{
-Please cite \href{https://doi.org/10.1016/j.jfineco.2024.103916}{Ardia, Guidotti, & Kroencke (2024)} 
+Please cite Ardia, Guidotti, & Kroencke (2024)
 when using this package in publication.
 }
 \examples{
@@ -41,6 +41,6 @@ edge(x$Open, x$High, x$Low, x$Close)
 
 }
 \references{
-Ardia, D., Guidotti E., & Kroencke T. A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. 
+Ardia, D., Guidotti, E., Kroencke, T.A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. Journal of Financial Economics, 161, 103916. 
 \doi{10.1016/j.jfineco.2024.103916}
 }
