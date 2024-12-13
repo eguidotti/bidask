@@ -1,2 +1,3 @@
 from .edge import edge
-__all__ = ['edge']
+from .rolling_edge import rolling_edge
+__all__ = ['edge','rolling_edge']
