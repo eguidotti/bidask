@@ -37,7 +37,7 @@ def test_edge_rolling_consistency(window_size: int):
     
     df = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
 
-    rolling_estimates = rolling_edge(df=df, window=window_size)
+    rolling_estimates = rolling_edge(df=df, window=window_size, min_periods=window_size)
 
     # Compute the expected results by manually looping with `edge`.
 
@@ -68,20 +68,30 @@ def test_edge_rolling_consistency(window_size: int):
         desired = expected_estimates,
         rtol=1e-8,
         atol=1e-8,
-        err_msg="Rolling vectorized results do not match the original function results on a per-window basis."
+        err_msg=f"`rolling_edge` doesn't match `edge` estimates per-window for window_size={window_size}"
     )
 
-def test_edge_rolling_min_periods():
+def test_edge_rolling_allowed_args():
     """
     Tests that rolling_edge raises a ValueError when either `window` or `min_periods` is < 3,
     and that it does not raise an error otherwise.
     """
     df = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
 
-    with pytest.raises(ValueError):
+    # min_periods > window
+    with pytest.raises(Exception):
+        rolling_edge(df, window=3, min_periods=4)
+
+    # window < 3
+    with pytest.raises(Exception):
         rolling_edge(df, window=2)
 
+    # min_periods < 3
     with pytest.raises(ValueError):
-        rolling_edge(df, window=4, min_periods=2)
+        rolling_edge(df, window=3, min_periods=2)
 
+    # smallest allowed args work
     rolling_edge(df, window=3, min_periods=3)
+
+    # minimal default args work
+    rolling_edge(df, window=3)

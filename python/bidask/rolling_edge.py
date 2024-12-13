@@ -4,7 +4,7 @@ import numpy as np
 def rolling_edge(
         df: pd.DataFrame, 
         window: int,
-        min_periods: int = None, 
+        min_periods: int = 3, 
         sign: bool = False,
         rolling_kwargs: dict = {},
         ) -> pd.Series:
@@ -12,32 +12,31 @@ def rolling_edge(
     Direct python implementation of the vectorized R code for rolling the `edge` estimate.
     Avoids the problem of chained means by expanding the required terms
     and computing probabilities, expectations, etc in a single rolling.mean call.
+
+    For more information about rolling parameters, see 
+    https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
     
     Parameters
     ----------
     - `df` : pd.DataFrame
         DataFrame with columns 'open', 'high', 'low', 'close' (case-insensitive).
     - `window` : int
-        Rolling window size.
-    - `min_periods` : int, optional
+        Rolling window size > 3. Can be other types supported by pandas.
+    - `min_periods` : int, default 3
         Minimum number of observations in window required to have a non-null result.
         This estimator requires at least 3 observations in the window.
     - `sign` : bool, default False
         Whether to return signed estimates.
     - `rolling_kwargs` : dict, optional
         Additional keyword arguments to pass to the pandas rolling function.
-        See https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
 
     Returns
     -------
     pd.Series
         A pandas Series of rolling spread estimates. A value of 0.01 corresponds to a spread of 1%.
     """
-    if min_periods is None:
-        if window < 3:
-            raise ValueError(f"Estimator requires at least 3 observations in the window. Got window={window}")
-    elif min_periods < 3:
-        raise ValueError(f"Estimator requires at least 3 observations in the window. Got min_periods={min_periods}")
+    if min_periods is None or min_periods < 3:
+        raise ValueError(f"min_periods must be specified and greater than or equal to 3. Got min_periods={min_periods}")
     
     # Convert column names to lower case for consistency
     df = df.rename(columns=str.lower, inplace=False)
