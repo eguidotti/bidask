@@ -3,7 +3,8 @@ import numpy as np
 
 def rolling_edge(
         df: pd.DataFrame, 
-        window: int, 
+        window: int,
+        min_periods: int = None, 
         sign: bool = False,
         rolling_kwargs: dict = {},
         ) -> pd.Series:
@@ -18,6 +19,9 @@ def rolling_edge(
         DataFrame with columns 'open', 'high', 'low', 'close' (case-insensitive).
     - `window` : int
         Rolling window size.
+    - `min_periods` : int, optional
+        Minimum number of observations in window required to have a non-null result.
+        This estimator requires at least 3 observations in the window.
     - `sign` : bool, default False
         Whether to return signed estimates.
     - `rolling_kwargs` : dict, optional
@@ -29,6 +33,12 @@ def rolling_edge(
     pd.Series
         A pandas Series of rolling spread estimates. A value of 0.01 corresponds to a spread of 1%.
     """
+    if min_periods is None:
+        if window < 3:
+            raise ValueError(f"Estimator requires at least 3 observations in the window. Got window={window}")
+    elif min_periods < 3:
+        raise ValueError(f"Estimator requires at least 3 observations in the window. Got min_periods={min_periods}")
+    
     # Convert column names to lower case for consistency
     df = df.rename(columns=str.lower, inplace=False)
     o = np.log(df['open'])
@@ -97,7 +107,7 @@ def rolling_edge(
     
     # decided against x.iloc[1:].rolling as in the R code.
     # Keeps m lined up with o,h,l,c.
-    m = x.rolling(window=window, **rolling_kwargs).mean()
+    m = x.rolling(window=window, min_periods=min_periods, **rolling_kwargs).mean()
 
     # Compute po and pc
     po = -8.0 / (m[31] + m[32])

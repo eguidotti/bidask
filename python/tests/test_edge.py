@@ -24,14 +24,17 @@ def test_edge():
     ))
 
 @pytest.mark.parametrize("window_size", [3,42,1000])
-def test_edge_rolling_consistency(window_size):
+def test_edge_rolling_consistency(window_size: int):
     """
     Compares the rolling vectorized implementation to the original function.
 
-    NOTE: There is a problem with window_size = 2 or 1; `edge` produces 
-    some or all NaNs, respectively, while the rolling implementation produces 
-    small (<1e-8) or zero values, respectively, at these same times.
+    Parameters
+    ----------
+    - `window_size` : int
+        The rolling window size. The estimator requires at least 3.
     """
+    assert window_size >= 3, "Test should never test a window size < 3"
+    
     df = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
 
     rolling_estimates = rolling_edge(df=df, window=window_size)
@@ -67,3 +70,18 @@ def test_edge_rolling_consistency(window_size):
         atol=1e-8,
         err_msg="Rolling vectorized results do not match the original function results on a per-window basis."
     )
+
+def test_edge_rolling_min_periods():
+    """
+    Tests that rolling_edge raises a ValueError when either `window` or `min_periods` is < 3,
+    and that it does not raise an error otherwise.
+    """
+    df = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
+
+    with pytest.raises(ValueError):
+        rolling_edge(df, window=2)
+
+    with pytest.raises(ValueError):
+        rolling_edge(df, window=4, min_periods=2)
+
+    rolling_edge(df, window=3, min_periods=3)
