@@ -5,24 +5,34 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
     """
     Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-    Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices 
-    as described in Ardia, Guidotti, & Kroencke (2024) -> https://doi.org/10.1016/j.jfineco.2024.103916
-
-    Prices must be sorted in ascending order of the timestamp.
+    Implements an efficient estimator of bid-ask spreads from open, high, low, 
+    and close prices as described in Ardia, Guidotti, & Kroencke (2024):
+    https://doi.org/10.1016/j.jfineco.2024.103916
 
     Parameters
     ----------
-    - `open`: array-like vector of open prices
-    - `high`: array-like vector of high prices
-    - `low`: array-like vector of low prices
-    - `close`: array-like vector of close prices
-    - `sign`: whether signed estimates should be returned
+    - `open`: array-like 
+        Vector of open prices sorted in ascending order of the timestamp.
+    - `high`: array-like 
+        Vector of high prices sorted in ascending order of the timestamp.
+    - `low`: array-like 
+        Vector of low prices sorted in ascending order of the timestamp.
+    - `close`: array-like 
+        Vector of close prices sorted in ascending order of the timestamp.
+    - `sign`: 
+        Whether to return signed estimates.
 
     Returns
     -------
-    The spread estimate. A value of 0.01 corresponds to a spread of 1%.
-    
+    float
+        The spread estimate. A value of 0.01 corresponds to a spread of 1%.
     """
+    no, nh, nl, nc = len(open), len(high), len(low), len(close)
+    if no != nh or no != nl or no != nc:
+        raise ValueError("Open, high, low, and close prices must have the same length")
+    
+    if no < 3:
+        return np.nan
 
     o = np.log(np.asarray(open))
     h = np.log(np.asarray(high))
@@ -64,9 +74,13 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
   
     v1 = np.nanmean(x1**2) - e1**2
     v2 = np.nanmean(x2**2) - e2**2
-  
-    s2 = (v2*e1 + v1*e2) / (v1 + v2)
-  
+
+    v1 *= v1 > np.finfo(v1.dtype).eps
+    v2 *= v2 > np.finfo(v2.dtype).eps
+    if v1 == 0 and v2 == 0:
+        return np.nan
+    
+    s2 = (v2*e1 + v1*e2) / (v1 + v2)  
     s = np.sqrt(np.abs(s2))
     if sign and s2 < 0: 
         s = -s

@@ -1,15 +1,18 @@
 import pytest
 import numpy as np
 import pandas as pd
-from bidask import edge, rolling_edge
+from bidask import edge, edge_rolling
+
+
+df = pd.read_csv(
+    "https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv"
+)
 
 
 def test_edge():
     """
     Compares the `edge` function to the known test case
     """
-    df = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
-
     estimate = edge(df.Open, df.High, df.Low, df.Close)
     assert estimate == pytest.approx(0.0101849034905478)
   
@@ -23,75 +26,41 @@ def test_edge():
         [17.61, 17.61, 17.61]
     ))
 
-@pytest.mark.parametrize("window_size", [3,42,1000])
-def test_edge_rolling_consistency(window_size: int):
+
+@pytest.mark.parametrize("window", [1, 2, 3, 4, 42, 1000])
+@pytest.mark.parametrize("sign", [True, False])
+@pytest.mark.parametrize("step", [1, 2, 5, 10])
+def test_edge_rolling(window: int, step: int, sign: bool):
     """
     Compares the rolling vectorized implementation to the original function.
 
     Parameters
     ----------
-    - `window_size` : int
-        The rolling window size. The estimator requires at least 3.
+    - `window` : int
+        The rolling window size.
+    - `step`: int
+        Evaluate the window at every step result.
+    - `sign`: bool
+        Whether to use signed estimates.
     """
-    assert window_size >= 3, "Test should never test a window size < 3"
+    rolling_estimates = edge_rolling(df=df, window=window, step=step, sign=sign)
     
-    df = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
-
-    rolling_estimates = rolling_edge(df=df, window=window_size, min_periods=window_size)
-
-    # Compute the expected results by manually looping with `edge`.
-
-    # Due to lag handling via e.g. h1:=h[:-1], h:=h[1:] in `edge`,
-    # the oldest date is discarded for "present" prices and
-    # the lagged prices include this oldest date. Hence, the `edge`
-    # function applied to prices at times {t=a-window_size, ..., t=a}
-    # correspond to the pd.rolling(window_size) estimate @ t=a.
-    window_size_edge = window_size + 1 
-
-    expected_estimates = [np.nan] * (window_size)
-
-    for t0 in range(len(df) + 1 - window_size_edge):
-        t = t0 + window_size_edge
-        est = edge(
-            df.Open.values[t0:t],
-            df.High.values[t0:t],
-            df.Low.values[t0:t],
-            df.Close.values[t0:t]
-        )
-        expected_estimates.append(est)
-
-    expected_estimates = np.array(expected_estimates)
-
-    # Compare the rolling vectorized results to the expected results
+    expected_estimates = []
+    for t in range(0, len(df), step):
+        t1 = t + 1
+        t0 = t1 - window
+        expected_estimates.append(edge(
+            df.Open.values[t0:t1],
+            df.High.values[t0:t1],
+            df.Low.values[t0:t1],
+            df.Close.values[t0:t1],
+            sign=sign
+        ) if t0 >= 0 else np.nan)
+        
     np.testing.assert_allclose(
         actual = rolling_estimates,
         desired = expected_estimates,
         rtol=1e-8,
         atol=1e-8,
-        err_msg=f"`rolling_edge` doesn't match `edge` estimates per-window for window_size={window_size}"
+        err_msg='Rolling estimates do not match expected estimates'
     )
-
-def test_edge_rolling_allowed_args():
-    """
-    Tests that rolling_edge raises a ValueError when either `window` or `min_periods` is < 3,
-    and that it does not raise an error otherwise.
-    """
-    df = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
-
-    # min_periods > window
-    with pytest.raises(Exception):
-        rolling_edge(df, window=3, min_periods=4)
-
-    # window < 3
-    with pytest.raises(Exception):
-        rolling_edge(df, window=2)
-
-    # min_periods < 3
-    with pytest.raises(ValueError):
-        rolling_edge(df, window=3, min_periods=2)
-
-    # smallest allowed args work
-    rolling_edge(df, window=3, min_periods=3)
-
-    # minimal default args work
-    rolling_edge(df, window=3)
