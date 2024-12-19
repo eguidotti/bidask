@@ -18,7 +18,6 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
         Whether to return signed estimates.
     - `kwargs` : dict
         Additional keyword arguments to pass to the pandas rolling function.
-        When applicable, `window` and `min_periods` are internally decremented by 1 to account for lagged prices.
         For more information about the rolling parameters, see 
         https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
 
@@ -90,7 +89,7 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
 
     for k in ['window', 'min_periods']:
         if k in kwargs and isinstance(kwargs[k], (int, np.integer)):
-            kwargs[k] = max(0, kwargs[k]-1)
+            kwargs[k] = max(0, kwargs[k]-1)  # decrement by 1 to account for lagged prices
     m = x.rolling(**kwargs).mean()
 
     po = -8. / (m[31] + m[32])
