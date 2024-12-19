@@ -17,7 +17,8 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
     - `sign` : bool, default False
         Whether to return signed estimates.
     - `kwargs` : dict
-        Additional keyword arguments to pass to the pandas rolling function. 
+        Additional keyword arguments to pass to the pandas rolling function.
+        Note: `window` and `min_periods` are internally decremented by 1 to account for using `.shift(1)`.
         For more information about the rolling parameters, see 
         https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
 
