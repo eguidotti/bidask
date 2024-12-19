@@ -89,7 +89,7 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
     }, index=df.index)
 
     for k in ['window', 'min_periods']:
-        if k in kwargs and isinstance(kwargs[k], (int, float)):
+        if k in kwargs and isinstance(kwargs[k], (int, np.integer)):
             kwargs[k] = max(0, kwargs[k]-1)
     m = x.rolling(**kwargs).mean()
 
