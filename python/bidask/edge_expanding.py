@@ -2,11 +2,11 @@ import numpy as np
 import pandas as pd
 
 
-def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
+def edge_expanding(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
     """
-    Rolling Estimates of Bid-Ask Spreads from Open, High, Low, and Close Prices
+    Expanding Estimates of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-    Implements a rolling window calculation of the efficient estimator of bid-ask spreads 
+    Implements an expanding window calculation of the efficient estimator of bid-ask spreads 
     from open, high, low, and close prices described in Ardia, Guidotti, & Kroencke (2024):
     https://doi.org/10.1016/j.jfineco.2024.103916
         
@@ -17,14 +17,14 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
     - `sign` : bool, default False
         Whether to return signed estimates.
     - `kwargs` : dict
-        Additional keyword arguments to pass to the pandas rolling function.
-        For more information about the rolling parameters, see 
-        https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
+        Additional keyword arguments to pass to the pandas expanding function.
+        For more information about the expanding parameters, see 
+        https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.expanding.html
 
     Returns
     -------
     pd.Series
-        A pandas Series of rolling spread estimates. A value of 0.01 corresponds to a spread of 1%.
+        A pandas Series of expanding spread estimates. A value of 0.01 corresponds to a spread of 1%.
     """    
     df = df.rename(columns=str.lower, inplace=False)
     o = np.log(df['open'])
@@ -86,15 +86,15 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
         33: phi3,
         34: phi4
     }, index=df.index, dtype=float)
-
-    # decrement window and min_periods by 1 to account for lagged prices
-    for k in ['window', 'min_periods']:
+   
+    # decrement min_periods by 1 to account for lagged prices
+    for k in ['min_periods']:
         if k in kwargs and isinstance(kwargs[k], (int, np.integer)):
             kwargs[k] = max(0, kwargs[k]-1)
-    
-    # mask the first observation and compute rolling means
+            
+    # mask the first observation and compute expanding means
     x.iloc[0] = np.nan
-    m = x.rolling(**kwargs).mean()
+    m = x.expanding(**kwargs).mean()
 
     po = -8. / (m[31] + m[32])
     pc = -8. / (m[33] + m[34])

@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import pandas as pd
-from bidask import edge, edge_rolling
+from bidask import edge, edge_rolling, edge_expanding
 
 
 df = pd.read_csv(
@@ -63,4 +63,39 @@ def test_edge_rolling(window: int, step: int, sign: bool):
         rtol=1e-8,
         atol=1e-8,
         err_msg='Rolling estimates do not match expected estimates'
+    )
+
+
+@pytest.mark.parametrize("min_periods", [0, 1, 2, 3, 42, 1000])
+@pytest.mark.parametrize("sign", [True, False])
+def test_edge_expanding(min_periods: int, sign: bool):
+    """
+    Compares the expanding vectorized implementation to the original function.
+
+    Parameters
+    ----------
+    - `min_periods` : int
+        Minimum number of observations in window required to have a value; otherwise, result is np.nan.
+    - `sign`: bool
+        Whether to use signed estimates.
+    """
+    expanding_estimates = edge_expanding(df=df, min_periods=min_periods, sign=sign)
+    
+    expected_estimates = []
+    for t in range(0, len(df)):
+        t1 = t + 1
+        expected_estimates.append(edge(
+            df.Open.values[0:t1],
+            df.High.values[0:t1],
+            df.Low.values[0:t1],
+            df.Close.values[0:t1],
+            sign=sign
+        ) if t1 >= min_periods else np.nan)
+        
+    np.testing.assert_allclose(
+        actual = expanding_estimates,
+        desired = expected_estimates,
+        rtol=1e-8,
+        atol=1e-8,
+        err_msg='Expanding estimates do not match expected estimates'
     )
