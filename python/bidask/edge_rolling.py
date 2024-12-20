@@ -1,8 +1,20 @@
+from __future__ import annotations
+
 import numpy as np
 import pandas as pd
+from typing import TYPE_CHECKING, Union
 
+if TYPE_CHECKING:
+    import datetime as dt
+    from pandas.tseries.offsets import BaseOffset
+    from pandas.api.indexers import BaseIndexer
 
-def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
+def edge_rolling(
+        df: pd.DataFrame,
+        window: Union[int, "dt.timedelta", str, "BaseOffset", "BaseIndexer"],
+        sign: bool = False, 
+        **kwargs
+) -> pd.Series:
     """
     Rolling Estimates of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
@@ -14,6 +26,9 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
     ----------
     - `df` : pd.DataFrame
         DataFrame with columns 'open', 'high', 'low', 'close' (case-insensitive).
+    - `window` : int, str, timedelta, BaseOffset, BaseIndexer
+        Size of the rolling window. For more information about this parameter, see
+        https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
     - `sign` : bool, default False
         Whether to return signed estimates.
     - `kwargs` : dict
@@ -88,13 +103,14 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
     }, index=df.index, dtype=float)
 
     # decrement window and min_periods by 1 to account for lagged prices
-    for k in ['window', 'min_periods']:
-        if k in kwargs and isinstance(kwargs[k], (int, np.integer)):
-            kwargs[k] = max(0, kwargs[k]-1)
+    if isinstance(window, (int, np.integer)):
+        window = max(0, window-1)
+    if 'min_periods' in kwargs and isinstance(kwargs['min_periods'], (int, np.integer)):
+        kwargs['min_periods'] = max(0, kwargs['min_periods']-1)
     
     # mask the first observation and compute rolling means
     x.iloc[0] = np.nan
-    m = x.rolling(**kwargs).mean()
+    m = x.rolling(window=window, **kwargs).mean()
 
     po = -8. / (m[31] + m[32])
     pc = -8. / (m[33] + m[34])

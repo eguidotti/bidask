@@ -35,17 +35,18 @@ edge(open, high, low, close, sign=False)
 
 ### Function: `edge_rolling`
 
-Implements a rolling window calculation of `edge`. The input is a pandas data frame. The output is a pandas series of rolling spread estimates. A value of 0.01 corresponds to a spread of 1%. 
+Implements a rolling window calculation of `edge`. The input is a pandas data frame. The output is a pandas series of rolling spread estimates. A value of 0.01 corresponds to a spread of 1%. The rolling parameters `window` and `min_periods`, when integer, are the number of periods used in each estimate.
 
 ```python
-edge_rolling(df, sign=False, **kwargs)
+edge_rolling(df, window, sign=False, **kwargs)
 ```
 
 | field      | description                                                  |
 | ---------- | ------------------------------------------------------------ |
 | `df`       | Data frame with columns 'open', 'high', 'low', 'close' (case-insensitive). |
+| `window`   | The size of the rolling window. For more information about the rolling parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html). |
 | `sign`     | Whether to return signed estimates                           |
-| `**kwargs` | Additional keyword arguments to pass to the pandas rolling function. For more information about the rolling parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html) |
+| `**kwargs` | Additional keyword arguments to pass to the pandas rolling function. For more information about the rolling parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html). |
 
 ### Function: `edge_expanding`
 
