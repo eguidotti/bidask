@@ -1,6 +1,6 @@
 # Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices.
+Implements the efficient estimator of bid-ask spreads from open, high, low, and close prices described in Ardia, Guidotti, & Kroencke (JFE, 2024): [https://doi.org/10.1016/j.jfineco.2024.103916](https://doi.org/10.1016/j.jfineco.2024.103916)
 
 
 ## Installation
@@ -25,28 +25,27 @@ The input prices must be sorted in ascending order of the timestamp. The output 
 edge(open, high, low, close, sign=False)
 ```
 
-| field   | description                        |
-| ------- | ---------------------------------- |
-| `open`  | Array-like vector of open prices   |
-| `high`  | Array-like vector of high prices   |
-| `low`   | Array-like vector of low prices    |
-| `close` | Array-like vector of close prices  |
-| `sign`  | Whether to return signed estimates |
+| field   | description                         |
+| ------- | ----------------------------------- |
+| `open`  | Array-like vector of open prices.   |
+| `high`  | Array-like vector of high prices.   |
+| `low`   | Array-like vector of low prices.    |
+| `close` | Array-like vector of close prices.  |
+| `sign`  | Whether to return signed estimates. |
 
 ### Function: `edge_rolling`
 
-Implements a rolling window calculation of `edge`. The input is a pandas data frame. The output is a pandas series of rolling spread estimates. A value of 0.01 corresponds to a spread of 1%. The rolling parameters `window` and `min_periods`, when integer, are the number of periods used in each estimate.
+Implements a rolling window calculation of `edge`. The input is a pandas data frame. The output is a pandas series of rolling spread estimates. A value of 0.01 corresponds to a spread of 1%.
 
 ```python
-edge_rolling(df, window, sign=False, **kwargs)
+edge_rolling(df, sign=False, **kwargs)
 ```
 
 | field      | description                                                  |
 | ---------- | ------------------------------------------------------------ |
 | `df`       | Data frame with columns 'open', 'high', 'low', 'close' (case-insensitive). |
-| `window`   | The size of the rolling window. For more information about the rolling parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html). |
-| `sign`     | Whether to return signed estimates                           |
-| `**kwargs` | Additional keyword arguments to pass to the pandas rolling function. For more information about the rolling parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html). |
+| `sign`     | Whether to return signed estimates.                          |
+| `**kwargs` | Additional keyword arguments to pass to the pandas rolling function. The argument `window` is required. When integer, `window` is the number of observations used in each estimate. For more information about the rolling parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html). |
 
 ### Function: `edge_expanding`
 
@@ -56,11 +55,11 @@ Implements an expanding window calculation of `edge`. The input is a pandas data
 edge_expanding(df, sign=False, **kwargs)
 ```
 
-| field      | description                                                  |
-| ---------- | ------------------------------------------------------------ |
+| field      | description                                                   |
+| ---------- | ------------------------------------------------------------- |
 | `df`       | Data frame with columns 'open', 'high', 'low', 'close' (case-insensitive). |
-| `sign`     | Whether to return signed estimates                           |
-| `**kwargs` | Additional keyword arguments to pass to the pandas expanding function. For more information about the expanding parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.expanding.html) |
+| `sign`     | Whether to return signed estimates.                           |
+| `**kwargs` | Additional keyword arguments to pass to the pandas expanding function. For more information about the expanding parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.expanding.html). |
 
 ## Examples
 
@@ -71,14 +70,14 @@ import pandas as pd
 df = pd.read_csv("https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv")
 ```
 
-Compute the spread estimate using the full sample data.
+Compute the spread estimate using all the observations.
 
 ```py
 from bidask import edge
 edge(df.Open, df.High, df.Low, df.Close)
 ```
 
-Compute rolling estimates using a window size of 21 periods.
+Compute rolling estimates using a window of 21 observations.
 
 ```py
 from bidask import edge_rolling
@@ -154,4 +153,3 @@ A BibTex  entry for LaTeX users is:
   author = {David Ardia and Emanuele Guidotti and Tim A. Kroencke},
 }
 ```
-

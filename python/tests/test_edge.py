@@ -44,7 +44,8 @@ def test_edge_rolling(window: int, step: int, sign: bool):
         Whether to use signed estimates.
     """
     rolling_estimates = edge_rolling(df=df, window=window, step=step, sign=sign)
-    
+    assert isinstance(rolling_estimates, pd.Series)
+
     expected_estimates = []
     for t in range(0, len(df), step):
         t1 = t + 1
@@ -80,7 +81,8 @@ def test_edge_expanding(min_periods: int, sign: bool):
         Whether to use signed estimates.
     """
     expanding_estimates = edge_expanding(df=df, min_periods=min_periods, sign=sign)
-    
+    assert isinstance(expanding_estimates, pd.Series)
+
     expected_estimates = []
     for t in range(0, len(df)):
         t1 = t + 1
