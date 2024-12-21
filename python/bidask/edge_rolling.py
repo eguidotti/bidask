@@ -48,8 +48,12 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
         if arg in kwargs and isinstance(kwargs[arg], (int, np.integer)):
             kwargs[arg] = max(0, kwargs[arg]-1)
 
-    # compute tau 
-    tau = (h != l) | (l != c1)
+    # compute indicator variables
+    tau = np.where(np.isnan(h) | np.isnan(l) | np.isnan(c1), np.nan, (h != l) | (l != c1))
+    po1 = tau * np.where(np.isnan(o) | np.isnan(h), np.nan, o != h)
+    po2 = tau * np.where(np.isnan(o) | np.isnan(l), np.nan, o != l)
+    pc1 = tau * np.where(np.isnan(c1) | np.isnan(h1), np.nan, c1 != h1)
+    pc2 = tau * np.where(np.isnan(c1) | np.isnan(l1), np.nan, c1 != l1)
     
     # compute log-returns
     r1 = m-o
@@ -58,7 +62,7 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
     r4 = c1-m1
     r5 = o-c1
 
-    # compute auxiliary vectors
+    # compute auxiliary returns
     r12 = r1*r2
     r15 = r1*r5
     r34 = r3*r4
@@ -100,17 +104,17 @@ def edge_rolling(df: pd.DataFrame, sign: bool = False, **kwargs) -> pd.Series:
         28: tr5*r45,
         29: tr4*r5,
         30: tr5,
-        31: tau & (o != h),
-        32: tau & (o != l),
-        33: tau & (c1 != h1),
-        34: tau & (c1 != l1)
+        31: po1,
+        32: po2,
+        33: pc1,
+        34: pc2
     }, index=df.index, dtype=float)
     
     # mask the first observation and compute rolling means
     x.iloc[0] = np.nan
     m = x.rolling(**kwargs).mean()
 
-    # set to missing if there are less than 2 observations with tau=1
+    # set to missing if there are less than two observations with tau=1
     m[x[5].rolling(**kwargs).sum() < 2] = np.nan
 
     # compute auxiliary values

@@ -47,30 +47,20 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
     h1, l1, c1, m1 = h[:-1], l[:-1], c[:-1], m[:-1]
     o, h, l, c, m = o[1:], h[1:], l[1:], c[1:], m[1:]
 
-    # compute tau 
-    # return missing if there are less than 2 observations with tau=1
-    tau = np.logical_or(h != l, l != c1) 
-    if np.nansum(tau) < 2:
-        return np.nan
+    # compute indicator variables
+    tau = np.where(np.isnan(h) | np.isnan(l) | np.isnan(c1), np.nan, (h != l) | (l != c1))
+    po1 = tau * np.where(np.isnan(o) | np.isnan(h), np.nan, o != h)
+    po2 = tau * np.where(np.isnan(o) | np.isnan(l), np.nan, o != l)
+    pc1 = tau * np.where(np.isnan(c1) | np.isnan(h1), np.nan, c1 != h1)
+    pc2 = tau * np.where(np.isnan(c1) | np.isnan(l1), np.nan, c1 != l1)
     
-    # compute the probability that tau=1 
-    # return missing if it is missing or zero
+    # compute probabilities
     pt = np.nanmean(tau)
-    if np.isnan(pt) or pt == 0:
-        return np.nan
-    
-    # compute the probability that tau=1 and the open differs from the high
-    # compute the probability that tau=1 and the open differs from the low
-    # compute their sum and return missing if it is missing or zero
-    po = np.nanmean(np.logical_and(tau, o != h)) + np.nanmean(np.logical_and(tau, o != l))
-    if np.isnan(po) or po == 0:
-        return np.nan
-    
-    # compute the probability that tau=1 and the previous close differs from the previous high
-    # compute the probability that tau=1 and the previous close differs from the previous low
-    # compute their sum and return missing if it is missing or zero
-    pc = np.nanmean(np.logical_and(tau, c1 != h1)) + np.nanmean(np.logical_and(tau, c1 != l1))
-    if np.isnan(pc) or pc == 0:
+    po = np.nanmean(po1) + np.nanmean(po2)
+    pc = np.nanmean(pc1) + np.nanmean(pc2)
+
+    # return missing if there are less than two periods with tau=1 or po or pc are zero 
+    if np.nansum(tau) < 2 or po == 0 or pc == 0:
         return np.nan
 
     # compute log-returns
@@ -81,17 +71,13 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
     r5 = o - c1
   
     # compute de-meaned log-returns
-    d1 = r1 - tau * (np.nanmean(r1) / pt)
-    d3 = r3 - tau * (np.nanmean(r3) / pt)
-    d5 = r5 - tau * (np.nanmean(r5) / pt)
+    d1 = r1 - np.nanmean(r1)/pt*tau
+    d3 = r3 - np.nanmean(r3)/pt*tau
+    d5 = r5 - np.nanmean(r5)/pt*tau
   
-    # compute auxiliary vectors
-    y1 = -4. / po * d1 
-    y2 = -4. / pc * r4
-
     # compute input vectors
-    x1 = y1 * r2 + y2 * d3 
-    x2 = y1 * r5 + y2 * d5 
+    x1 = -4./po*d1*r2 + -4./pc*r4*d3
+    x2 = -4./po*d1*r5 + -4./pc*r4*d5 
   
     # compute expected values
     e1 = np.nanmean(x1)
