@@ -8,6 +8,10 @@ df = pd.read_csv(
     "https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv"
 )
 
+df_miss = pd.read_csv(
+    "https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc-miss.csv"
+)
+
 
 def test_edge():
     """
@@ -18,6 +22,9 @@ def test_edge():
   
     estimate = edge(df.Open[0:10], df.High[0:10], df.Low[0:10], df.Close[0:10], True)
     assert estimate == pytest.approx(-0.016889917516422)
+
+    estimate = edge(df_miss.Open, df_miss.High, df_miss.Low, df_miss.Close)
+    assert estimate == pytest.approx(0.01013284969780197)
 
     assert np.isnan(edge(
         [18.21, 17.61, 17.61],
