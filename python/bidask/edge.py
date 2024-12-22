@@ -62,10 +62,6 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
     pc1 = tau * np.where(np.isnan(c1) | np.isnan(h1), np.nan, c1 != h1)
     pc2 = tau * np.where(np.isnan(c1) | np.isnan(l1), np.nan, c1 != l1)
     
-    # return missing if there are less than two periods with tau=1
-    if np.nansum(tau) < 2:
-        return np.nan
-
     # ignore warnings raised by nanmean for all-NaN slices
     with warnings.catch_warnings():
         warnings.simplefilter('ignore', RuntimeWarning)
@@ -74,6 +70,11 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
         pt = np.nanmean(tau)
         po = np.nanmean(po1) + np.nanmean(po2)
         pc = np.nanmean(pc1) + np.nanmean(pc2)
+
+        # return missing if there are less than two periods with tau=1 
+        # or po or pc is zero
+        if np.nansum(tau) < 2 or po == 0 or pc == 0:
+            return np.nan
     
         # compute de-meaned log-returns
         d1 = r1 - np.nanmean(r1)/pt*tau
@@ -92,7 +93,8 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
         v1 = np.nanmean(x1**2) - e1**2
         v2 = np.nanmean(x2**2) - e2**2
     
-    # compute square spread by using a (equally) weighted average if the total variance is (not) positive
+    # compute square spread by using a (equally) weighted 
+    # average if the total variance is (not) positive
     vt = v1 + v2
     s2 = (v2*e1 + v1*e2) / vt if vt > 0 else (e1 + e2) / 2.
     

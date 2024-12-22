@@ -57,7 +57,7 @@ def edge_rolling(df: pd.DataFrame, window: int, sign: bool = False, **kwargs) ->
     pc1 = tau * np.where(np.isnan(c1) | np.isnan(h1), np.nan, c1 != h1)
     pc2 = tau * np.where(np.isnan(c1) | np.isnan(l1), np.nan, c1 != l1)
     
-    # compute base products
+    # set up data frame for rolling means
     r12 = r1 * r2
     r15 = r1 * r5
     r34 = r3 * r4
@@ -65,9 +65,7 @@ def edge_rolling(df: pd.DataFrame, window: int, sign: bool = False, **kwargs) ->
     tr1 = tau * r1
     tr2 = tau * r2
     tr4 = tau * r4
-    tr5 = tau * r5
-    
-    # set up data frame
+    tr5 = tau * r5    
     x = pd.DataFrame({
         1:  r12,
         2:  r34,
@@ -115,16 +113,23 @@ def edge_rolling(df: pd.DataFrame, window: int, sign: bool = False, **kwargs) ->
     # compute rolling means
     m = x.rolling(window=window, **kwargs).mean()
 
-    # set to missing if there are less than two observations with tau=1
-    m[x[5].rolling(window=window, **kwargs).sum() < 2] = np.nan
+    # compute probabilities
+    pt = m[5]
+    po = m[31] + m[32]
+    pc = m[33] + m[34]
 
-    # compute auxiliary variables
-    a1 = -4. / (m[31] + m[32])
-    a2 = -4. / (m[33] + m[34])
-    a3 = m[6] / m[5]
-    a4 = m[9] / m[5]
-    a5 = m[8] / m[5]
-    a6 = m[10] / m[5]
+    # set to missing if there are less than two periods with tau=1
+    # or po or pc is zero
+    nt = x[5].rolling(window=window, **kwargs).sum()
+    m[(nt < 2) | (po == 0) | (pc == 0)] = np.nan
+
+    # compute input vectors
+    a1 = -4. / po
+    a2 = -4. / pc
+    a3 = m[6] / pt
+    a4 = m[9] / pt
+    a5 = m[8] / pt
+    a6 = m[10] / pt
     a12 = 2 * a1 * a2
     a11 = a1 ** 2
     a22 = a2 ** 2
@@ -148,9 +153,14 @@ def edge_rolling(df: pd.DataFrame, window: int, sign: bool = False, **kwargs) ->
         a12 * (m[16] - a3*m[28] - a6*m[27] + a3*a6*m[29]) 
     )
 
-    # compute square spread by using a (equally) weighted average if the total variance is (not) positive
+    # compute square spread by using a (equally) weighted 
+    # average if the total variance is (not) positive
     vt = v1 + v2
-    s2 = pd.Series.where(cond=vt > 0, self=(v2*e1 + v1*e2) / vt, other=(e1 + e2) / 2.)
+    s2 = pd.Series.where(
+        cond=vt > 0, 
+        self=(v2*e1 + v1*e2) / vt, 
+        other=(e1 + e2) / 2.
+    )
 
     # compute signed root
     s = np.sqrt(np.abs(s2))

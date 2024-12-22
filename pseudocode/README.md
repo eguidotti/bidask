@@ -43,22 +43,21 @@ r4 = c1 - m1
 r5 = o - c1
 
 # compute indicator variables
-# (note: comparisons involving missing values must be missing)
-tau = h != l or l != c1 
-po1 = tau and o != h
-po2 = tau and o != l
-pc1 = tau and c1 != h1
-pc2 = tau and c1 != l1
-
-# return missing if there are less than two periods with tau=1
-if sum(tau) < 2:
-  return missing
+tau = (h != l or l != c1) if h, l, c1 are non-missing else missing
+po1 = (tau and o != h) if tau, o, h are non-missing else missing
+po2 = (tau and o != l) if tau, o, l are non-missing else missing
+pc1 = (tau and c1 != h1) if tau, c1, h1 are non-missing else missing
+pc2 = (tau and c1 != l1) if tau, c1, l1 are non-missing else missing
 
 # compute probabilities
-# (note: 0/0 must be missing; otherwise return missing if po or pc is zero)
 pt = mean(tau)
 po = mean(po1) + mean(po2)
 pc = mean(pc1) + mean(pc2)
+
+# return missing if there are less than two periods with tau=1 
+# or po or pc is zero
+if sum(tau) < 2 or po == 0 or pc == 0:
+  return missing
 
 # compute de-meaned log-returns
 d1 = r1 - mean(r1)/pt*tau
@@ -80,10 +79,7 @@ v2 = mean(x2*x2) - e2*e2
 # compute square spread by using a (equally) weighted 
 # average if the total variance is (not) positive
 vt = v1 + v2
-if vt > 0:
-  s2 = (v2*e1 + v1*e2) / vt
-else:
-  s2 = (e1 + e2) / 2.
+s2 = (v2*e1 + v1*e2) / vt if vt > 0 else (e1 + e2) / 2.
 
 # compute signed root
 s = sqrt(abs(s2))
