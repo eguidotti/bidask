@@ -1,3 +1,4 @@
+import warnings
 import numpy as np
 
 
@@ -47,6 +48,13 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
     h1, l1, c1, m1 = h[:-1], l[:-1], c[:-1], m[:-1]
     o, h, l, c, m = o[1:], h[1:], l[1:], c[1:], m[1:]
 
+    # compute log-returns
+    r1 = m - o
+    r2 = o - m1
+    r3 = m - c1
+    r4 = c1 - m1
+    r5 = o - c1
+
     # compute indicator variables
     tau = np.where(np.isnan(h) | np.isnan(l) | np.isnan(c1), np.nan, (h != l) | (l != c1))
     po1 = tau * np.where(np.isnan(o) | np.isnan(h), np.nan, o != h)
@@ -54,38 +62,35 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
     pc1 = tau * np.where(np.isnan(c1) | np.isnan(h1), np.nan, c1 != h1)
     pc2 = tau * np.where(np.isnan(c1) | np.isnan(l1), np.nan, c1 != l1)
     
-    # compute probabilities
-    pt = np.nanmean(tau)
-    po = np.nanmean(po1) + np.nanmean(po2)
-    pc = np.nanmean(pc1) + np.nanmean(pc2)
-
-    # return missing if there are less than two periods with tau=1 or po or pc are zero 
-    if np.nansum(tau) < 2 or po == 0 or pc == 0:
+    # return missing if there are less than two periods with tau=1
+    if np.nansum(tau) < 2:
         return np.nan
 
-    # compute log-returns
-    r1 = m - o
-    r2 = o - m1
-    r3 = m - c1
-    r4 = c1 - m1
-    r5 = o - c1
-  
-    # compute de-meaned log-returns
-    d1 = r1 - np.nanmean(r1)/pt*tau
-    d3 = r3 - np.nanmean(r3)/pt*tau
-    d5 = r5 - np.nanmean(r5)/pt*tau
-  
-    # compute input vectors
-    x1 = -4./po*d1*r2 + -4./pc*r4*d3
-    x2 = -4./po*d1*r5 + -4./pc*r4*d5 
-  
-    # compute expected values
-    e1 = np.nanmean(x1)
-    e2 = np.nanmean(x2)
-  
-    # compute variances
-    v1 = np.nanmean(x1**2) - e1**2
-    v2 = np.nanmean(x2**2) - e2**2
+    # ignore warnings raised by nanmean for all-NaN slices
+    with warnings.catch_warnings():
+        warnings.simplefilter('ignore', RuntimeWarning)
+
+        # compute probabilities
+        pt = np.nanmean(tau)
+        po = np.nanmean(po1) + np.nanmean(po2)
+        pc = np.nanmean(pc1) + np.nanmean(pc2)
+    
+        # compute de-meaned log-returns
+        d1 = r1 - np.nanmean(r1)/pt*tau
+        d3 = r3 - np.nanmean(r3)/pt*tau
+        d5 = r5 - np.nanmean(r5)/pt*tau
+    
+        # compute input vectors
+        x1 = -4./po*d1*r2 + -4./pc*r4*d3
+        x2 = -4./po*d1*r5 + -4./pc*r4*d5 
+    
+        # compute expected values
+        e1 = np.nanmean(x1)
+        e2 = np.nanmean(x2)
+    
+        # compute variances
+        v1 = np.nanmean(x1**2) - e1**2
+        v2 = np.nanmean(x2**2) - e2**2
     
     # compute square spread by using a (equally) weighted average if the total variance is (not) positive
     vt = v1 + v2
