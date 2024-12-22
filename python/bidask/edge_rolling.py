@@ -15,8 +15,7 @@ def edge_rolling(df: pd.DataFrame, window: int, sign: bool = False, **kwargs) ->
     - `df` : pd.DataFrame
         DataFrame with columns 'open', 'high', 'low', 'close' (case-insensitive).
     - `window` : int, timedelta, str, offset, or BaseIndexer subclass
-        Size of the moving window. If an integer, the fixed number of observations 
-        used for each estimate. For more information about this parameter, see
+        Size of the moving window. For more information about this parameter, see
         https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html
     - `sign` : bool, default False
         Whether to return signed estimates.

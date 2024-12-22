@@ -38,28 +38,29 @@ edge(open, high, low, close, sign=False)
 Implements a rolling window calculation of `edge`. The input is a pandas data frame. The output is a pandas series of rolling spread estimates. A value of 0.01 corresponds to a spread of 1%.
 
 ```python
-edge_rolling(df, sign=False, **kwargs)
+edge_rolling(df, window, sign=False, **kwargs)
 ```
 
 | field      | description                                                  |
 | ---------- | ------------------------------------------------------------ |
 | `df`       | Data frame with columns 'open', 'high', 'low', 'close' (case-insensitive). |
+| `window`   | Size of the moving window. For more information about this parameter, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html). |
 | `sign`     | Whether to return signed estimates.                          |
-| `**kwargs` | Additional keyword arguments to pass to the pandas rolling function. The argument `window` is required. When integer, `window` is the number of observations used in each estimate. For more information about the rolling parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html). |
+| `**kwargs` | Additional keyword arguments to pass to the pandas rolling function. For more information about the rolling parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rolling.html). |
 
 ### Function: `edge_expanding`
 
 Implements an expanding window calculation of `edge`. The input is a pandas data frame. The output is a pandas series of expanding spread estimates. A value of 0.01 corresponds to a spread of 1%. 
 
 ```python
-edge_expanding(df, sign=False, **kwargs)
+edge_expanding(df, min_periods=1, sign=False)
 ```
 
-| field      | description                                                   |
-| ---------- | ------------------------------------------------------------- |
-| `df`       | Data frame with columns 'open', 'high', 'low', 'close' (case-insensitive). |
-| `sign`     | Whether to return signed estimates.                           |
-| `**kwargs` | Additional keyword arguments to pass to the pandas expanding function. For more information about the expanding parameters, see [here](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.expanding.html). |
+| field         | description                                                  |
+| ------------- | ------------------------------------------------------------ |
+| `df`          | Data frame with columns 'open', 'high', 'low', 'close' (case-insensitive). |
+| `min_periods` | Minimum number of observations in window required to have a value; otherwise, result is `np.nan`. |
+| `sign`        | Whether to return signed estimates.                          |
 
 ## Examples
 
