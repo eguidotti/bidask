@@ -57,7 +57,7 @@ def edge_rolling(df: pd.DataFrame, window: int, sign: bool = False, **kwargs) ->
     pc1 = tau * np.where(np.isnan(c1) | np.isnan(h1), np.nan, c1 != h1)
     pc2 = tau * np.where(np.isnan(c1) | np.isnan(l1), np.nan, c1 != l1)
     
-    # set up data frame for rolling means
+    # compute base products for rolling means
     r12 = r1 * r2
     r15 = r1 * r5
     r34 = r3 * r4
@@ -66,6 +66,8 @@ def edge_rolling(df: pd.DataFrame, window: int, sign: bool = False, **kwargs) ->
     tr2 = tau * r2
     tr4 = tau * r4
     tr5 = tau * r5    
+
+    # set up data frame for rolling means
     x = pd.DataFrame({
         1:  r12,
         2:  r34,
@@ -103,7 +105,8 @@ def edge_rolling(df: pd.DataFrame, window: int, sign: bool = False, **kwargs) ->
         34: pc2
     }, index=df.index)
     
-    # mask the first observation and decrement window and min_periods to account for lagged prices
+    # mask the first observation and decrement window and min_periods by 1 before
+    # computing rolling means to account for lagged prices
     x.iloc[0] = np.nan
     if isinstance(window, (int, np.integer)):
         window = max(0, window - 1)
