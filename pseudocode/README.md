@@ -4,7 +4,7 @@ This file provides the pseudocode to simplify implementations of the estimator i
 
 ### Input
 
-Vectors of `open`, `high`, `low`, and `close` prices. The vectors must be sorted in ascending order of the timestamp. The function should also accept the argument `sign` specifying whether signed estimates should be returned.
+Vectors of `open`, `high`, `low`, and `close` prices. The vectors must be sorted in ascending order of the timestamp. The function should also accept the argument `sign` specifying whether to return signed estimates.
 
 ### Output
 
@@ -13,46 +13,61 @@ Numeric spread estimate. A value of 0.01 corresponds to a spread of 1%.
 ### Algorithm
 
 ```python
-# convert prices to logs
+# check that the open, high, low, and close prices have the same length
+nobs = len(open)
+if len(high) != nobs or len(low) != nobs or len(close) != nobs:
+	raise error
+
+# return missing if there are less than 3 observations
+if nobs < 3:
+	return missing
+
+# compute log-prices
 o = log(open)
 h = log(high)
 l = log(low)
 c = log(close)
 m = (h + l) / 2.
 
-# lag prices by one period 
+# shift log-prices by one period
 h1 = lag(h)
 l1 = lag(l)
 c1 = lag(c)
 m1 = lag(m)
 
+# compute log-returns
+r1 = m - o
+r2 = o - m1
+r3 = m - c1
+r4 = c1 - m1
+r5 = o - c1
+
 # compute indicator variables
-tau = h != l OR l != c1 
-phi1 = o != h AND tau
-phi2 = o != l AND tau
-phi3 = c1 != h1 AND tau
-phi4 = c1 != l1 AND tau
+# (note: comparisons involving missing values must be missing)
+tau = h != l or l != c1 
+po1 = tau and o != h
+po2 = tau and o != l
+pc1 = tau and c1 != h1
+pc2 = tau and c1 != l1
 
-# compute means
+# return missing if there are less than two periods with tau=1
+if sum(tau) < 2:
+  return missing
+
+# compute probabilities
+# (note: 0/0 must be missing; otherwise return missing if po or pc is zero)
 pt = mean(tau)
-po = mean(phi1) + mean(phi2)
-pc = mean(phi3) + mean(phi4)
+po = mean(po1) + mean(po2)
+pc = mean(pc1) + mean(pc2)
 
-# compute returns
-r1 = m-o
-r2 = o-m1
-r3 = m-c1
-r4 = c1-m1
-r5 = o-c1
+# compute de-meaned log-returns
+d1 = r1 - mean(r1)/pt*tau
+d3 = r3 - mean(r3)/pt*tau
+d5 = r5 - mean(r5)/pt*tau
 
-# demean returns
-d1 = r1 - tau * mean(r1) / pt
-d3 = r3 - tau * mean(r3) / pt
-d5 = r5 - tau * mean(r5) / pt
-
-# compute the following vectors
-x1 = -4./po*d1*r2 -4./pc*d3*r4 
-x2 = -4./po*d1*r5 -4./pc*d5*r4 
+# compute input vectors
+x1 = -4./po*d1*r2 + -4./pc*d3*r4 
+x2 = -4./po*d1*r5 + -4./pc*d5*r4 
 
 # compute expectations
 e1 = mean(x1)
@@ -62,12 +77,17 @@ e2 = mean(x2)
 v1 = mean(x1*x1) - e1*e1
 v2 = mean(x2*x2) - e2*e2
 
-# compute square spread
-s2 = (v2*e1 + v1*e2) / (v1 + v2)
+# compute square spread by using a (equally) weighted 
+# average if the total variance is (not) positive
+vt = v1 + v2
+if vt > 0:
+  s2 = (v2*e1 + v1*e2) / vt
+else:
+  s2 = (e1 + e2) / 2.
 
-# compute square root
+# compute signed root
 s = sqrt(abs(s2))
-if sign AND s2 < 0: 
+if sign and s2 < 0: 
     s = -s
 
 # return the spread

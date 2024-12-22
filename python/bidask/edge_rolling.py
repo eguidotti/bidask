@@ -132,7 +132,7 @@ def edge_rolling(df: pd.DataFrame, window: int, sign: bool = False, **kwargs) ->
     a55 = a5 ** 2
     a66 = a6 ** 2
 
-    # compute expected values
+    # compute expectations
     e1 = a1 * (m[1] - a3*m[7]) + a2 * (m[2] - a4*m[8])
     e2 = a1 * (m[3] - a3*m[30]) + a2 * (m[4] - a4*m[10])
     

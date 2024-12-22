@@ -81,10 +81,10 @@ def edge(open: np.array, high: np.array, low: np.array, close: np.array, sign: b
         d5 = r5 - np.nanmean(r5)/pt*tau
     
         # compute input vectors
-        x1 = -4./po*d1*r2 + -4./pc*r4*d3
-        x2 = -4./po*d1*r5 + -4./pc*r4*d5 
+        x1 = -4./po*d1*r2 + -4./pc*d3*r4 
+        x2 = -4./po*d1*r5 + -4./pc*d5*r4 
     
-        # compute expected values
+        # compute expectations
         e1 = np.nanmean(x1)
         e2 = np.nanmean(x2)
     
