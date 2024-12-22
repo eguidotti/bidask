@@ -11,6 +11,11 @@ NULL
 #' 
 rsum <- function(x, width, na.rm){
   
+  if(length(width) == 1 && width < 1){
+    width <- 1
+    x[] <- NaN
+  }
+  
   if(length(width) == 1 && width == nrow(x))
     width <- c(0, width)
   
@@ -27,6 +32,11 @@ rsum <- function(x, width, na.rm){
 #' 
 rmean <- function(x, width, na.rm){
 
+  if(length(width) == 1 && width < 1){
+    width <- 1
+    x[] <- NaN
+  }
+  
   if(length(width) == 1 && width == nrow(x))
     width <- c(0, width)
   

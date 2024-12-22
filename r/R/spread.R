@@ -18,14 +18,10 @@
 #' @param x \code{\link[xts]{xts}} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}.
 #' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use. By default, the whole time series is used to compute a single spread estimate.
 #' @param method the estimator(s) to use. See details.
-#' @param sign whether signed estimates should be returned.
-#' @param na.rm whether missing values should be ignored.
+#' @param sign whether to return signed estimates.
+#' @param na.rm whether to ignore missing values.
 #'
 #' @return Time series of spread estimates. A value of 0.01 corresponds to a spread of 1\%.
-#'
-#' @note 
-#' Please cite Ardia, Guidotti, & Kroencke (2024)
-#' when using this package in publication.
 #'
 #' @references
 #' Ardia, D., Guidotti, E., Kroencke, T.A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. Journal of Financial Economics, 161, 103916. 
@@ -68,7 +64,7 @@ spread <- function(x, width = nrow(x), method = "EDGE", sign = FALSE, na.rm = FA
     stop("x must be a xts object")
 
   if(nrow(x) < 3)
-    stop("x contains less than 3 observations")
+    stop("x must contain at least 3 observations")
   
   method <- toupper(method)
   colnames(x) <- toupper(gsub("^(.*\\b)(Open|High|Low|Close)$", "\\2", colnames(x)))

@@ -13,9 +13,9 @@ spread(x, width = nrow(x), method = "EDGE", sign = FALSE, na.rm = FALSE)
 
 \item{method}{the estimator(s) to use. See details.}
 
-\item{sign}{whether signed estimates should be returned.}
+\item{sign}{whether to return signed estimates.}
 
-\item{na.rm}{whether missing values should be ignored.}
+\item{na.rm}{whether to ignore missing values.}
 }
 \value{
 Time series of spread estimates. A value of 0.01 corresponds to a spread of 1\%.
@@ -35,10 +35,6 @@ The method \code{AR} implements the estimator described in Abdi & Ranaldo (2017)
 The method \code{CS} implements the estimator described in Corwin & Schultz (2012). \code{CS2} implements their 2-period version. Both versions are adjusted for overnight (close-to-open) returns as described in the paper.
 
 The method \code{ROLL} implements the estimator described in Roll (1984).
-}
-\note{
-Please cite Ardia, Guidotti, & Kroencke (2024)
-when using this package in publication.
 }
 \examples{
 # simulate open, high, low, and close prices with spread 1\%

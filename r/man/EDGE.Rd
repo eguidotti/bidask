@@ -15,22 +15,18 @@ edge(open, high, low, close, sign = FALSE)
 
 \item{close}{numeric vector of close prices.}
 
-\item{sign}{whether signed estimates should be returned.}
+\item{sign}{whether to return signed estimates.}
 }
 \value{
 The spread estimate. A value of 0.01 corresponds to a spread of 1\%.
 }
 \description{
-Implements an efficient estimator of bid-ask spreads 
-from open, high, low, and close prices as described in 
-Ardia, Guidotti, & Kroencke (2024).
+Implements the efficient estimator of bid-ask spreads from open, high, low, 
+and close prices described in Ardia, Guidotti, & Kroencke (JFE, 2024):
+\doi{10.1016/j.jfineco.2024.103916}
 }
 \details{
 Prices must be sorted in ascending order of the timestamp.
-}
-\note{
-Please cite Ardia, Guidotti, & Kroencke (2024)
-when using this package in publication.
 }
 \examples{
 # simulate open, high, low, and close prices with spread 1\%

@@ -33,13 +33,16 @@ test_that("edge-rolling", {
   set.seed(123)
   x <- sim(prob = 0.01)
   
-  width <- 21
-  s1 <- spread(x, width = width, method = "EDGE")
-  s2 <- zoo::rollapplyr(x, width = width, by.column = FALSE, FUN = function(x){
-    edge(x$Open, x$High, x$Low, x$Close)
-  })[-(1:width-1)]
-  
-  expect_equal(as.numeric(s1), as.numeric(s2))
+  for(width in c(1, 2, 3, 4, 21, 100)){
+    
+    s1 <- spread(x, width = width, method = "EDGE")
+    s2 <- zoo::rollapplyr(x, width = width, by.column = FALSE, FUN = function(x){
+      edge(x$Open, x$High, x$Low, x$Close)
+    })[-(1:max(1, width-1))]
+    
+    expect_equal(as.numeric(s1), as.numeric(s2), label=paste("width = ", width))
+    
+  }
   
 })
 

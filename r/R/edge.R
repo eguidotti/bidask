@@ -4,105 +4,151 @@
 #'
 EDGE <- function(x, width = nrow(x), sign, na.rm){
   
+  # compute log-prices
   x <- log(x)
-
-  O <- x$OPEN
-  H <- x$HIGH
-  L <- x$LOW
-  C <- x$CLOSE
-  M <- (H+L)/2
+  o <- x$OPEN
+  h <- x$HIGH
+  l <- x$LOW
+  c <- x$CLOSE
+  m <- (h + l) / 2
   
-  H1 <- lag(H, 1)
-  L1 <- lag(L, 1)
-  C1 <- lag(C, 1)
-  M1 <- lag(M, 1)
+  # shift log-prices by one period
+  h1 <- lag(h, 1)
+  l1 <- lag(l, 1)
+  c1 <- lag(c, 1)
+  m1 <- lag(m, 1)
 
-  r1 <- M-O
-  r2 <- O-M1
-  r3 <- M-C1
-  r4 <- C1-M1
-  r5 <- O-C1
+  # compute log-returns
+  r1 <- m - o
+  r2 <- o - m1
+  r3 <- m - c1
+  r4 <- c1 - m1
+  r5 <- o - c1
   
-  tau  <- H!=L | L!=C1 
-  phi1 <- O!=H & tau 
-  phi2 <- O!=L & tau 
-  phi3 <- C1!=H1 & tau 
-  phi4 <- C1!=L1 & tau 
+  # compute indicator variables
+  tau <- h != l | l != c1 
+  po1 <- tau & o != h
+  po2 <- tau & o != l
+  pc1 <- tau & c1 != h1
+  pc2 <- tau & c1 != l1
 
+  # compute base products for rolling means
+  r12 <- r1 * r2
+  r15 <- r1 * r5
+  r34 <- r3 * r4
+  r45 <- r4 * r5
+  tr1 <- tau * r1
+  tr2 <- tau * r2
+  tr4 <- tau * r4
+  tr5 <- tau * r5
+  
+  # set up data frame for rolling means
   x <- cbind(
-    r1*r2,        # 1
-    r3*r4,        # 2
-    r1*r5,        # 3
-    r5*r4,        # 4
-    tau,          # 5
-    r1,           # 6
-    tau*r2,       # 7
-    r3,           # 8
-    tau*r4,       # 9
-    r5,           # 10
-    r1^2*r2^2,    # 11
-    r3^2*r4^2,    # 12
-    r1^2*r5^2,    # 13
-    r4^2*r5^2,    # 14
-    r1*r2*r3*r4,  # 15
-    r1*r4*r5^2,   # 16
-    tau*r2^2,     # 17
-    tau*r4^2,     # 18
-    tau*r5^2,     # 19
-    tau*r1*r2^2,  # 20
-    tau*r3*r4^2,  # 21
-    tau*r1*r5^2,  # 22
-    tau*r5*r4^2,  # 23
-    tau*r1*r2*r4, # 24
-    tau*r2*r3*r4, # 25
-    tau*r2*r4,    # 26
-    tau*r1*r4*r5, # 27
-    tau*r4*r5^2,  # 28
-    tau*r4*r5,    # 29
-    tau*r5,       # 30
-    phi1,         # 31
-    phi2,         # 32
-    phi3,         # 33
-    phi4          # 34
+    r12,
+    r34,
+    r15,
+    r45,
+    tau,
+    r1,
+    tr2,
+    r3,
+    tr4,
+    r5,
+    r12^2,
+    r34^2,
+    r15^2,
+    r45^2,
+    r12 * r34,
+    r15 * r45,
+    tr2 * r2,
+    tr4 * r4,
+    tr5 * r5,
+    tr2 * r12,
+    tr4 * r34,
+    tr5 * r15,
+    tr4 * r45,
+    tr4 * r12,
+    tr2 * r34,
+    tr2 * r4,
+    tr1 * r45,
+    tr5 * r45,
+    tr4 * r5,
+    tr5,
+    po1,
+    po2,
+    pc1,
+    pc2
   )
   
-  m <- rmean(x[-1], width = width-1, na.rm = na.rm)
+  # mask the first observation and decrement width by 1 before 
+  # computing rolling means to account for lagged prices
+  x <- x[-1]
+  width = width - 1
   
-  po <- -8 / (m[,31] + m[,32])
-  pc <- -8 / (m[,33] + m[,34])
+  # compute rolling means
+  m <- rmean(x, width = width, na.rm = na.rm)
   
-  e1 <- po/2 * (m[,1] - m[,6]*m[,7]/m[,5]) + 
-    pc/2 * (m[,2] - m[,8]*m[,9]/m[,5])
+  # compute probabilities
+  pt <- m[,5]
+  po <- m[,31] + m[,32]
+  pc <- m[,33] + m[,34]
   
-  e2 <- po/2 * (m[,3] - m[,6]*m[,30]/m[,5]) + 
-    pc/2 * (m[,4] - m[,10]*m[,9]/m[,5])
+  # set to missing if there are less than two periods with tau=1
+  # or po or pc is zero
+  nt <- rsum(x[,5], width = width, na.rm = TRUE)
+  m[nt < 2 | (!is.nan(po) & po == 0) | (!is.nan(pc) & pc == 0)] <- NaN
   
-  v1 <- po^2/4 * (m[,11] + m[,6]^2*m[,17]/m[,5]^2 - 2*m[,20]*m[,6]/m[,5]) +
-    pc^2/4 * (m[,12] + m[,8]^2*m[,18]/m[,5]^2 - 2*m[,21]*m[,8]/m[,5]) +
-    po*pc/2 * (m[,15] - m[,24]*m[,8]/m[,5] - m[,6]*m[,25]/m[,5] + m[,6]*m[,8]*m[,26]/m[,5]^2) - 
-    e1^2
+  # compute input vectors
+  a1 <- -4. / po
+  a2 <- -4. / pc
+  a3 <- m[,6] / pt
+  a4 <- m[,9] / pt
+  a5 <- m[,8] / pt
+  a6 <- m[,10] / pt
+  a12 <- 2 * a1 * a2
+  a11 <- a1^2
+  a22 <- a2^2
+  a33 <- a3^2
+  a55 <- a5^2
+  a66 <- a6^2
   
-  v2 <- po^2/4 * (m[,13] + m[,6]^2*m[,19]/m[,5]^2 - 2*m[,22]*m[,6]/m[,5]) +
-    pc^2/4 * (m[,14] + m[,10]^2*m[,18]/m[,5]^2 - 2*m[,23]*m[,10]/m[,5]) +
-    po*pc/2 * (m[,16] - m[,27]*m[,10]/m[,5] - m[,6]*m[,28]/m[,5] + m[,6]*m[,10]*m[,29]/m[,5]^2) -
-    e2^2
+  # compute expectations
+  e1 <- a1 * (m[,1] - a3*m[,7]) + a2 * (m[,2] - a4*m[,8])
+  e2 <- a1 * (m[,3] - a3*m[,30]) + a2 * (m[,4] - a4*m[,10])
   
-  S2 <- (v2*e1 + v1*e2) / (v1 + v2)
-  S2[is.infinite(S2)] <- NaN
-  colnames(S2) <- "EDGE"
-
-  S <- sign(S2) * sqrt(abs(S2))
-  if(!sign) S <- abs(S)
+  # compute variances
+  v1 <- - e1^2 + (
+    a11 * (m[,11] - 2*a3*m[,20] + a33*m[,17]) +
+    a22 * (m[,12] - 2*a5*m[,21] + a55*m[,18]) +
+    a12 * (m[,15] - a3*m[,25] - a5*m[,24] + a3*a5*m[,26])
+  )
+  v2 <- - e2^2 + (
+    a11 * (m[,13] - 2*a3*m[,22] + a33*m[,19]) + 
+    a22 * (m[,14] - 2*a6*m[,23] + a66*m[,18]) +
+    a12 * (m[,16] - a3*m[,28] - a6*m[,27] + a3*a6*m[,29]) 
+  )
   
-  return(S)
+  # compute square spread by using a (equally) weighted 
+  # average if the total variance is (not) positive
+  vt <- v1 + v2
+  s2 <- ifelse(!is.na(vt) & vt > 0, (v2*e1 + v1*e2) / vt, (e1 + e2) / 2.)
+  colnames(s2) <- "EDGE"
+  
+  # compute signed root
+  s <- sqrt(abs(s2))
+  if(sign) 
+    s <- s * base::sign(s2)
+  
+  # return the spread
+  return(s)
   
 }
 
 #' Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 #' 
-#' Implements an efficient estimator of bid-ask spreads 
-#' from open, high, low, and close prices as described in 
-#' Ardia, Guidotti, & Kroencke (2024).
+#' Implements the efficient estimator of bid-ask spreads from open, high, low, 
+#' and close prices described in Ardia, Guidotti, & Kroencke (JFE, 2024):
+#' \doi{10.1016/j.jfineco.2024.103916}
 #' 
 #' @details
 #' Prices must be sorted in ascending order of the timestamp.
@@ -111,13 +157,9 @@ EDGE <- function(x, width = nrow(x), sign, na.rm){
 #' @param high numeric vector of high prices.
 #' @param low numeric vector of low prices.
 #' @param close numeric vector of close prices.
-#' @param sign whether signed estimates should be returned.
+#' @param sign whether to return signed estimates.
 #'
 #' @return The spread estimate. A value of 0.01 corresponds to a spread of 1\%.
-#'
-#' @note 
-#' Please cite Ardia, Guidotti, & Kroencke (2024)
-#' when using this package in publication.
 #'
 #' @references 
 #' Ardia, D., Guidotti, E., Kroencke, T.A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. Journal of Financial Economics, 161, 103916. 
@@ -134,62 +176,82 @@ EDGE <- function(x, width = nrow(x), sign, na.rm){
 #' 
 edge <- function(open, high, low, close, sign = FALSE){
   
+  # check that the open, high, low, and close prices have the same length
   n <- length(open)
   if(length(high) != n | length(low) != n | length(close) != n)
     stop("open, high, low, close must have the same length")
   
+  # return missing if there are less than 3 observations
+  if(n < 3)
+    return(NaN)
+  
+  # compute log-prices
   o <- log(as.numeric(open))
   h <- log(as.numeric(high))
   l <- log(as.numeric(low))
   c <- log(as.numeric(close))
   m <- (h + l) / 2
   
-  h1 <- h[-n]
-  l1 <- l[-n]
-  c1 <- c[-n]
-  m1 <- m[-n]
+  # shift log-prices by one period
+  h1 <- h[-n]; l1 <- l[-n]; c1 <- c[-n]; m1 <- m[-n]
+  o <- o[-1]; h <- h[-1]; l <- l[-1]; c <- c[-1]; m <- m[-1]
   
-  o <- o[-1]
-  h <- h[-1]
-  l <- l[-1]
-  c <- c[-1]
-  m <- m[-1]
+  # compute log-returns
+  r1 <- m - o
+  r2 <- o - m1
+  r3 <- m - c1
+  r4 <- c1 - m1
+  r5 <- o - c1
   
-  tau  <- h!=l | l!=c1 
-  phi1 <- o!=h & tau
-  phi2 <- o!=l & tau
-  phi3 <- c1!=h1 & tau
-  phi4 <- c1!=l1 & tau
+  # compute indicator variables
+  tau <- h != l | l != c1 
+  po1 <- tau & o != h
+  po2 <- tau & o != l
+  pc1 <- tau & c1 != h1
+  pc2 <- tau & c1 != l1
   
+  # compute probabilities
   pt <- mean(tau, na.rm = TRUE)
-  po <- mean(phi1, na.rm = TRUE) + mean(phi2, na.rm = TRUE)
-  pc <- mean(phi3, na.rm = TRUE) + mean(phi4, na.rm = TRUE)
+  po <- mean(po1, na.rm = TRUE) + mean(po2, na.rm = TRUE)
+  pc <- mean(pc1, na.rm = TRUE) + mean(pc2, na.rm = TRUE)
   
-  r1 <- m-o
-  r2 <- o-m1
-  r3 <- m-c1
-  r4 <- c1-m1
-  r5 <- o-c1
+  # return missing if there are less than two periods with tau=1 
+  # or po or pc is zero
+  nt <- sum(tau, na.rm = TRUE)
+  if(nt < 2 | (!is.nan(po) & po == 0) | (!is.nan(pc) & pc == 0))
+    return(NaN)
   
-  d1 <- r1 - tau * mean(r1, na.rm = TRUE) / pt
-  d3 <- r3 - tau * mean(r3, na.rm = TRUE) / pt
-  d5 <- r5 - tau * mean(r5, na.rm = TRUE) / pt
+  # compute de-meaned log-returns
+  d1 <- r1 - mean(r1, na.rm = TRUE)/pt*tau
+  d3 <- r3 - mean(r3, na.rm = TRUE)/pt*tau
+  d5 <- r5 - mean(r5, na.rm = TRUE)/pt*tau
   
-  x1 <- -4/po*d1*r2 -4/pc*d3*r4 
-  x2 <- -4/po*d1*r5 -4/pc*d5*r4 
+  # compute input vectors
+  x1 <- -4./po*d1*r2 + -4./pc*d3*r4 
+  x2 <- -4./po*d1*r5 + -4./pc*d5*r4
   
-  e1  <- mean(x1, na.rm = TRUE)
-  e2  <- mean(x2, na.rm = TRUE)
+  # compute expectations
+  e1 <- mean(x1, na.rm = TRUE)
+  e2 <- mean(x2, na.rm = TRUE)
   
+  # compute variances
   v1 <- mean(x1^2, na.rm = TRUE) - e1^2
   v2 <- mean(x2^2, na.rm = TRUE) - e2^2
 
-  s2 <- (v2*e1 + v1*e2) / (v1 + v2)
+  # compute square spread by using a (equally) weighted 
+  # average if the total variance is (not) positive
+  vt = v1 + v2
+  if(!is.na(vt) & vt > 0)
+    s2 = (v2*e1 + v1*e2) / vt
+  else
+    s2 = (e1 + e2) / 2.
   
+  # compute signed root
   s <- sqrt(abs(s2))
-  if(sign & !is.na(s2) & s2 < 0)
-    s <- -s
+  if(sign) 
+    s <- s * base::sign(s2)
   
+  # return the spread
   return(s)
   
 }
