@@ -1,6 +1,6 @@
 #' Simulation of Open, High, Low, and Close Prices
 #'
-#' This function performs simulations consisting of \code{n} periods (e.g., days) and where each period consists of a given number of \code{trades}.
+#' This function performs simulations consisting of \code{n} periods and where each period consists of a given number of \code{trades}.
 #' For each trade, the actual price \eqn{P_t} is simulated as \eqn{P_t = P_{t-1}e^{\sigma x}}, where \eqn{\sigma} is the standard deviation per trade and \eqn{x} is a random draw from a unit normal distribution.
 #' The standard deviation per trade equals the \code{volatility} divided by the square root of the number of \code{trades}.
 #' Trades are assumed to be observed with a given \code{probability}.
@@ -16,19 +16,20 @@
 #' @param volatility the open-to-close volatility.
 #' @param overnight the close-to-open volatility.
 #' @param drift the expected return per period.
-#' @param units the units of the time period. One of: \code{sec}, \code{min}, \code{hour}, \code{day}, \code{week}, \code{month}, \code{year}.
+#' @param units the units of the time period. One of: \code{1}, \code{sec}, \code{min}, \code{hour}, \code{day}, \code{week}, \code{month}, \code{year}.
 #' @param sign whether to return positive prices for buys and negative prices for sells.
 #'
-#' @return Simulated open, high, low, and close prices.
-#'
-#' @note 
-#' Please cite Ardia, Guidotti, & Kroencke (2024) 
-#' when using this package in publication.
+#' @return A data.frame of open, high, low, and close prices if \code{units=1} (default). 
+#' Otherwise, an \code{xts} object is returned (requires the \code{xts} package to be installed).
 #'
 #' @references
 #' Ardia, D., Guidotti, E., Kroencke, T.A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. Journal of Financial Economics, 161, 103916. 
 #' \doi{10.1016/j.jfineco.2024.103916}
 #'
+#' @examples
+#' # simulate 10 open, high, low, and close prices with spread 1%
+#' sim(n = 10, spread = 0.01)
+#' 
 #' @export
 #'
 sim <- function(
@@ -39,14 +40,14 @@ sim <- function(
     volatility = 0.03, 
     overnight = 0, 
     drift = 0, 
-    units = "day",
+    units = 1,
     sign = FALSE){
 
   # sanitize units
   if(units == "minute") units <- "min"
 
   # check units
-  valid <- c("sec","min","hour","day","week","month","year")
+  valid <- c(1, "sec", "min", "hour", "day", "week", "month", "year")
   if(!(units %in% valid))
     stop(sprintf("units must be one of '%s'", paste(valid, collapse = "','")))
 
@@ -65,9 +66,8 @@ sim <- function(
   p <- exp(cumsum(r)) * (1 + z)
   
   # signed prices
-  if(sign){
-    p <- p * sign(z)
-  }
+  if(sign)
+    p <- p * base::sign(z)
 
   # subset observations
   keep <- as.logical(rbinom(m, size = 1, prob = prob))
@@ -92,16 +92,18 @@ sim <- function(
     prev <- obs[last]
   }
 
-  # get time
-  now <- Sys.time()
-  if(!(units %in% c("sec","min","hour")))
-    now <- as.Date(now)
+  if(units == 1){
+    ohlc <- as.data.frame(ohlc)
+  }
+  else {
+    now <- Sys.time()
+    if(!(units %in% c("sec", "min", "hour")))
+      now <- as.Date(now)
+    time <- seq(now, length = n, by = units)
+    ohlc <- xts::xts(ohlc, order.by = time)
+  }
 
-  # return OHLC
-  time <- seq(now, length = n, by = units)
-  p <- xts::xts(ohlc, order.by = time)
-  cn <- c("Open", "High", "Low", "Close")
-  colnames(p) <- cn
-  return(p)
+  colnames(ohlc) <- c("Open", "High", "Low", "Close")
+  return(ohlc)
 
 }

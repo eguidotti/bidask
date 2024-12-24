@@ -12,37 +12,26 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.width = 6,
+  out.width="100%",
+  dpi = 300,
   warning = FALSE,
   message = FALSE
 )
 ```
 
-This vignette illustrates how to estimate bid-ask spreads from open, high, low, and close prices. Let's start by loading the package:
+This vignette illustrates how to estimate bid-ask spreads from open, high, low, and close prices using the efficient estimator described in Ardia, Guidotti, & Kroencke (JFE, 2024): [https://doi.org/10.1016/j.jfineco.2024.103916](https://doi.org/10.1016/j.jfineco.2024.103916). 
 
 ```{r setup}
 library(bidask)
 ```
 
-The package offers two ways to estimate bid-ask spreads:
+The function `edge` computes a single bid-ask spread estimate from vectors of open, high, low, and close prices. The functions `edge_rolling` and `edge_expanding` are optimized for fast calculations over rolling and expanding windows, respectively. The function `spread` provides additional functionalities for `xts` objects and implements additional estimators. For all functions, an output value of 0.01 corresponds to a spread estimate of 1%.
 
-1. `edge()`: designed for tidy data.
-2. `spread()`: designed for `xts` objects.
+## Functions `edge`, `edge_rolling`, `edge_expanding`
 
-The function `edge()` implements the efficient estimator described in [Ardia, Guidotti, & Kroencke (2024)](https://doi.org/10.1016/j.jfineco.2024.103916). Open, high, low, and close prices are to be passed as separate vectors. 
+These functions can be easily used with tidy data. For instance, download daily prices for Bitcoin and Ethereum using the [crypto2](https://cran.r-project.org/package=crypto2) package:
 
-The function `spread()` requires an `xts` object containing columns named `Open`, `High`, `Low`, `Close` and it provides additional functionalities, such as additional estimators and rolling estimates.
-
-An output value of 0.01 corresponds to a spread estimate of 1%.
-
-Examples are provided below.
-
-## Tidy data
-
-The function `edge()` can be easily used with tidy data and the `dplyr` grammar. In the following example, we estimate bid-ask spreads for cryptocurrencies.
-
-Download daily prices for Bitcoin and Ethereum using the [crypto2](https://cran.r-project.org/package=crypto2) package:
-
-```{r}
+```{r, results='hide'}
 library(dplyr)
 library(crypto2)
 df <- crypto_list(only_active=TRUE) %>%
@@ -61,53 +50,73 @@ df %>%
   mutate(yyyy = format(timestamp, "%Y")) %>%
   group_by(symbol, yyyy) %>%
   arrange(timestamp) %>%
-  summarise(EDGE = edge(open, high, low, close))
+  summarise("EDGE" = edge(open, high, low, close))
 ```
 
-## `xts` objects
+Estimate the spread using a rolling window of 30 days for each coin and plot the results:
 
-The function `spread()` provides additional functionalities for [xts](https://cran.r-project.org/package=xts) objects. In the following example, we estimate bid-ask spreads for equities.
+```{r}
+library(ggplot2)
+df %>%
+  group_by(symbol) %>%
+  arrange(timestamp) %>%
+  mutate("EDGE (rolling)" = edge_rolling(open, high, low, close, width = 30)) %>%
+  ggplot(aes(x = timestamp, y = `EDGE (rolling)`, color = symbol)) +
+  geom_line() +
+  theme_minimal()
+```
 
-Download daily data for Microsoft (MSFT) using the [quantmod](https://cran.r-project.org/package=quantmod) package:
+Estimate the spread using an expanding window for each coin and plot the results:
+```{r}
+df %>%
+  group_by(symbol) %>%
+  arrange(timestamp) %>%
+  mutate("EDGE (expanding)" = edge_expanding(open, high, low, close)) %>%
+  ggplot(aes(x = timestamp, y = `EDGE (expanding)`, color = symbol)) +
+  geom_line() +
+  theme_minimal()
+```
+
+Notice that, generally, using intraday data (instead of daily) improves the estimation accuracy, especially when the spread is expected to be small (see example below).
+
+## Function `spread`
+
+The function `spread()` provides additional functionalities for [xts](https://cran.r-project.org/package=xts) objects and implements additional estimators. For instance, download daily data for Microsoft (MSFT) using the [quantmod](https://cran.r-project.org/package=quantmod) package which returns an `xts` object:
 
 ```{r}
 library(quantmod)
 x <- getSymbols("MSFT", auto.assign = FALSE, start = "2019-01-01", end = "2022-12-31")
 head(x)
-```
-
-This is an `xts` object:
-
-```{r}
 class(x)
 ```
-So we can estimate the spread with:
+
+Estimate the spread with:
 
 ```{r}
 spread(x)
 ```
 
-By default, the call above is equivalent to:
+or, equivalently:
 
 ```{r}
 edge(open = x[,1], high = x[,2], low = x[,3], close = x[,4])
 ```
 
-But `spread()` also provides additional functionalities. For instance, estimate the spread for each month and plot the estimates:
+Estimate the spread for each month and plot the estimates:
 
 ```{r}
 sp <- spread(x, width = endpoints(x, on = "months"))
 plot(sp)
 ```
 
-Or estimate the spread using a rolling window of 21 obervations:
+Estimate the spread using a rolling window of 21 obervations:
 
 ```{r}
 sp <- spread(x, width = 21)
 plot(sp)
 ```
 
-To illustrate higher-frequency estimates, we are going to download intraday data from Alpha Vantage. You must register with Alpha Vantage in order to download their data, but the one-time registration is fast and free. Register at https://www.alphavantage.co/ to receive your key. You can set the API key globally as follows:
+To illustrate higher-frequency estimates, download intraday data from Alpha Vantage. You must register with Alpha Vantage in order to download their data, but the one-time registration is fast and free. Register at https://www.alphavantage.co/ to receive your key. You can set the API key globally as follows:
 
 ```{r}
 setDefaults(getSymbols.av, api.key = "<API-KEY>")
@@ -130,7 +139,10 @@ x <- read.csv(system.file("extdata", "msft.csv", package = "bidask"))
 x <- xts(x[,-1], order.by = as.POSIXct(x[,1]))
 ```
 
+Keep only prices during regular market hours:
+
 ```{r}
+x <- x["T09:30/T16:00"]
 head(x)
 ```
 
@@ -138,14 +150,19 @@ Estimate the spread for each day and plot the estimates:
 
 ```{r}
 sp <- spread(x, width = endpoints(x, on = "day"))
-plot(sp)
+plot(sp, type = "b")
+```
+
+Use multiple estimators and plot the estimates:
+
+```{r}
+sp <- spread(x, width = endpoints(x, on = "day"), method = c("EDGE", "AR", "CS", "ROLL"))
+plot(sp, type = "b", legend.loc = "topright")
 ```
 
 ## GitHub 
 
-If you find this package useful, please [star the repo](https://github.com/eguidotti/bidask)!
-
-The repository also contains implementations for Python, C++, MATLAB, and more.
+If you find this package useful, please [star the repo](https://github.com/eguidotti/bidask)! The repository also contains implementations for Python, C++, MATLAB, and more; as well as open data containing bid-ask spread estimates for crypto pairs in Binance and for U.S. stocks in CRSP.
 
 ## Cite as
 

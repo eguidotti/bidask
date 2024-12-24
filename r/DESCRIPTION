@@ -7,22 +7,25 @@ Authors@R: c(
     person(given = "David", family = "Ardia", role = c("ctb"), comment = c(ORCID = "0000-0003-2823-782X")),
     person(given = "Tim", family = "Kroencke", role = c("ctb"), comment = c(ORCID = "0000-0001-8700-356X"))
   )
-Description: Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices
-  as described in Ardia, Guidotti, & Kroencke (2024) <doi:10.1016/j.jfineco.2024.103916>. 
+Description: Implements the efficient estimator of bid-ask spreads from open, high, low, and close prices
+  described in Ardia, Guidotti, & Kroencke (JFE, 2024) <doi:10.1016/j.jfineco.2024.103916>. 
   It also provides an implementation of the estimators described in 
-  Roll (1984) <doi:10.1111/j.1540-6261.1984.tb03897.x>, 
-  Corwin & Schultz (2012) <doi:10.1111/j.1540-6261.2012.01729.x>,
-  and Abdi & Ranaldo (2017) <doi:10.1093/rfs/hhx084>.
-License: GPL-3
+  Roll (JF, 1984) <doi:10.1111/j.1540-6261.1984.tb03897.x>, 
+  Corwin & Schultz (JF, 2012) <doi:10.1111/j.1540-6261.2012.01729.x>,
+  and Abdi & Ranaldo (RFS, 2017) <doi:10.1093/rfs/hhx084>.
+License: MIT + file LICENSE
 URL: https://github.com/eguidotti/bidask
 BugReports: https://github.com/eguidotti/bidask/issues
 Encoding: UTF-8
-Imports: xts, zoo
+Imports: data.table
 RoxygenNote: 7.2.3
 Suggests:
+    xts,
+    zoo,
     dplyr,
     crypto2,
     quantmod,
+    ggplot2,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)

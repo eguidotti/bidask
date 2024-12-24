@@ -1,27 +1,29 @@
 #' Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 #'
 #' This function implements several methods to estimate bid-ask spreads
-#' from open, high, low, and close prices.
+#' from open, high, low, and close prices and it is optimized for fast 
+#' calculations over rolling and expanding windows.
 #'
 #' @details
-#' The method \code{EDGE} implements the Efficient Discrete Generalized Estimator described in Ardia, Guidotti, & Kroencke (2024).
+#' The method \code{EDGE} implements the Efficient Discrete Generalized Estimator described in Ardia, Guidotti, & Kroencke (JFE, 2024).
 #' 
-#' The methods \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia, Guidotti, & Kroencke (2024).
+#' The methods \code{OHL}, \code{OHLC}, \code{CHL}, \code{CHLO} implement the generalized estimators described in Ardia, Guidotti, & Kroencke (JFE, 2024).
 #' They can be combined by concatenating their identifiers, e.g., \code{OHLC.CHLO} uses an average of the \code{OHLC} and \code{CHLO} estimators.
 #'
-#' The method \code{AR} implements the estimator described in Abdi & Ranaldo (2017). \code{AR2} implements their 2-period version.
+#' The method \code{AR} implements the estimator described in Abdi & Ranaldo (RFS, 2017). \code{AR2} implements their 2-period version.
 #'
-#' The method \code{CS} implements the estimator described in Corwin & Schultz (2012). \code{CS2} implements their 2-period version. Both versions are adjusted for overnight (close-to-open) returns as described in the paper.
+#' The method \code{CS} implements the estimator described in Corwin & Schultz (JF, 2012). \code{CS2} implements their 2-period version. Both versions are adjusted for overnight (close-to-open) returns as described in the paper.
 #'
-#' The method \code{ROLL} implements the estimator described in Roll (1984).
+#' The method \code{ROLL} implements the estimator described in Roll (JF, 1984).
 #'
-#' @param x \code{\link[xts]{xts}} object with columns named \code{Open}, \code{High}, \code{Low}, \code{Close}.
-#' @param width integer width of the rolling window to use, or vector of endpoints defining the intervals to use. By default, the whole time series is used to compute a single spread estimate.
-#' @param method the estimator(s) to use. See details.
+#' @param x tabular data with columns named \code{open}, \code{high}, \code{low}, \code{close} (case-insensitive).
+#' @param width if an integer, the width of the rolling window. If a vector with the same length of the input prices, the width of the window corresponding to each observation. Otherwise, a vector of endpoints. By default, the full sample is used to compute a single spread estimate. See examples.
+#' @param method the estimators to use. See details.
 #' @param sign whether to return signed estimates.
 #' @param na.rm whether to ignore missing values.
 #'
-#' @return Time series of spread estimates. A value of 0.01 corresponds to a spread of 1\%.
+#' @return A data.frame of spread estimates, or an \code{xts} object if \code{x} is of class \code{xts}. 
+#' A value of 0.01 corresponds to a spread of 1\%.
 #'
 #' @references
 #' Ardia, D., Guidotti, E., Kroencke, T.A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. Journal of Financial Economics, 161, 103916. 
@@ -42,16 +44,29 @@
 #'
 #' # estimate the spread
 #' spread(x)
-#' 
-#' # by default this is equivalent to
+#' # equivalent to
 #' edge(x$Open, x$High, x$Low, x$Close)
 #'
 #' # estimate the spread using a rolling window of 21 periods
-#' spread(x, width = 21)
-#'
-#' # estimate the spread for each month
-#' ep <- xts::endpoints(x, on = "months")
+#' s <- spread(x, width = 21)
+#' tail(s)
+#' # equivalent to
+#' s <- edge_rolling(x$Open, x$High, x$Low, x$Close, width = 21)
+#' tail(s)
+#' 
+#' # estimate the spread using an expanding window
+#' s <- spread(x, width = 1:nrow(x))
+#' tail(s)
+#' # equivalent to
+#' s <- edge_expanding(x$Open, x$High, x$Low, x$Close, na.rm = FALSE)
+#' tail(s)
+#' 
+#' # estimate the spread using custom endpoints
+#' ep <- c(3, 35, 100)
 #' spread(x, width = ep)
+#' # equivalent to
+#' edge(x$Open[3:35], x$High[3:35], x$Low[3:35], x$Close[3:35])
+#' edge(x$Open[35:100], x$High[35:100], x$Low[35:100], x$Close[35:100])
 #'
 #' # use multiple estimators
 #' spread(x, method = c("EDGE", "AR", "CS", "ROLL", "OHLC", "OHL.CHL"))
@@ -60,50 +75,58 @@
 #'
 spread <- function(x, width = nrow(x), method = "EDGE", sign = FALSE, na.rm = FALSE){
 
-  if(!is.xts(x))
-    stop("x must be a xts object")
-
-  if(nrow(x) < 3)
-    stop("x must contain at least 3 observations")
+  s <- list()
+  todo <- method <- toupper(method)
+  colnames(x) <- tolower(gsub("^(.*\\b)(Open|High|Low|Close)$", "\\2", colnames(x)))
   
-  method <- toupper(method)
-  colnames(x) <- toupper(gsub("^(.*\\b)(Open|High|Low|Close)$", "\\2", colnames(x)))
+  open <- as.numeric(x$open)
+  high <- as.numeric(x$high)
+  low <- as.numeric(x$low)
+  close <- as.numeric(x$close)
 
-  S <- NULL
-  x <- x[,intersect(colnames(x), c("OPEN", "HIGH", "LOW", "CLOSE"))]
-
-  todo <- method
-  
   m <- "EDGE"
   if(m %in% todo){
-    S <- cbind(S, EDGE(x, width = width, sign = sign, na.rm = na.rm))
+    s <- c(s, EDGE(open, high, low, close, width, sign, na.rm))
     todo <- setdiff(todo, m)
   }
   
-  m <- c("AR","AR2")
+  m <- c("AR", "AR2")
   if(any(m %in% todo)){
     m <- intersect(todo, m)
-    S <- cbind(S, AR(x, width = width, method = m, sign = sign, na.rm = na.rm))
+    s <- c(s, AR(high, low, close, width, m, sign, na.rm))
     todo <- setdiff(todo, m)
   }
 
-  m <- c("CS","CS2")
+  m <- c("CS", "CS2")
   if(any(m %in% todo)){
     m <- intersect(todo, m)
-    S <- cbind(S, CS(x, width = width, method = m, sign = sign, na.rm = na.rm))
+    s <- c(s, CS(high, low, close, width, m, sign, na.rm))
     todo <- setdiff(todo, m)
   }
 
   m <- "ROLL"
   if(m %in% todo){
-    S <- cbind(S, ROLL(x, width = width, sign = sign, na.rm = na.rm))
+    s <- c(s, ROLL(close, width, sign, na.rm))
     todo <- setdiff(todo, m)
   }
   
   if(length(todo)){
-    S <- cbind(S, OHLC(x, width = width, method = todo, sign = sign, na.rm = na.rm))
+    s <- c(s, OHLC(open, high, low, close, width, todo, sign, na.rm))
   }
 
-  return(S[,method])
+  s <- as.data.frame(s, row.names = rownames(x))
+  if(requireNamespace("xts", quietly = TRUE) & 
+     requireNamespace("zoo", quietly = TRUE)
+  ){
+    if(xts::is.xts(x)){
+      s <- xts::xts(s, order.by = zoo::index(x))
+    }
+  }
+  
+  nw <- length(width)
+  if(nw == 1) s <- s[-(1:pmax(1, width - 1)), , drop = FALSE]
+  else if(nw != nrow(x)) s <- s[width[-1], , drop = FALSE]
+  
+  return(s[, method, drop = FALSE])
 
 }

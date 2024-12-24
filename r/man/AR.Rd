@@ -4,7 +4,7 @@
 \alias{AR}
 \title{Abdi-Ranaldo Estimator}
 \usage{
-AR(x, width = nrow(x), method, sign, na.rm)
+AR(high, low, close, width, method, sign, na.rm)
 }
 \description{
 Abdi-Ranaldo Estimator

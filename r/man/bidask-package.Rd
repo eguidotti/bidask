@@ -6,7 +6,7 @@
 \alias{bidask-package}
 \title{bidask: Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices}
 \description{
-Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices as described in Ardia, Guidotti, & Kroencke (2024) \doi{10.1016/j.jfineco.2024.103916}. It also provides an implementation of the estimators described in Roll (1984) \doi{10.1111/j.1540-6261.1984.tb03897.x}, Corwin & Schultz (2012) \doi{10.1111/j.1540-6261.2012.01729.x}, and Abdi & Ranaldo (2017) \doi{10.1093/rfs/hhx084}.
+Implements the efficient estimator of bid-ask spreads from open, high, low, and close prices described in Ardia, Guidotti, & Kroencke (JFE, 2024) \doi{10.1016/j.jfineco.2024.103916}. It also provides an implementation of the estimators described in Roll (JF, 1984) \doi{10.1111/j.1540-6261.1984.tb03897.x}, Corwin & Schultz (JF, 2012) \doi{10.1111/j.1540-6261.2012.01729.x}, and Abdi & Ranaldo (RFS, 2017) \doi{10.1093/rfs/hhx084}.
 }
 \seealso{
 Useful links:

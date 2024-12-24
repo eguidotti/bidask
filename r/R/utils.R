@@ -1,28 +1,46 @@
 #' @keywords internal
 "_PACKAGE"
 
-#' @import xts
-#' @importFrom stats lag rbinom rnorm
+#' @import data.table
+#' @importFrom stats rbinom rnorm
 NULL
 
-#' Rolling sum
+#' Rolling function
 #' 
 #' @keywords internal
 #' 
-rsum <- function(x, width, na.rm){
+rfun <- function(froll, x, width, shift, na.rm){
   
-  if(length(width) == 1 && width < 1){
-    width <- 1
-    x[] <- NaN
+  nw <- length(width)
+  nc <- ncol(x); nr <- nrow(x)
+  if(is.null(nr)) nr <- length(x)
+  
+  n <- width - shift
+  if(nw != 1 && nw != nr){
+    n <- rep(0, nr)
+    n[width[-1]] <- diff(pmax(1, width))
   }
   
-  if(length(width) == 1 && width == nrow(x))
-    width <- c(0, width)
+  if(nw == 1 && n < 1){
+    if(is.null(nc)) y <- rep(NA, nr)
+    else y <- as.data.frame(matrix(data = NA, nrow = nr, ncol = nc))
+  }
+  else{
+    y <- froll(x, n = n, na.rm = na.rm, adaptive = nw > 1, fill = NA)
+    if(is.list(y)) setDF(y)
+  }
   
-  if(length(width) > 1)
-    return(xts::period.apply(x, INDEX = width[width>=0], FUN = colSums, na.rm = na.rm))
+  return(y)
+  
+}
 
-  return(zoo::rollsumr(x, k = width, na.rm = na.rm))
+#' #' Rolling sum
+#' 
+#' @keywords internal
+#' 
+rsum <- function(x, width, shift, na.rm){
+  
+  rfun(frollsum, x, width, shift, na.rm)
 
 }
 
@@ -30,19 +48,8 @@ rsum <- function(x, width, na.rm){
 #' 
 #' @keywords internal
 #' 
-rmean <- function(x, width, na.rm){
+rmean <- function(x, width, shift, na.rm){
 
-  if(length(width) == 1 && width < 1){
-    width <- 1
-    x[] <- NaN
-  }
+  rfun(frollmean, x, width, shift, na.rm)
   
-  if(length(width) == 1 && width == nrow(x))
-    width <- c(0, width)
-  
-  if(length(width) > 1)
-    return(xts::period.apply(x, INDEX = width[width>=0], FUN = colMeans, na.rm = na.rm))
-
-  return(zoo::rollmeanr(x, k = width, na.rm = na.rm))
-
 }

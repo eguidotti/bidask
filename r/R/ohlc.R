@@ -2,68 +2,73 @@
 #'
 #' @keywords internal
 #'
-OHLC <- function(x, width = nrow(x), method, sign, na.rm){
+OHLC <- function(open, high, low, close, width, method, sign, na.rm){
 
-  methods <- strsplit(method, split = ".", fixed = TRUE)
-
-  m <- unique(unlist(methods))
-  p <- unique(unlist(strsplit(m, split = "")))
-
+  splitmethods <- strsplit(method, split = ".", fixed = TRUE)
+  uniquemethods <- unique(unlist(splitmethods))
   ok <- c("OHL","OHLC","CHL","CHLO")
-  if(length(ko <- setdiff(m, ok)))
+  if(length(ko <- setdiff(uniquemethods, ok)))
     stop(sprintf(
       "Method(s) '%s' not available. The available methods include '%s', or any combination of them, e.g. 'OHLC.CHLO'.",
        paste(ko, collapse = "', '"), paste(ok, collapse = "', '")
     ))
 
-  x <- log(x)
-
-  O <- x$OPEN
-  C <- x$CLOSE
-  H <- x$HIGH
-  L <- x$LOW
-  M <- (H+L)/2
+  o <- log(open)
+  h <- log(high)
+  l <- log(low)
+  c <- log(close)
+  m <- (h + l) / 2
   
-  C1 <- lag(C)
-  H1 <- lag(H)
-  L1 <- lag(L)
-  M1 <- lag(M)
+  c1 <- shift(c, 1)
+  h1 <- shift(h, 1)
+  l1 <- shift(l, 1)
+  m1 <- shift(m, 1)
 
-  tau <- (H!=L | L!=C1)[-1]
-  pt <- rmean(tau, width = width-1, na.rm = na.rm)
+  if(length(c1) == 0) c1 <- rep(NA, length(h))
+  tau <- ifelse(is.na(h) | is.na(l), NA, h != l | l != c1)
+  tau[1] <- NA
   
-  if("OHL" %in% m | "OHLC" %in% m)
-    po <- rmean((O!=H & tau) + (O!=L & tau), width = width-1, na.rm = na.rm)
-  if("CHL" %in% m | "CHLO" %in% m)
-    pc <- rmean((C1!=H1 & tau) + (C1!=L1 & tau), width = width-1, na.rm = na.rm)
+  shift <- 1
+  pt <- rmean(tau, width = width, shift = shift, na.rm = na.rm)
+  nt <- rsum(tau, width = width, shift = shift, na.rm = TRUE)
+  
+  if("OHL" %in% uniquemethods | "OHLC" %in% uniquemethods){
+    po1 <- rmean(tau * (o != h), width = width, shift = shift, na.rm = na.rm)
+    po2 <- rmean(tau * (o != l), width = width, shift = shift, na.rm = na.rm)
+    po <- po1 + po2
+  }
+  
+  if("CHL" %in% uniquemethods | "CHLO" %in% uniquemethods){
+    pc1 <- rmean(tau * (c1 != h1), width = width, shift = shift, na.rm = na.rm)
+    pc2 <- rmean(tau * (c1 != l1), width = width, shift = shift, na.rm = na.rm)
+    pc <- pc1 + pc2
+  }
   
   s2 <- function(r1, r2, pi){
-    x <- cbind(r1*r2, r1, tau*r2)[-1]
-    m <- rmean(x, width = width-1, na.rm = na.rm)
+    x <- data.frame(r1*r2, r1, tau*r2); x[1,] <- NA
+    m <- rmean(x, width = width, shift = shift, na.rm = na.rm)
+    m[which(nt < 2 | pi == 0),] <- NA
     -8 / pi * (m[,1] - (m[,2] * m[,3]) / pt)
   }
   
-  if("OHL" %in% m)
-    S2.OHL <- s2(M-O, O-M1, po)
-  if("OHLC" %in% m)
-    S2.OHLC <- s2(M-O, O-C1, po)
-  if("CHL" %in% m)
-    S2.CHL <- s2(M-C1, C1-M1, pc)
-  if("CHLO" %in% m)
-    S2.CHLO <- s2(O-C1, C1-M1, pc)
+  if("OHL" %in% uniquemethods)
+    s2.OHL <- s2(m - o, o - m1, po)
+  if("OHLC" %in% uniquemethods)
+    s2.OHLC <- s2(m - o, o - c1, po)
+  if("CHL" %in% uniquemethods)
+    s2.CHL <- s2(m - c1, c1 - m1, pc)
+  if("CHLO" %in% uniquemethods)
+    s2.CHLO <- s2(o - c1, c1 - m1, pc)
 
-  S2 <- NULL
-  for(m in methods){
-    expr <- sprintf("(%s)/%s", paste0("S2.", m, collapse = "+"), length(m))
-    S2 <- cbind(S2, eval(parse(text = expr)))
-  }
+  s <- lapply(splitmethods, function(m){
+    expr <- sprintf("(%s)/%s", paste0("s2.", m, collapse = "+"), length(m))
+    s2 <- eval(parse(text = expr))
+    s <- sqrt(abs(s2))
+    if(sign) s <- s * base::sign(s2)
+    return(s)
+  })
   
-  S2[is.infinite(S2)] <- NaN
-  colnames(S2) <- method
-  
-  S <- sign(S2) * sqrt(abs(S2))
-  if(!sign) S <- abs(S)
-  
-  return(S)
+  names(s) <- method
+  return(s)
   
 }

@@ -4,7 +4,7 @@
 \alias{CS}
 \title{Corwin-Schultz Estimator}
 \usage{
-CS(x, width = nrow(x), method, sign, na.rm)
+CS(high, low, close, width, method, sign, na.rm)
 }
 \description{
 Corwin-Schultz Estimator

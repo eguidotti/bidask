@@ -2,37 +2,40 @@
 #'
 #' @keywords internal
 #'
-AR <- function(x, width = nrow(x), method, sign, na.rm){
+AR <- function(high, low, close, width, method, sign, na.rm){
 
   ok <- c("AR","AR2")
   if(length(ko <- setdiff(method, ok)))
     stop(sprintf("Method(s) '%s' not available. The available methods are '%s'.",
                  paste(ko, collapse = "', '"), paste(ok, collapse = "', '")))
 
-  x <- log(x)
+  h <- log(high)
+  l <- log(low)
+  c <- log(close)
 
-  M2 <- (x$HIGH+x$LOW)/2
-  M1 <- lag(M2, 1)[-1,]
-  C1 <- lag(x$CLOSE, 1)
+  m2 <- (h + l) / 2
+  m1 <- shift(m2, 1)
+  c1 <- shift(c, 1)
 
-  S2 <- 4*(C1-M1)*(C1-M2)
+  s2 <- 4 * (c1 - m1) * (c1 - m2)
 
+  shift <- 1
   ar <- ar2 <- NULL
   
   if("AR" %in% method) {
-    ar <- rmean(S2, width = width-1, na.rm = na.rm)
+    ar <- rmean(s2, width = width, shift = shift, na.rm = na.rm)
     ar <- sign(ar) * sqrt(abs(ar))
     if(!sign) ar <- abs(ar)
-    colnames(ar) <- "AR"
+    ar <- list("AR" = ar)
   }
 
   if("AR2" %in% method){
-    S2[S2<0] <- 0
-    S <- sqrt(S2)
-    ar2 <- rmean(S, width = width-1, na.rm = na.rm)
-    colnames(ar2) <- "AR2"
+    s2[s2 < 0] <- 0
+    s <- sqrt(s2)
+    ar2 <- rmean(s, width = width, shift = shift, na.rm = na.rm)
+    ar2 <- list("AR2" = ar2)
   }
 
-  return(cbind(ar, ar2))
+  return(c(ar, ar2))
 
 }

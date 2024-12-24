@@ -12,7 +12,7 @@ sim(
   volatility = 0.03,
   overnight = 0,
   drift = 0,
-  units = "day",
+  units = 1,
   sign = FALSE
 )
 }
@@ -31,15 +31,16 @@ sim(
 
 \item{drift}{the expected return per period.}
 
-\item{units}{the units of the time period. One of: \code{sec}, \code{min}, \code{hour}, \code{day}, \code{week}, \code{month}, \code{year}.}
+\item{units}{the units of the time period. One of: \code{1}, \code{sec}, \code{min}, \code{hour}, \code{day}, \code{week}, \code{month}, \code{year}.}
 
 \item{sign}{whether to return positive prices for buys and negative prices for sells.}
 }
 \value{
-Simulated open, high, low, and close prices.
+A data.frame of open, high, low, and close prices if \code{units=1} (default). 
+Otherwise, an \code{xts} object is returned (requires the \code{xts} package to be installed).
 }
 \description{
-This function performs simulations consisting of \code{n} periods (e.g., days) and where each period consists of a given number of \code{trades}.
+This function performs simulations consisting of \code{n} periods and where each period consists of a given number of \code{trades}.
 For each trade, the actual price \eqn{P_t} is simulated as \eqn{P_t = P_{t-1}e^{\sigma x}}, where \eqn{\sigma} is the standard deviation per trade and \eqn{x} is a random draw from a unit normal distribution.
 The standard deviation per trade equals the \code{volatility} divided by the square root of the number of \code{trades}.
 Trades are assumed to be observed with a given \code{probability}.
@@ -48,9 +49,10 @@ High and low prices equal the highest and lowest prices observed during the peri
 Open and Close prices equal the first and the last price observed in the period.
 If no trade is observed for a period, then the previous Close is used as the Open, High, Low, and Close prices for that period.
 }
-\note{
-Please cite Ardia, Guidotti, & Kroencke (2024) 
-when using this package in publication.
+\examples{
+# simulate 10 open, high, low, and close prices with spread 1\%
+sim(n = 10, spread = 0.01)
+
 }
 \references{
 Ardia, D., Guidotti, E., Kroencke, T.A. (2024). Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices. Journal of Financial Economics, 161, 103916. 

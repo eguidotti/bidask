@@ -4,7 +4,7 @@
 \alias{OHLC}
 \title{OHLC Estimators}
 \usage{
-OHLC(x, width = nrow(x), method, sign, na.rm)
+OHLC(open, high, low, close, width, method, sign, na.rm)
 }
 \description{
 OHLC Estimators

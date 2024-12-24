@@ -2,11 +2,11 @@
 % Please edit documentation in R/utils.R
 \name{rsum}
 \alias{rsum}
-\title{Rolling sum}
+\title{#' Rolling sum}
 \usage{
-rsum(x, width, na.rm)
+rsum(x, width, shift, na.rm)
 }
 \description{
-Rolling sum
+#' Rolling sum
 }
 \keyword{internal}
