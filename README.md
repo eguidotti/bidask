@@ -31,7 +31,7 @@ The following datasets are available to download:
 
 > What is the recommended number of observations to use? 
 
-- There is no one-size-fits-all solution.  For instance, using a few days of data would provide estimates closer to the spread in the last days but with potentially large estimation uncertainty. Using one year of data would provide more precise estimates, but for the average (more precisely, root mean square) spread in the last year. For more information, see https://github.com/eguidotti/bidask/issues/2
+- There is no one-size-fits-all solution.  For instance, using a few days of data would provide estimates closer to the spread in those days but with potentially large estimation uncertainty. Using one year of data would provide more precise estimates, but for the average (more precisely, root mean square) spread in the whole year. For more information, see https://github.com/eguidotti/bidask/issues/2
 
 > Does the estimator work with intraday data?
 
