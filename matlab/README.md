@@ -20,13 +20,13 @@ Arguments:
 edge(open, high, low, close, sign=false)
 ```
 
-| field   | description                                 |
-| ------- | ------------------------------------------- |
-| `open`  | Vector of open prices with size `T` x `1`   |
-| `high`  | Vector of high prices with size `T` x `1`   |
-| `low`   | Vector of low prices with size `T` x `1`    |
-| `close` | Vector of close prices with size `T` x `1`  |
-| `sign`  | Whether signed estimates should be returned |
+| field   | description                                |
+| ------- | ------------------------------------------ |
+| `open`  | Vector of open prices with size `T` x `1`  |
+| `high`  | Vector of high prices with size `T` x `1`  |
+| `low`   | Vector of low prices with size `T` x `1`   |
+| `close` | Vector of close prices with size `T` x `1` |
+| `sign`  | Whether to return signed estimates         |
 
 The input prices must be sorted in ascending order of the timestamp. 
 
