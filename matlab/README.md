@@ -1,6 +1,6 @@
 # Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices.
+Implements the efficient estimator of bid-ask spreads from open, high, low, and close prices described in Ardia, Guidotti, & Kroencke (JFE, 2024): [https://doi.org/10.1016/j.jfineco.2024.103916](https://doi.org/10.1016/j.jfineco.2024.103916)
 
 ## Installation
 
