@@ -14,7 +14,7 @@ Parameters
 - `high`: the name of the column containing high prices
 - `low`: the name of the column containing low prices
 - `close`: the name of the column containing close prices
-- `sign`: boolean value (0/1) indicating whether signed estimates should be returned
+- `sign`: boolean value (0/1) indicating whether to return signed estimates
 
 Notes
 -----
