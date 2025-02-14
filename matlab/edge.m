@@ -1,10 +1,9 @@
 function s = edge(open, high, low, close, sign)
     % Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
     %
-    % Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices 
-    % as described in Ardia, Guidotti, & Kroencke (2024) -> https://doi.org/10.1016/j.jfineco.2024.103916
-    %
-    % Prices must be sorted in ascending order of the timestamp.
+    % Implements the efficient estimator of bid-ask spreads from open, high, low, 
+    % and close prices described in Ardia, Guidotti, & Kroencke (JFE, 2024):
+    % https://doi.org/10.1016/j.jfineco.2024.103916
     %
     % Parameters
     % ----------
@@ -12,7 +11,11 @@ function s = edge(open, high, low, close, sign)
     % - `high`: vector of high prices with size Tx1
     % - `low`: vector of low prices with size Tx1
     % - `close`: vector of close prices with size Tx1
-    % - `sign`: whether signed estimates should be returned
+    % - `sign`: boolean value indicating whether to return signed estimates
+    %
+    % Notes
+    % -----
+    % Prices must be sorted in ascending order of the timestamp.
     %
     % Returns
     % -------
@@ -41,16 +44,35 @@ function s = edge(open, high, low, close, sign)
     c = c(2:end,:);
     m = m(2:end,:);
 
-    tau = h ~= l | l ~= c1;
-    phi1 = o ~= h & tau;
-    phi2 = o ~= l & tau;
-    phi3 = c1 ~= h1 & tau;
-    phi4 = c1 ~= l1 & tau;
+    tau = NaN(size(c));
+    idx = ~(isnan(h) | isnan(l) | isnan(c1));
+    tau(idx) = (h(idx) ~= l(idx)) | (l(idx) ~= c1(idx));
+
+    phi1 = NaN(size(c));
+    idx = ~(isnan(o) | isnan(h));
+    phi1(idx) = tau(idx) .* (o(idx) ~= h(idx));
+
+    phi2 = NaN(size(c));
+    idx = ~(isnan(o) | isnan(l));
+    phi2(idx) = tau(idx) .* (o(idx) ~= l(idx));
+    
+    phi3 = NaN(size(c));
+    idx = ~(isnan(c1) | isnan(h1));
+    phi3(idx) = tau(idx) .* (c1(idx) ~= h1(idx));
+    
+    phi4 = NaN(size(c));
+    idx = ~(isnan(c1) | isnan(l1));
+    phi4(idx) = tau(idx) .* (c1(idx) ~= l1(idx));
   
     pt = mean(tau, "omitnan");
     po = mean(phi1, "omitnan") + mean(phi2, "omitnan");
     pc = mean(phi3, "omitnan") + mean(phi4, "omitnan");
     
+    if sum(tau, "omitnan") < 2 || po == 0 || pc == 0
+        s = NaN;
+        return;
+    end
+
     r1 = m-o;
     r2 = o-m1;
     r3 = m-c1;
@@ -66,14 +88,19 @@ function s = edge(open, high, low, close, sign)
   
     e1 = mean(x1, "omitnan");
     e2 = mean(x2, "omitnan");
-  
+
     v1 = mean(x1.^2, "omitnan") - e1^2;
     v2 = mean(x2.^2, "omitnan") - e2^2;
   
-    s2 = (v2*e1 + v1*e2) / (v1 + v2);
+    vt = v1 + v2;
+    if vt > 0
+        s2 = (v2*e1 + v1*e2) / vt;
+    else
+        s2 = (e1 + e2) / 2;
+    end
   
     s = sqrt(abs(s2));
-    if sign & s2 < 0
+    if sign && s2 < 0
         s = -s;
     end
 
