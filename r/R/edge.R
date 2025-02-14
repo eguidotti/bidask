@@ -166,7 +166,7 @@ EDGE <- function(open, high, low, close, width, sign, na.rm, aslist = TRUE){
 #'
 #' @examples
 #' # simulate open, high, low, and close prices with spread 1%
-#' x <- sim(spread = 0.01)
+#' x <- sim(n = 1000, spread = 0.01)
 #'
 #' # estimate the spread
 #' edge(x$Open, x$High, x$Low, x$Close)
@@ -282,7 +282,7 @@ edge <- function(open, high, low, close, sign = FALSE){
 #'
 #' @examples
 #' # simulate open, high, low, and close prices with spread 1%
-#' x <- sim(spread = 0.01)
+#' x <- sim(n = 1000, spread = 0.01)
 #'
 #' # estimate the spread using a rolling window
 #' s <- edge_rolling(x$Open, x$High, x$Low, x$Close, width = 21)
@@ -349,7 +349,7 @@ edge_rolling <- function(open, high, low, close, width, sign = FALSE, na.rm = FA
 #'
 #' @examples
 #' # simulate open, high, low, and close prices with spread 1%
-#' x <- sim(spread = 0.01)
+#' x <- sim(n = 1000, spread = 0.01)
 #'
 #' # estimate the spread using an expanding window
 #' s <- edge_expanding(x$Open, x$High, x$Low, x$Close)

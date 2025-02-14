@@ -36,7 +36,7 @@ Prices must be sorted in ascending order of the timestamp.
 }
 \examples{
 # simulate open, high, low, and close prices with spread 1\%
-x <- sim(spread = 0.01)
+x <- sim(n = 1000, spread = 0.01)
 
 # estimate the spread using a rolling window
 s <- edge_rolling(x$Open, x$High, x$Low, x$Close, width = 21)

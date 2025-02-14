@@ -40,7 +40,7 @@
 #'
 #' @examples
 #' # simulate open, high, low, and close prices with spread 1%
-#' x <- sim(spread = 0.01)
+#' x <- sim(n = 1000, spread = 0.01)
 #'
 #' # estimate the spread
 #' spread(x)
