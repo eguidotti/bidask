@@ -31,7 +31,7 @@ The following datasets are available to download:
 
 > What is the recommended number of observations to use? 
 
-- There is no one-size-fits-all solution.  For instance, using a few days of daily prices would provide estimates closer to the spread in those days but with potentially large estimation uncertainty. Using one year of daily prices would provide more precise estimates, but for the average (more precisely, root mean square) spread in the whole year. For more information, see https://github.com/eguidotti/bidask/issues/2
+- There is no one-size-fits-all solution.  For instance, using a few daily prices would provide estimates closer to the spread in those days but with potentially large estimation uncertainty. Using one year of daily prices would provide more precise estimates, but for the average (more precisely, root mean square) spread in the whole year. For more information, see https://github.com/eguidotti/bidask/issues/2
 
 > Does the estimator work with intraday data?
 
@@ -55,7 +55,7 @@ The following datasets are available to download:
 
 > Do the functions `edge` and `edge_rolling` produce the same results?
 
-- The function `edge_rolling` is a version of `edge` optimized for fast calculations over rolling windows. The two functions produce the same estimates when there are no missing data. If missing data are present, they may provide slightly different estimates due to how missing values are handled, but both estimates are consistent.
+- The function `edge_rolling` is a version of `edge` optimized for fast calculations over rolling windows. The two functions produce the same estimates when there are no missing values. If missing values are present, the two functions may provide slightly different estimates due to how missing values are handled, but both estimates are consistent.
 
 ## Replication code
 
