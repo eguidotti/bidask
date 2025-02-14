@@ -23,7 +23,7 @@ The following datasets are available to download:
 
 > Each transaction price may generally include a different bid-ask spread, but the estimator only returns a single estimate given a sample of open, high, low, and close prices. What is the estimator computing exactly?
 
-- The estimator estimates the root mean square effective sperad within the sample period.
+- The estimator estimates the root mean square effective spread within the sample period.
 
 > What is the minimum number of observations required by the estimator?
 
