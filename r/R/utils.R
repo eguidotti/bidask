@@ -2,7 +2,7 @@
 "_PACKAGE"
 .onLoad <- function(libname, pkgname) {
   # CRAN OMP THREAD LIMIT
-  Sys.setenv("OMP_THREAD_LIMIT" = 2)
+  Sys.setenv("OMP_THREAD_LIMIT" = 1)
 }
 
 #' @import data.table
@@ -26,14 +26,18 @@ rfun <- function(froll, x, width, shift, na.rm){
   }
   
   if(nw == 1 && n < 1){
-    if(is.null(nc)) y <- rep(NA, nr)
-    else y <- as.data.frame(matrix(data = NA, nrow = nr, ncol = nc))
-  }
-  else{
-    y <- froll(x, n = n, na.rm = na.rm, adaptive = nw > 1, fill = NA)
-    if(is.list(y)) setDF(y)
+    if(is.null(nc)) return(rep(NA, nr))
+    return(as.data.frame(matrix(data = NA, nrow = nr, ncol = nc)))
   }
   
+  y <- froll(x, n = n, na.rm = na.rm, adaptive = nw > 1, fill = NA)
+  if(is.list(y)) setDF(y)
+  
+  if(nw == 1 && width > 1){
+    if(is.data.frame(y)) y[1:(width-1),] <- NA
+    else y[1:(width-1)] <- NA
+  }
+
   return(y)
   
 }

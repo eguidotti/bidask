@@ -112,6 +112,19 @@ test_that("edge-rolling", {
   
 })
 
+test_that("edge-rolling-na", {
+  
+  set.seed(123)
+  x <- sim(n = 100)
+  
+  s1 <- edge_rolling(x$Open, x$High, x$Low, x$Close, width = nrow(x), na.rm = TRUE)
+  expect_equal(sum(!is.na(s1)), 1)
+  
+  s2 <- edge_rolling(x$Open, x$High, x$Low, x$Close, width = c(1, nrow(x)), na.rm = TRUE)
+  expect_equal(s1[!is.na(s1)], s2[!is.na(s2)])
+  
+})
+
 test_that("edge-expanding", {
   
   set.seed(123)
