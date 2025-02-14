@@ -25,13 +25,13 @@ Arguments:
 edge(open, high, low, close, sign=false)
 ```
 
-| field   | description                                 |
-| ------- | ------------------------------------------- |
-| `open`  | AbstractVector of open prices               |
-| `high`  | AbstractVector of high prices               |
-| `low`   | AbstractVector of low prices                |
-| `close` | AbstractVector of close prices              |
-| `sign`  | Whether signed estimates should be returned |
+| field   | description                        |
+| ------- | ---------------------------------- |
+| `open`  | AbstractVector of open prices      |
+| `high`  | AbstractVector of high prices      |
+| `low`   | AbstractVector of low prices       |
+| `close` | AbstractVector of close prices     |
+| `sign`  | Whether to return signed estimates |
 
 The input prices must be sorted in ascending order of the timestamp.
 
