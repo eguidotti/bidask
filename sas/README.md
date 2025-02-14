@@ -35,7 +35,7 @@ sas edge.sas \
 | `high`  | The name of the column containing high prices                |
 | `low`   | The name of the column containing low prices                 |
 | `close` | The name of the column containing close prices               |
-| `sign`  | Boolean value (0/1) indicating whether signed estimates should be returned |
+| `sign`  | Boolean value (0/1) indicating whether to return signed estimates |
 
 The input prices must be sorted in ascending order of the timestamp within each group. 
 
