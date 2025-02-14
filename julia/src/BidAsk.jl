@@ -5,10 +5,9 @@ using Statistics
 """
 Efficient Estimation of Bid-Ask Spreads from Open, High, Low, and Close Prices
 
-Implements an efficient estimator of bid-ask spreads from open, high, low, and close prices 
-as described in Ardia, Guidotti, & Kroencke (2024) -> https://doi.org/10.1016/j.jfineco.2024.103916
-
-Prices must be sorted in ascending order of the timestamp.
+Implements the efficient estimator of bid-ask spreads from open, high, low, 
+and close prices described in Ardia, Guidotti, & Kroencke (JFE, 2024):
+https://doi.org/10.1016/j.jfineco.2024.103916
 
 Parameters
 ----------
@@ -16,7 +15,11 @@ Parameters
 - `high`: AbstractVector of high prices
 - `low`: AbstractVector of low prices
 - `close`: AbstractVector of close prices
-- `sign`: whether signed estimates should be returned
+- `sign`: Whether to return signed estimates
+
+Notes
+-----
+Prices must be sorted in ascending order of the timestamp.
 
 Returns
 -------
@@ -42,15 +45,23 @@ function edge(open::AbstractVector, high::AbstractVector, low::AbstractVector, c
     c = c[2:end]
     m = m[2:end]
 
-    tau = (h .!= l) .| (l .!= c1) 
-    phi1 = (o .!= h) .& tau
-    phi2 = (o .!= l) .& tau
-    phi3 = (c1 .!= h1) .& tau
-    phi4 = (c1 .!= l1) .& tau
+    tau = ifelse.(ismissing.(h) .| ismissing.(l) .| ismissing.(c1),  missing,  (h .!= l) .| (l .!= c1))
+    phi1 = collect(skipmissing(tau .* (o .!= h)))
+    phi2 = collect(skipmissing(tau .* (o .!= l)))
+    phi3 = collect(skipmissing(tau .* (c1 .!= h1)))
+    phi4 = collect(skipmissing(tau .* (c1 .!= l1)))
 
-    pt = mean(skipmissing(tau))
-    po = mean(skipmissing(phi1)) + mean(skipmissing(phi2))
-    pc = mean(skipmissing(phi3)) + mean(skipmissing(phi4))
+    nt = sum(skipmissing(tau), init=0)
+    if nt < 2 || length(phi1) == 0 || length(phi2) == 0 || length(phi3) == 0 || length(phi4) == 0
+        return NaN
+    end
+
+    pt = nt / count(!ismissing, tau)
+    po = mean(phi1) + mean(phi2)
+    pc = mean(phi3) + mean(phi4)
+    if po == 0 || pc == 0
+        return NaN
+    end
 
     r1 = m .- o
     r2 = o .- m1
@@ -71,10 +82,11 @@ function edge(open::AbstractVector, high::AbstractVector, low::AbstractVector, c
     v1 = mean(skipmissing(x1 .* x1)) - e1 * e1
     v2 = mean(skipmissing(x2 .* x2)) - e2 * e2
 
-    s2 = (v2 * e1 + v1 * e2) / (v1 + v2)
+    vt = v1 + v2
+    s2 = ifelse(vt > 0, (v2*e1 + v1*e2) / vt, (e1 + e2) / 2)
 
     s = sqrt(abs(s2))
-    if sign & (s2 < 0)
+    if sign && s2 < 0
         s = -s
     end
 
