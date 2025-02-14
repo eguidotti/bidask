@@ -14,6 +14,13 @@ using Test
     @test isapprox(-0.016889917516422, estimate)
 
     @test isnan(edge(
+        [missing, missing, missing],
+        [missing, missing, missing],
+        [missing, missing, missing],
+        [missing, missing, missing],
+    ))
+
+    @test isnan(edge(
         [18.21, 17.61, 17.61],
         [18.21, 17.61, 17.61],
         [17.61, 17.61, 17.61],
