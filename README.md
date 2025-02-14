@@ -47,7 +47,7 @@ The following datasets are available to download:
 
 > How to handle non-positive estimates?
 
-- By default, the estimator returns the absolute value of the estimates. This is generally a good option if you are interested in point estimates, but may create a small-sample bias if the estimates are used for averaging or regression studies. To reduce this source of bias, you can compute signed estimates with the argument `sign=False` and reset negative values to zero. Keeping negative values is not recommended because more negative estimates are typically associated with larger spreads empirically. For more information, see https://github.com/eguidotti/bidask/issues/3
+- By default, the estimator returns the absolute value of the estimates. This is generally a good option if you are interested in point estimates, but may create a small-sample bias if the estimates are used for averaging or regression studies. To reduce this source of bias, you can compute signed estimates with the argument `sign=True` and reset negative values to zero. Keeping negative values is not recommended because more negative estimates are typically associated with larger spreads empirically. For more information, see https://github.com/eguidotti/bidask/issues/3
 
 > Does the estimator work with missing values?
 
