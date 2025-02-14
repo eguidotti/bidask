@@ -37,7 +37,7 @@ The output value is the spread estimate. A value of 0.01 corresponds to a spread
 ```matlab
 import edge.*
 
-df = readmatrix('https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc-miss.csv');
+df = readmatrix('https://raw.githubusercontent.com/eguidotti/bidask/main/pseudocode/ohlc.csv');
 edge(df(:,1), df(:,2), df(:,3), df(:,4))
 ```
 
