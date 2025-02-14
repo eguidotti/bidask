@@ -28,14 +28,14 @@ sas edge.sas \
 
 | field   | description                                                  |
 | ------- | ------------------------------------------------------------ |
-| `in`    | The path to a SAS dataset containing open, high, low, and close prices for multiple groups |
-| `out`   | The name of the file to output spread estimates. See [here](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/acpcref/p1d0tocg3njhmfn1d4ld2covlwm0.htm) for supported file extensions |
-| `group` | Comma separated list of column(s) to group by; e.g., `symbol` or `date,symbol` |
-| `open`  | The name of the column containing open prices                |
-| `high`  | The name of the column containing high prices                |
-| `low`   | The name of the column containing low prices                 |
-| `close` | The name of the column containing close prices               |
-| `sign`  | Boolean value (0/1) indicating whether to return signed estimates |
+| `in`    | The path to a SAS dataset containing open, high, low, and close prices for multiple groups. |
+| `out`   | The name of the file to output spread estimates. See [here](https://documentation.sas.com/doc/en/pgmsascdc/9.4_3.5/acpcref/p1d0tocg3njhmfn1d4ld2covlwm0.htm) for supported file extensions. |
+| `group` | Comma separated list of column(s) to group by; e.g., `symbol` or `date,symbol`. |
+| `open`  | The name of the column containing open prices.               |
+| `high`  | The name of the column containing high prices.               |
+| `low`   | The name of the column containing low prices.                |
+| `close` | The name of the column containing close prices.              |
+| `sign`  | Boolean value (0/1) indicating whether to return signed estimates. |
 
 The input prices must be sorted in ascending order of the timestamp within each group. 
 
