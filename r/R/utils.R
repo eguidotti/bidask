@@ -1,8 +1,9 @@
 #' @keywords internal
 "_PACKAGE"
 .onLoad <- function(libname, pkgname) {
-  # CRAN OMP THREAD LIMIT
-  Sys.setenv("OMP_THREAD_LIMIT" = 1)
+  if(Sys.getenv("_R_CHECK_LIMIT_CORES_", FALSE) == TRUE){
+    setDTthreads(2)
+  }
 }
 
 #' @import data.table
