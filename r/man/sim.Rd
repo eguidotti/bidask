@@ -50,6 +50,9 @@ Open and Close prices equal the first and the last price observed in the period.
 If no trade is observed for a period, then the previous Close is used as the Open, High, Low, and Close prices for that period.
 }
 \examples{
+# reduce number of threads to pass CRAN checks (you can ignore this)
+data.table::setDTthreads(1)
+
 # simulate 10 open, high, low, and close prices with spread 1\%
 sim(n = 10, spread = 0.01)
 

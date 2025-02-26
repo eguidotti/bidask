@@ -33,6 +33,9 @@ from open, high, low, and close prices described in Ardia, Guidotti, & Kroencke 
 Prices must be sorted in ascending order of the timestamp.
 }
 \examples{
+# reduce number of threads to pass CRAN checks (you can ignore this)
+data.table::setDTthreads(1)
+
 # simulate open, high, low, and close prices with spread 1\%
 x <- sim(n = 1000, spread = 0.01)
 

@@ -39,6 +39,9 @@ The method \code{CS} implements the estimator described in Corwin & Schultz (JF,
 The method \code{ROLL} implements the estimator described in Roll (JF, 1984).
 }
 \examples{
+# reduce number of threads to pass CRAN checks (you can ignore this)
+data.table::setDTthreads(1)
+
 # simulate open, high, low, and close prices with spread 1\%
 x <- sim(n = 1000, spread = 0.01)
 

@@ -39,6 +39,9 @@
 #' \doi{10.1111/j.1540-6261.1984.tb03897.x}
 #'
 #' @examples
+#' # reduce number of threads to pass CRAN checks (you can ignore this)
+#' data.table::setDTthreads(1)
+#' 
 #' # simulate open, high, low, and close prices with spread 1%
 #' x <- sim(n = 1000, spread = 0.01)
 #'

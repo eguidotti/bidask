@@ -8,5 +8,6 @@
 
 library(testthat)
 library(bidask)
+data.table::setDTthreads(1)
 
 test_check("bidask")

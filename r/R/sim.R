@@ -27,6 +27,9 @@
 #' \doi{10.1016/j.jfineco.2024.103916}
 #'
 #' @examples
+#' # reduce number of threads to pass CRAN checks (you can ignore this)
+#' data.table::setDTthreads(1)
+#' 
 #' # simulate 10 open, high, low, and close prices with spread 1%
 #' sim(n = 10, spread = 0.01)
 #' 

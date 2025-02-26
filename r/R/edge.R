@@ -165,6 +165,9 @@ EDGE <- function(open, high, low, close, width, sign, na.rm, aslist = TRUE){
 #' \doi{10.1016/j.jfineco.2024.103916}
 #'
 #' @examples
+#' # reduce number of threads to pass CRAN checks (you can ignore this)
+#' data.table::setDTthreads(1)
+#' 
 #' # simulate open, high, low, and close prices with spread 1%
 #' x <- sim(n = 1000, spread = 0.01)
 #'
@@ -281,6 +284,9 @@ edge <- function(open, high, low, close, sign = FALSE){
 #' \doi{10.1016/j.jfineco.2024.103916}
 #'
 #' @examples
+#' # reduce number of threads to pass CRAN checks (you can ignore this)
+#' data.table::setDTthreads(1)
+#' 
 #' # simulate open, high, low, and close prices with spread 1%
 #' x <- sim(n = 1000, spread = 0.01)
 #'
@@ -348,6 +354,9 @@ edge_rolling <- function(open, high, low, close, width, sign = FALSE, na.rm = FA
 #' \doi{10.1016/j.jfineco.2024.103916}
 #'
 #' @examples
+#' # reduce number of threads to pass CRAN checks (you can ignore this)
+#' data.table::setDTthreads(1)
+#' 
 #' # simulate open, high, low, and close prices with spread 1%
 #' x <- sim(n = 1000, spread = 0.01)
 #'
