@@ -1,0 +1,241 @@
+case,dataset,width_name,width,sign,na_rm,nrow_out,errors
+c0001,synth,w21,21,False,False,100,
+c0002,synth,w21,21,False,True,100,
+c0003,synth,w21,21,True,False,100,
+c0004,synth,w21,21,True,True,100,
+c0005,synth,expanding,expanding,False,False,120,ROLL='n' must be non-negative integer values (>= 0)
+c0006,synth,expanding,expanding,False,True,120,ROLL='n' must be non-negative integer values (>= 0)
+c0007,synth,expanding,expanding,True,False,120,ROLL='n' must be non-negative integer values (>= 0)
+c0008,synth,expanding,expanding,True,True,120,ROLL='n' must be non-negative integer values (>= 0)
+c0009,synth_miss,w21,21,False,False,100,
+c0010,synth_miss,w21,21,False,True,100,
+c0011,synth_miss,w21,21,True,False,100,
+c0012,synth_miss,w21,21,True,True,100,
+c0013,synth_miss,expanding,expanding,False,False,120,ROLL='n' must be non-negative integer values (>= 0)
+c0014,synth_miss,expanding,expanding,False,True,120,ROLL='n' must be non-negative integer values (>= 0)
+c0015,synth_miss,expanding,expanding,True,False,120,ROLL='n' must be non-negative integer values (>= 0)
+c0016,synth_miss,expanding,expanding,True,True,120,ROLL='n' must be non-negative integer values (>= 0)
+c0017,msft_minute,w21,21,False,False,100,
+c0018,msft_minute,w21,21,False,True,100,
+c0019,msft_minute,w21,21,True,False,100,
+c0020,msft_minute,w21,21,True,True,100,
+c0021,msft_minute,expanding,expanding,False,False,120,ROLL='n' must be non-negative integer values (>= 0)
+c0022,msft_minute,expanding,expanding,False,True,120,ROLL='n' must be non-negative integer values (>= 0)
+c0023,msft_minute,expanding,expanding,True,False,120,ROLL='n' must be non-negative integer values (>= 0)
+c0024,msft_minute,expanding,expanding,True,True,120,ROLL='n' must be non-negative integer values (>= 0)
+c0025,msft_daily,full,full,False,False,1,
+c0026,msft_daily,full,full,False,True,1,
+c0027,msft_daily,full,full,True,False,1,
+c0028,msft_daily,full,full,True,True,1,
+c0029,msft_daily,w1,1,False,False,14,
+c0030,msft_daily,w1,1,False,True,14,
+c0031,msft_daily,w1,1,True,False,14,
+c0032,msft_daily,w1,1,True,True,14,
+c0033,msft_daily,w2,2,False,False,14,
+c0034,msft_daily,w2,2,False,True,14,
+c0035,msft_daily,w2,2,True,False,14,
+c0036,msft_daily,w2,2,True,True,14,
+c0037,msft_daily,w3,3,False,False,13,
+c0038,msft_daily,w3,3,False,True,13,
+c0039,msft_daily,w3,3,True,False,13,
+c0040,msft_daily,w3,3,True,True,13,
+c0041,msft_daily,w21,21,False,False,0,EDGE=row names supplied are of the wrong length | AR=row names supplied are of the wrong length | AR2=row names supplied are of the wrong length | CS=row names supplied are of the wrong length | CS2=row names supplied are of the wrong length | ROLL=row names supplied are of the wrong length | OHL=row names supplied are of the wrong length | OHLC=row names supplied are of the wrong length | CHL=row names supplied are of the wrong length | CHLO=row names supplied are of the wrong length | OHL.CHL=row names supplied are of the wrong length | OHLC.CHLO=row names supplied are of the wrong length
+c0042,msft_daily,w21,21,False,True,0,EDGE=row names supplied are of the wrong length | AR=row names supplied are of the wrong length | AR2=row names supplied are of the wrong length | CS=row names supplied are of the wrong length | CS2=row names supplied are of the wrong length | ROLL=row names supplied are of the wrong length | OHL=row names supplied are of the wrong length | OHLC=row names supplied are of the wrong length | CHL=row names supplied are of the wrong length | CHLO=row names supplied are of the wrong length | OHL.CHL=row names supplied are of the wrong length | OHLC.CHLO=row names supplied are of the wrong length
+c0043,msft_daily,w21,21,True,False,0,EDGE=row names supplied are of the wrong length | AR=row names supplied are of the wrong length | AR2=row names supplied are of the wrong length | CS=row names supplied are of the wrong length | CS2=row names supplied are of the wrong length | ROLL=row names supplied are of the wrong length | OHL=row names supplied are of the wrong length | OHLC=row names supplied are of the wrong length | CHL=row names supplied are of the wrong length | CHLO=row names supplied are of the wrong length | OHL.CHL=row names supplied are of the wrong length | OHLC.CHLO=row names supplied are of the wrong length
+c0044,msft_daily,w21,21,True,True,0,EDGE=row names supplied are of the wrong length | AR=row names supplied are of the wrong length | AR2=row names supplied are of the wrong length | CS=row names supplied are of the wrong length | CS2=row names supplied are of the wrong length | ROLL=row names supplied are of the wrong length | OHL=row names supplied are of the wrong length | OHLC=row names supplied are of the wrong length | CHL=row names supplied are of the wrong length | CHLO=row names supplied are of the wrong length | OHL.CHL=row names supplied are of the wrong length | OHLC.CHLO=row names supplied are of the wrong length
+c0045,msft_daily,expanding,expanding,False,False,15,ROLL='n' must be non-negative integer values (>= 0)
+c0046,msft_daily,expanding,expanding,False,True,15,ROLL='n' must be non-negative integer values (>= 0)
+c0047,msft_daily,expanding,expanding,True,False,15,ROLL='n' must be non-negative integer values (>= 0)
+c0048,msft_daily,expanding,expanding,True,True,15,ROLL='n' must be non-negative integer values (>= 0)
+c0049,msft_daily,endpoints,1 7 15,False,False,2,
+c0050,msft_daily,endpoints,1 7 15,False,True,2,
+c0051,msft_daily,endpoints,1 7 15,True,False,2,
+c0052,msft_daily,endpoints,1 7 15,True,True,2,
+c0053,msft_daily,endpoints_desc,1 10 5,False,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0054,msft_daily,endpoints_desc,1 10 5,False,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0055,msft_daily,endpoints_desc,1 10 5,True,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0056,msft_daily,endpoints_desc,1 10 5,True,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0057,single_row,full,full,False,False,0,
+c0058,single_row,full,full,False,True,0,
+c0059,single_row,full,full,True,False,0,
+c0060,single_row,full,full,True,True,0,
+c0061,single_row,w1,1,False,False,0,
+c0062,single_row,w1,1,False,True,0,
+c0063,single_row,w1,1,True,False,0,
+c0064,single_row,w1,1,True,True,0,
+c0065,single_row,w2,2,False,False,0,
+c0066,single_row,w2,2,False,True,0,
+c0067,single_row,w2,2,True,False,0,
+c0068,single_row,w2,2,True,True,0,
+c0069,single_row,w3,3,False,False,0,EDGE='row.names' should specify one of the variables | AR='row.names' should specify one of the variables | AR2='row.names' should specify one of the variables | CS='row.names' should specify one of the variables | CS2='row.names' should specify one of the variables | ROLL='row.names' should specify one of the variables | OHL='row.names' should specify one of the variables | OHLC='row.names' should specify one of the variables | CHL='row.names' should specify one of the variables | CHLO='row.names' should specify one of the variables | OHL.CHL='row.names' should specify one of the variables | OHLC.CHLO='row.names' should specify one of the variables
+c0070,single_row,w3,3,False,True,0,EDGE='row.names' should specify one of the variables | AR='row.names' should specify one of the variables | AR2='row.names' should specify one of the variables | CS='row.names' should specify one of the variables | CS2='row.names' should specify one of the variables | ROLL='row.names' should specify one of the variables | OHL='row.names' should specify one of the variables | OHLC='row.names' should specify one of the variables | CHL='row.names' should specify one of the variables | CHLO='row.names' should specify one of the variables | OHL.CHL='row.names' should specify one of the variables | OHLC.CHLO='row.names' should specify one of the variables
+c0071,single_row,w3,3,True,False,0,EDGE='row.names' should specify one of the variables | AR='row.names' should specify one of the variables | AR2='row.names' should specify one of the variables | CS='row.names' should specify one of the variables | CS2='row.names' should specify one of the variables | ROLL='row.names' should specify one of the variables | OHL='row.names' should specify one of the variables | OHLC='row.names' should specify one of the variables | CHL='row.names' should specify one of the variables | CHLO='row.names' should specify one of the variables | OHL.CHL='row.names' should specify one of the variables | OHLC.CHLO='row.names' should specify one of the variables
+c0072,single_row,w3,3,True,True,0,EDGE='row.names' should specify one of the variables | AR='row.names' should specify one of the variables | AR2='row.names' should specify one of the variables | CS='row.names' should specify one of the variables | CS2='row.names' should specify one of the variables | ROLL='row.names' should specify one of the variables | OHL='row.names' should specify one of the variables | OHLC='row.names' should specify one of the variables | CHL='row.names' should specify one of the variables | CHLO='row.names' should specify one of the variables | OHL.CHL='row.names' should specify one of the variables | OHLC.CHLO='row.names' should specify one of the variables
+c0073,single_row,w21,21,False,False,0,EDGE='row.names' should specify one of the variables | AR='row.names' should specify one of the variables | AR2='row.names' should specify one of the variables | CS='row.names' should specify one of the variables | CS2='row.names' should specify one of the variables | ROLL='row.names' should specify one of the variables | OHL='row.names' should specify one of the variables | OHLC='row.names' should specify one of the variables | CHL='row.names' should specify one of the variables | CHLO='row.names' should specify one of the variables | OHL.CHL='row.names' should specify one of the variables | OHLC.CHLO='row.names' should specify one of the variables
+c0074,single_row,w21,21,False,True,0,EDGE='row.names' should specify one of the variables | AR='row.names' should specify one of the variables | AR2='row.names' should specify one of the variables | CS='row.names' should specify one of the variables | CS2='row.names' should specify one of the variables | ROLL='row.names' should specify one of the variables | OHL='row.names' should specify one of the variables | OHLC='row.names' should specify one of the variables | CHL='row.names' should specify one of the variables | CHLO='row.names' should specify one of the variables | OHL.CHL='row.names' should specify one of the variables | OHLC.CHLO='row.names' should specify one of the variables
+c0075,single_row,w21,21,True,False,0,EDGE='row.names' should specify one of the variables | AR='row.names' should specify one of the variables | AR2='row.names' should specify one of the variables | CS='row.names' should specify one of the variables | CS2='row.names' should specify one of the variables | ROLL='row.names' should specify one of the variables | OHL='row.names' should specify one of the variables | OHLC='row.names' should specify one of the variables | CHL='row.names' should specify one of the variables | CHLO='row.names' should specify one of the variables | OHL.CHL='row.names' should specify one of the variables | OHLC.CHLO='row.names' should specify one of the variables
+c0076,single_row,w21,21,True,True,0,EDGE='row.names' should specify one of the variables | AR='row.names' should specify one of the variables | AR2='row.names' should specify one of the variables | CS='row.names' should specify one of the variables | CS2='row.names' should specify one of the variables | ROLL='row.names' should specify one of the variables | OHL='row.names' should specify one of the variables | OHLC='row.names' should specify one of the variables | CHL='row.names' should specify one of the variables | CHLO='row.names' should specify one of the variables | OHL.CHL='row.names' should specify one of the variables | OHLC.CHLO='row.names' should specify one of the variables
+c0077,single_row,expanding,expanding,False,False,0,
+c0078,single_row,expanding,expanding,False,True,0,
+c0079,single_row,expanding,expanding,True,False,0,
+c0080,single_row,expanding,expanding,True,True,0,
+c0081,single_row,endpoints,1,False,False,0,
+c0082,single_row,endpoints,1,False,True,0,
+c0083,single_row,endpoints,1,True,False,0,
+c0084,single_row,endpoints,1,True,True,0,
+c0085,two_rows,full,full,False,False,1,
+c0086,two_rows,full,full,False,True,1,
+c0087,two_rows,full,full,True,False,1,
+c0088,two_rows,full,full,True,True,1,
+c0089,two_rows,w1,1,False,False,1,
+c0090,two_rows,w1,1,False,True,1,
+c0091,two_rows,w1,1,True,False,1,
+c0092,two_rows,w1,1,True,True,1,
+c0093,two_rows,w2,2,False,False,1,
+c0094,two_rows,w2,2,False,True,1,
+c0095,two_rows,w2,2,True,False,1,
+c0096,two_rows,w2,2,True,True,1,
+c0097,two_rows,w3,3,False,False,0,
+c0098,two_rows,w3,3,False,True,0,
+c0099,two_rows,w3,3,True,False,0,
+c0100,two_rows,w3,3,True,True,0,
+c0101,two_rows,w21,21,False,False,0,EDGE=row names supplied are of the wrong length | AR=row names supplied are of the wrong length | AR2=row names supplied are of the wrong length | CS=row names supplied are of the wrong length | CS2=row names supplied are of the wrong length | ROLL=row names supplied are of the wrong length | OHL=row names supplied are of the wrong length | OHLC=row names supplied are of the wrong length | CHL=row names supplied are of the wrong length | CHLO=row names supplied are of the wrong length | OHL.CHL=row names supplied are of the wrong length | OHLC.CHLO=row names supplied are of the wrong length
+c0102,two_rows,w21,21,False,True,0,EDGE=row names supplied are of the wrong length | AR=row names supplied are of the wrong length | AR2=row names supplied are of the wrong length | CS=row names supplied are of the wrong length | CS2=row names supplied are of the wrong length | ROLL=row names supplied are of the wrong length | OHL=row names supplied are of the wrong length | OHLC=row names supplied are of the wrong length | CHL=row names supplied are of the wrong length | CHLO=row names supplied are of the wrong length | OHL.CHL=row names supplied are of the wrong length | OHLC.CHLO=row names supplied are of the wrong length
+c0103,two_rows,w21,21,True,False,0,EDGE=row names supplied are of the wrong length | AR=row names supplied are of the wrong length | AR2=row names supplied are of the wrong length | CS=row names supplied are of the wrong length | CS2=row names supplied are of the wrong length | ROLL=row names supplied are of the wrong length | OHL=row names supplied are of the wrong length | OHLC=row names supplied are of the wrong length | CHL=row names supplied are of the wrong length | CHLO=row names supplied are of the wrong length | OHL.CHL=row names supplied are of the wrong length | OHLC.CHLO=row names supplied are of the wrong length
+c0104,two_rows,w21,21,True,True,0,EDGE=row names supplied are of the wrong length | AR=row names supplied are of the wrong length | AR2=row names supplied are of the wrong length | CS=row names supplied are of the wrong length | CS2=row names supplied are of the wrong length | ROLL=row names supplied are of the wrong length | OHL=row names supplied are of the wrong length | OHLC=row names supplied are of the wrong length | CHL=row names supplied are of the wrong length | CHLO=row names supplied are of the wrong length | OHL.CHL=row names supplied are of the wrong length | OHLC.CHLO=row names supplied are of the wrong length
+c0105,two_rows,expanding,expanding,False,False,2,ROLL='n' must be non-negative integer values (>= 0)
+c0106,two_rows,expanding,expanding,False,True,2,ROLL='n' must be non-negative integer values (>= 0)
+c0107,two_rows,expanding,expanding,True,False,2,ROLL='n' must be non-negative integer values (>= 0)
+c0108,two_rows,expanding,expanding,True,True,2,ROLL='n' must be non-negative integer values (>= 0)
+c0109,two_rows,endpoints,1 2,False,False,2,ROLL='n' must be non-negative integer values (>= 0)
+c0110,two_rows,endpoints,1 2,False,True,2,ROLL='n' must be non-negative integer values (>= 0)
+c0111,two_rows,endpoints,1 2,True,False,2,ROLL='n' must be non-negative integer values (>= 0)
+c0112,two_rows,endpoints,1 2,True,True,2,ROLL='n' must be non-negative integer values (>= 0)
+c0113,constant,full,full,False,False,1,
+c0114,constant,full,full,False,True,1,
+c0115,constant,full,full,True,False,1,
+c0116,constant,full,full,True,True,1,
+c0117,constant,w1,1,False,False,39,
+c0118,constant,w1,1,False,True,39,
+c0119,constant,w1,1,True,False,39,
+c0120,constant,w1,1,True,True,39,
+c0121,constant,w2,2,False,False,39,
+c0122,constant,w2,2,False,True,39,
+c0123,constant,w2,2,True,False,39,
+c0124,constant,w2,2,True,True,39,
+c0125,constant,w3,3,False,False,38,
+c0126,constant,w3,3,False,True,38,
+c0127,constant,w3,3,True,False,38,
+c0128,constant,w3,3,True,True,38,
+c0129,constant,w21,21,False,False,20,
+c0130,constant,w21,21,False,True,20,
+c0131,constant,w21,21,True,False,20,
+c0132,constant,w21,21,True,True,20,
+c0133,constant,expanding,expanding,False,False,40,ROLL='n' must be non-negative integer values (>= 0)
+c0134,constant,expanding,expanding,False,True,40,ROLL='n' must be non-negative integer values (>= 0)
+c0135,constant,expanding,expanding,True,False,40,ROLL='n' must be non-negative integer values (>= 0)
+c0136,constant,expanding,expanding,True,True,40,ROLL='n' must be non-negative integer values (>= 0)
+c0137,constant,endpoints,1 20 40,False,False,2,
+c0138,constant,endpoints,1 20 40,False,True,2,
+c0139,constant,endpoints,1 20 40,True,False,2,
+c0140,constant,endpoints,1 20 40,True,True,2,
+c0141,constant,endpoints_desc,1 10 5,False,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0142,constant,endpoints_desc,1 10 5,False,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0143,constant,endpoints_desc,1 10 5,True,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0144,constant,endpoints_desc,1 10 5,True,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0145,halted,full,full,False,False,1,
+c0146,halted,full,full,False,True,1,
+c0147,halted,full,full,True,False,1,
+c0148,halted,full,full,True,True,1,
+c0149,halted,w1,1,False,False,59,
+c0150,halted,w1,1,False,True,59,
+c0151,halted,w1,1,True,False,59,
+c0152,halted,w1,1,True,True,59,
+c0153,halted,w2,2,False,False,59,
+c0154,halted,w2,2,False,True,59,
+c0155,halted,w2,2,True,False,59,
+c0156,halted,w2,2,True,True,59,
+c0157,halted,w3,3,False,False,58,
+c0158,halted,w3,3,False,True,58,
+c0159,halted,w3,3,True,False,58,
+c0160,halted,w3,3,True,True,58,
+c0161,halted,w21,21,False,False,40,
+c0162,halted,w21,21,False,True,40,
+c0163,halted,w21,21,True,False,40,
+c0164,halted,w21,21,True,True,40,
+c0165,halted,expanding,expanding,False,False,60,ROLL='n' must be non-negative integer values (>= 0)
+c0166,halted,expanding,expanding,False,True,60,ROLL='n' must be non-negative integer values (>= 0)
+c0167,halted,expanding,expanding,True,False,60,ROLL='n' must be non-negative integer values (>= 0)
+c0168,halted,expanding,expanding,True,True,60,ROLL='n' must be non-negative integer values (>= 0)
+c0169,halted,endpoints,1 30 60,False,False,2,
+c0170,halted,endpoints,1 30 60,False,True,2,
+c0171,halted,endpoints,1 30 60,True,False,2,
+c0172,halted,endpoints,1 30 60,True,True,2,
+c0173,halted,endpoints_desc,1 10 5,False,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0174,halted,endpoints_desc,1 10 5,False,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0175,halted,endpoints_desc,1 10 5,True,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0176,halted,endpoints_desc,1 10 5,True,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0177,nonpositive,full,full,False,False,1,
+c0178,nonpositive,full,full,False,True,1,
+c0179,nonpositive,full,full,True,False,1,
+c0180,nonpositive,full,full,True,True,1,
+c0181,nonpositive,w1,1,False,False,39,
+c0182,nonpositive,w1,1,False,True,39,
+c0183,nonpositive,w1,1,True,False,39,
+c0184,nonpositive,w1,1,True,True,39,
+c0185,nonpositive,w2,2,False,False,39,
+c0186,nonpositive,w2,2,False,True,39,
+c0187,nonpositive,w2,2,True,False,39,
+c0188,nonpositive,w2,2,True,True,39,
+c0189,nonpositive,w3,3,False,False,38,
+c0190,nonpositive,w3,3,False,True,38,
+c0191,nonpositive,w3,3,True,False,38,
+c0192,nonpositive,w3,3,True,True,38,
+c0193,nonpositive,w21,21,False,False,20,
+c0194,nonpositive,w21,21,False,True,20,
+c0195,nonpositive,w21,21,True,False,20,
+c0196,nonpositive,w21,21,True,True,20,
+c0197,nonpositive,expanding,expanding,False,False,40,ROLL='n' must be non-negative integer values (>= 0)
+c0198,nonpositive,expanding,expanding,False,True,40,ROLL='n' must be non-negative integer values (>= 0)
+c0199,nonpositive,expanding,expanding,True,False,40,ROLL='n' must be non-negative integer values (>= 0)
+c0200,nonpositive,expanding,expanding,True,True,40,ROLL='n' must be non-negative integer values (>= 0)
+c0201,nonpositive,endpoints,1 20 40,False,False,2,
+c0202,nonpositive,endpoints,1 20 40,False,True,2,
+c0203,nonpositive,endpoints,1 20 40,True,False,2,
+c0204,nonpositive,endpoints,1 20 40,True,True,2,
+c0205,nonpositive,endpoints_desc,1 10 5,False,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0206,nonpositive,endpoints_desc,1 10 5,False,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0207,nonpositive,endpoints_desc,1 10 5,True,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0208,nonpositive,endpoints_desc,1 10 5,True,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0209,open_at_high,full,full,False,False,1,
+c0210,open_at_high,full,full,False,True,1,
+c0211,open_at_high,full,full,True,False,1,
+c0212,open_at_high,full,full,True,True,1,
+c0213,open_at_high,w1,1,False,False,39,
+c0214,open_at_high,w1,1,False,True,39,
+c0215,open_at_high,w1,1,True,False,39,
+c0216,open_at_high,w1,1,True,True,39,
+c0217,open_at_high,w2,2,False,False,39,
+c0218,open_at_high,w2,2,False,True,39,
+c0219,open_at_high,w2,2,True,False,39,
+c0220,open_at_high,w2,2,True,True,39,
+c0221,open_at_high,w3,3,False,False,38,
+c0222,open_at_high,w3,3,False,True,38,
+c0223,open_at_high,w3,3,True,False,38,
+c0224,open_at_high,w3,3,True,True,38,
+c0225,open_at_high,w21,21,False,False,20,
+c0226,open_at_high,w21,21,False,True,20,
+c0227,open_at_high,w21,21,True,False,20,
+c0228,open_at_high,w21,21,True,True,20,
+c0229,open_at_high,expanding,expanding,False,False,40,ROLL='n' must be non-negative integer values (>= 0)
+c0230,open_at_high,expanding,expanding,False,True,40,ROLL='n' must be non-negative integer values (>= 0)
+c0231,open_at_high,expanding,expanding,True,False,40,ROLL='n' must be non-negative integer values (>= 0)
+c0232,open_at_high,expanding,expanding,True,True,40,ROLL='n' must be non-negative integer values (>= 0)
+c0233,open_at_high,endpoints,1 20 40,False,False,2,
+c0234,open_at_high,endpoints,1 20 40,False,True,2,
+c0235,open_at_high,endpoints,1 20 40,True,False,2,
+c0236,open_at_high,endpoints,1 20 40,True,True,2,
+c0237,open_at_high,endpoints_desc,1 10 5,False,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0238,open_at_high,endpoints_desc,1 10 5,False,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0239,open_at_high,endpoints_desc,1 10 5,True,False,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)
+c0240,open_at_high,endpoints_desc,1 10 5,True,True,0,EDGE='n' must be non-negative integer values (>= 0) | AR='n' must be non-negative integer values (>= 0) | AR2='n' must be non-negative integer values (>= 0) | CS='n' must be non-negative integer values (>= 0) | CS2='n' must be non-negative integer values (>= 0) | ROLL='n' must be non-negative integer values (>= 0) | OHL='n' must be non-negative integer values (>= 0) | OHLC='n' must be non-negative integer values (>= 0) | CHL='n' must be non-negative integer values (>= 0) | CHLO='n' must be non-negative integer values (>= 0) | OHL.CHL='n' must be non-negative integer values (>= 0) | OHLC.CHLO='n' must be non-negative integer values (>= 0)

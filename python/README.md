@@ -11,10 +11,10 @@ pip install bidask
 
 ## Usage
 
-There are three functions in this package. The function `edge` computes a single bid-ask spread estimate from vectors of open, high, low, and close prices. The functions `edge_rolling` and `edge_expanding` are optimized for fast calculations over rolling and expanding windows, respectively.
+The function `edge` computes a single bid-ask spread estimate from vectors of open, high, low, and close prices. The functions `edge_rolling` and `edge_expanding` are optimized for fast calculations over rolling and expanding windows, respectively. The function `spread` is a port of the R function `spread` and implements the full family of estimators (EDGE, OHL, OHLC, CHL, CHLO, AR, AR2, CS, CS2, ROLL).
 
 ```python
-from bidask import edge, edge_rolling, edge_expanding
+from bidask import edge, edge_rolling, edge_expanding, spread
 ```
 
 ### Function: `edge`
@@ -61,6 +61,48 @@ edge_expanding(df, min_periods=1, sign=False)
 | `df`          | Data frame with columns 'open', 'high', 'low', 'close' (case-insensitive). |
 | `min_periods` | Minimum number of observations in window required to have a value; otherwise, result is `np.nan`. |
 | `sign`        | Whether to return signed estimates.                          |
+
+### Function: `spread`
+
+Port of the R function [`bidask::spread`](https://github.com/eguidotti/bidask/tree/main/r). It computes one or more estimators over the full sample, rolling or expanding windows, or custom endpoints. Results match the R package to 1e-10, including missing values and errors.
+
+```python
+spread(x, width=None, method="EDGE", sign=False, na_rm=False, by=None)
+```
+
+| field    | description |
+| -------- | ----------- |
+| `x`      | Data frame with columns 'open', 'high', 'low', 'close' (case-insensitive; prefixes such as 'MSFT.Open' are stripped, as in R). Rows sorted by time. |
+| `width`  | `None` (default) for one estimate on the full sample. An int for a rolling window. An array with one entry per row for per-row window widths (e.g. `range(1, len(x) + 1)` for an expanding window). Any other array gives 1-based endpoints: one estimate per endpoint after the first. |
+| `method` | One or more of `EDGE`, `OHL`, `OHLC`, `CHL`, `CHLO`, `AR`, `AR2`, `CS`, `CS2`, `ROLL`, or `.`-joined combinations of `OHL`/`OHLC`/`CHL`/`CHLO` (e.g. `OHLC.CHLO`). Case-insensitive. |
+| `sign`   | Whether to return signed estimates. |
+| `na_rm`  | Whether to ignore missing values within each window (R's `na.rm`). |
+| `by`     | Python only. Column(s) identifying each series in a long-format panel. Each group is estimated as if `spread` were called on it alone, in one vectorized pass. |
+
+The output is a data frame with one column per method, keeping the rows R keeps. With `width=None` that is the last row. With an int `width`, rows `width` onward. With per-row widths, every row. With endpoints, the endpoint rows. A value of 0.01 corresponds to a spread of 1%.
+
+| Estimator | Reference | R | Python | Python vs. R |
+| --- | --- | :-: | :-: | --- |
+| `EDGE` | Ardia, Guidotti & Kroencke (JFE, 2024) | ✓ | ✓ | agrees to 1e-10 |
+| `OHL`, `OHLC`, `CHL`, `CHLO` | Ardia, Guidotti & Kroencke (JFE, 2024) | ✓ | ✓ | agrees to 1e-10 |
+| `AR`, `AR2` | Abdi & Ranaldo (RFS, 2017) | ✓ | ✓ | agrees to 1e-10 |
+| `CS`, `CS2` | Corwin & Schultz (JF, 2012) | ✓ | ✓ | agrees to 1e-10 |
+| `ROLL` | Roll (JF, 1984) | ✓ | ✓ | agrees to 1e-10 |
+
+Parity is checked on 312 R-generated cases: 12 methods × width (full sample, 1, 2, 3, 21, expanding, endpoints) × `sign` × `na_rm`, on synthetic data, real MSFT minute and daily bars, and edge-case inputs. See `tests/fixtures/`.
+
+**Sign convention.** Most estimators first estimate a squared spread, which can be negative in finite samples. By default they return `sqrt(|s2|)`. With `sign=True` they return `sign(s2) * sqrt(|s2|)`, so negative estimates are kept, not set to zero. `AR2` and `CS2` set negative per-period estimates to zero before averaging, so they are never negative and `sign` has no effect on them.
+
+**Missing, halted and zero-volume periods.** A missing price makes every window that contains it NaN unless `na_rm=True`. Keep halted days as NaN rather than forward-filling them. EDGE and OHL/OHLC/CHL/CHLO skip non-informative bars, where high equals low equals the previous close (typical of zero-volume periods). They return NaN when a window has fewer than two informative bars. AR, CS and ROLL have no such filter, so flat bars pull them toward zero. Prices of 0 or below produce `-inf`/NaN log prices, as in R, with no error.
+
+```py
+from bidask import spread
+spread(df, method=["EDGE", "AR", "CS", "ROLL"])        # full sample
+spread(df, width=21, method="OHLC.CHLO", sign=True)     # rolling
+spread(df, width=range(1, len(df) + 1))                 # expanding
+spread(df, width=[3, 35, 100])                          # custom endpoints
+spread(panel, width=21, method="AR", by="ticker")       # long-format panel
+```
 
 ## Examples
 
