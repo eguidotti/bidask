@@ -2,11 +2,17 @@
 Cross-language parity: Python ``spread`` vs. R ``bidask::spread``.
 
 Expected values in ``fixtures/expected.csv.gz`` are produced by
-``fixtures/generate_fixtures.R`` from the R sources in ``r/R`` (see
-``fixtures/VERSION.txt`` for the exact commit, R and data.table versions).
+``fixtures/generate_fixtures.R`` from the R sources in ``r/R`` (run that
+script to print the exact commit, R and data.table versions it used).
 Every case runs all estimators on a fixed input for one combination of
 ``width`` x ``sign`` x ``na_rm``; Python must agree to 1e-10 and reproduce
 R's missing values and errors exactly.
+
+The committed fixtures are a representative subset that still exercises every
+estimator x width mode (full, rolling, per-row/expanding, endpoints) x sign x
+na_rm. The longer series (``synth``, ``synth_miss``, ``msft_minute``) are
+trimmed to their first rows and carried only at rolling/expanding widths, whose
+right-aligned windows make those values identical to the full-length series.
 """
 from pathlib import Path
 
@@ -65,11 +71,24 @@ def assert_close(actual, expected, label):
     np.testing.assert_allclose(actual[ok], expected[ok], rtol=TOL, atol=TOL, err_msg=label)
 
 
-def test_fixture_metadata():
-    meta = (FIX / "VERSION.txt").read_text()
-    assert "bidask_r_version" in meta and "data.table" in meta
-    assert len(CASES) > 300
+def _width_mode(width_name):
+    if width_name in ("full", "expanding"):
+        return width_name
+    if width_name.startswith("endpoints"):
+        return "endpoints"
+    return "rolling"
+
+
+def test_fixture_coverage():
+    assert len(CASES) > 150
     assert set(CASES.dataset) >= {"synth", "synth_miss", "msft_minute", "msft_daily"}
+    # every estimator x width mode x sign x na_rm combination is represented
+    modes = CASES.width_name.map(_width_mode)
+    combos = set(zip(modes, CASES.sign, CASES.na_rm))
+    assert combos == {(m, s, n) for m in ("full", "rolling", "expanding", "endpoints")
+                      for s in (False, True) for n in (False, True)}
+    # cases.csv and expected.csv.gz stay in sync
+    assert set(EXPECTED.case) <= set(CASES.case)
 
 
 @pytest.mark.parametrize("case", list(CASES.itertuples(index=False)), ids=lambda c: c.case)
@@ -130,11 +149,18 @@ def test_panel_matches_r_per_group(width, na_rm):
     assert list(out.columns) == ["id"] + methods
 
     wname = {None: "full", 21: "w21", "expanding": "expanding"}[width]
+    checked = 0
     for name in names:
-        case = CASES[(CASES.dataset == name) & (CASES.width_name == wname)
-                     & (CASES.sign == False) & (CASES.na_rm == na_rm)].iloc[0]  # noqa: E712
+        match = CASES[(CASES.dataset == name) & (CASES.width_name == wname)
+                      & (CASES.sign == False) & (CASES.na_rm == na_rm)]  # noqa: E712
+        if match.empty:
+            # trimmed series carry only rolling/expanding widths; skip the rest
+            continue
+        case = match.iloc[0]
         expected = EXPECTED[EXPECTED.case == case.case]
         got = out[out.id == name]
         assert len(got) == len(expected), name
         for m in methods:
             assert_close(got[m], parse(expected[m]), f"{name} {m}")
+        checked += 1
+    assert checked, f"no fixture cases for width {wname}"

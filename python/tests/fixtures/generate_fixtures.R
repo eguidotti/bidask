@@ -38,14 +38,20 @@ write_input <- function(name, x) {
 # ---------------------------------------------------------------------------
 data <- list()
 
+# Longer series are trimmed to their first rows to keep the committed fixtures
+# small. They are carried only at rolling/expanding widths (see `widths()`),
+# whose right-aligned windows make the kept values identical to the full series.
+TRIM <- 120L
+trimmed_datasets <- c("synth", "synth_miss", "msft_minute")
+
 # synthetic series shipped with the repo (simulated with a 1% spread)
-data$synth <- write_input("synth", head(read.csv("pseudocode/ohlc.csv"), 300))
-data$synth_miss <- write_input("synth_miss", head(read.csv("pseudocode/ohlc-miss.csv"), 300))
+data$synth <- write_input("synth", head(read.csv("pseudocode/ohlc.csv"), TRIM))
+data$synth_miss <- write_input("synth_miss", head(read.csv("pseudocode/ohlc-miss.csv"), TRIM))
 
 # real data: MSFT 1-minute bars shipped with the R package (r/inst/extdata/msft.csv)
 msft <- read.csv("r/inst/extdata/msft.csv")
 colnames(msft) <- sub("^MSFT\\.", "", colnames(msft))
-data$msft_minute <- write_input("msft_minute", head(msft, 600))
+data$msft_minute <- write_input("msft_minute", head(msft, TRIM))
 
 # real data: the same bars aggregated to daily OHLC (15 trading days)
 msft$Date <- substr(msft$Timestamp, 1, 10)
@@ -82,7 +88,11 @@ data$open_at_high <- write_input("open_at_high", flat_open)
 methods <- c("EDGE", "AR", "AR2", "CS", "CS2", "ROLL",
              "OHL", "OHLC", "CHL", "CHLO", "OHL.CHL", "OHLC.CHLO")
 
-widths <- function(n) {
+widths <- function(n, trimmed = FALSE) {
+  # Trimmed series carry only right-aligned (rolling/expanding) widths, whose
+  # values on the first `n` rows match the full-length series. Full-sample and
+  # endpoint widths would depend on the dropped rows, so they are omitted.
+  if (trimmed) return(list(w21 = 21L, expanding = "expanding"))
   w <- list(full = "full", w1 = 1L, w2 = 2L, w3 = 3L, w21 = 21L, expanding = "expanding")
   w$endpoints <- if (n >= 100) c(3L, 35L, 100L) else unique(c(1L, max(1L, n %/% 2L), n))
   w$endpoints_desc <- if (n >= 10) c(1L, 10L, 5L) else NULL   # negative window -> error
@@ -101,7 +111,7 @@ k <- 0L
 for (name in names(data)) {
   x <- data[[name]]
   n <- nrow(x)
-  ws <- widths(n)
+  ws <- widths(n, trimmed = name %in% trimmed_datasets)
   for (wname in names(ws)) for (sg in c(FALSE, TRUE)) for (nr in c(FALSE, TRUE)) {
     k <- k + 1L
     id <- sprintf("c%04d", k)
@@ -140,12 +150,10 @@ write.csv(values, con, row.names = FALSE, quote = FALSE)
 close(con)
 
 commit <- tryCatch(system("git rev-parse HEAD", intern = TRUE), error = function(e) "unknown")
-writeLines(c(
-  sprintf("generated: %s", format(Sys.time(), tz = "UTC", usetz = TRUE)),
-  sprintf("r_source_commit: %s", commit),
-  sprintf("bidask_r_version: %s", read.dcf("r/DESCRIPTION", "Version")[1]),
-  sprintf("R: %s", R.version.string),
-  sprintf("data.table: %s", format(packageVersion("data.table")))
-), file.path(out_dir, "VERSION.txt"))
-
 cat(sprintf("%d cases, %d value rows\n", nrow(cases), nrow(values)))
+cat("provenance:\n")
+cat(sprintf("  generated: %s\n", format(Sys.time(), tz = "UTC", usetz = TRUE)))
+cat(sprintf("  r_source_commit: %s\n", commit))
+cat(sprintf("  bidask_r_version: %s\n", read.dcf("r/DESCRIPTION", "Version")[1]))
+cat(sprintf("  R: %s\n", R.version.string))
+cat(sprintf("  data.table: %s\n", format(packageVersion("data.table"))))
